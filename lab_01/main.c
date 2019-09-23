@@ -147,7 +147,7 @@ void printDoubleRule(void)
 }
 void printMainRule(void)
 {
-    printf("pls, input integer and real number:\n");
+    printf("pls, input integer and real number for multiply:\n");
 }
 void printSymbolTip(void)
 {
