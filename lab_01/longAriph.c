@@ -51,8 +51,8 @@ void longMultiply(longNumber* numberFirst, longNumber* numberSecond, longNumber*
     }
     else
     {   
-        delSymbs = MAX_MANTISA;
         result->mantisaLen = (MAX_MANTISA * 2 - delSymbs);
+        delSymbs = MAX_MANTISA;
     }
     
     if (DEBUG_ARIPH)
@@ -75,7 +75,7 @@ void longMultiply(longNumber* numberFirst, longNumber* numberSecond, longNumber*
     {
         printf("\nresult: ");
         printIntArray(result->mantisa, MAX_MANTISA);
-        printf("\n exp in res: %d", result->exp);
+        printf("\n exp in res: %d, mantisaLen: %d", result->exp, result->mantisaLen);
     }
 
     delRightZero(result);

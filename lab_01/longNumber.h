@@ -16,15 +16,19 @@ typedef struct
 
 void setZero(longNumber* number);
 void setEmpty(longNumber* number);
-void inputNumber(longNumber* number, int* errorCode);
+
+void inputNumberDbl(longNumber* number, int* errorCode);
 void inputNumberInt(longNumber* number, int* errorCode);
 void printNumber(longNumber* number, int* errorCode);
 void normalizeNumber(longNumber* number);
+
 void countMantisLen(longNumber* number);
-void deleteLeadingSymb(int* temp, int len, int cntSymb);
+void deleteLeadingSymb(int* sourceArray, int len, int cntSymbToDelete);
 void zeroMantis(longNumber* number);
 void delRightZero(longNumber* number);
-void normalizeBase10(int* temp, int len);
-int countLeadingZero(int* temp, int len);
+void shiftMantisToRight(longNumber* number);
+
+void normalizeBase10(int* sourceArray, int len);
+int countLeadingZero(int* sourceArray, int len);
 
 #endif

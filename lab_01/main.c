@@ -51,7 +51,7 @@ int main(void)
         }
         
         // Input real number
-        inputNumber(&dbl_number, &errorCode);
+        inputNumberDbl(&dbl_number, &errorCode);
         
         // If numbers are correct
         if (!errorCode && (abs(dbl_number.exp) <= MAX_EXP))
@@ -125,7 +125,6 @@ int main(void)
         {
             printInputError();
         }
-        
     }
     else
     {

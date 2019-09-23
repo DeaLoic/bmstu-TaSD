@@ -23,7 +23,7 @@ void printNumber(longNumber* number, int* errorCode)
         {
             if (i == (MAX_MANTISA - number->mantisaLen + number->dotPos))
             {
-                if(i == MAX_MANTISA - number->mantisaLen)
+                if (i == MAX_MANTISA - number->mantisaLen)
                 {
                     printf("0");
                 }
@@ -55,6 +55,7 @@ void inputMantisa(longNumber* number, int* errorCode)
     
     if (!feof(stdin) && fscanf(stdin, "%c", &temp))
     {
+        // Check first symbol
         if (temp == '-')
         {
             number->mantisaSign = 0;
@@ -77,6 +78,7 @@ void inputMantisa(longNumber* number, int* errorCode)
         
         int isContinue = 1;
 
+        // Read other symbols
         while (!*errorCode && isContinue && !feof(stdin) && number->mantisaLen < (MAX_MANTISA) && fscanf(stdin, "%c", &temp))
         {
             if (isdigit(temp))
@@ -99,13 +101,23 @@ void inputMantisa(longNumber* number, int* errorCode)
             }
         }
 
-        if (!*errorCode && MAX_MANTISA != number->mantisaLen)
+        if (!*errorCode && isContinue && !feof(stdin) && (number->mantisaLen == (MAX_MANTISA)) && fscanf(stdin, "%c", &temp))
         {
-            for (int i = 0; i < number->mantisaLen; i++)
+            if (temp == '.' && number->dotPos != -1)
             {
-                *(number->mantisa + (MAX_MANTISA - 1 - i)) = *(number->mantisa + number->mantisaLen - 1 - i);
-                *(number->mantisa + number->mantisaLen - 1 - i) = 0;
+                *errorCode = INPUT_ERROR;
             }
+            else if (temp != '.')
+            {
+                ungetc(temp, stdin);
+                isContinue = 0;
+            }
+            
+        }
+
+        if (!*errorCode)
+        {
+            shiftMantisToRight(number);
         }
     }
     else
@@ -114,6 +126,17 @@ void inputMantisa(longNumber* number, int* errorCode)
     }
 }
 
+void shiftMantisToRight(longNumber* number)
+{
+    if (MAX_MANTISA != number->mantisaLen)
+    {
+        for (int i = 0; i < number->mantisaLen; i++)
+        {
+            *(number->mantisa + (MAX_MANTISA - 1 - i)) = *(number->mantisa + number->mantisaLen - 1 - i);
+            *(number->mantisa + number->mantisaLen - 1 - i) = 0;
+        }
+    }
+}
 void inputExp(longNumber* number, int* errorCode)
 {
     char temp;
@@ -131,7 +154,8 @@ void inputExp(longNumber* number, int* errorCode)
         *errorCode = INPUT_ERROR;
     }
 }
-void inputNumber(longNumber* number, int* errorCode)
+
+void inputNumberDbl(longNumber* number, int* errorCode)
 {
     setEmpty(number);
     inputMantisa(number, errorCode);
@@ -155,6 +179,7 @@ void delRightZero(longNumber* number)
     int i = MAX_MANTISA - 1;
     int countRightZero = 0;
     
+    // Count zeros and correction exp and mantisLen
     while (i > 0 && *(number->mantisa + i) == 0 && (number->mantisaLen > 1))
     {
         number->mantisaLen--;
@@ -165,6 +190,7 @@ void delRightZero(longNumber* number)
     
     if (countRightZero)
     {
+        // Shift to right
         for (int k = MAX_MANTISA - 1; k > MAX_MANTISA - number->mantisaLen - 1; k--)
         {
             number->mantisa[k] = number->mantisa[k - countRightZero];
@@ -190,18 +216,20 @@ void countMantisLen(longNumber* number)
     {
         i++;
     }
+
     number->mantisaLen = MAX_MANTISA - i;
+
     if (number->mantisaLen == 0)
     {
         number->mantisaLen = 1;
     }
 }
 
-void deleteLeadingSymb(int* temp, int len, int cntSymb)
+void deleteLeadingSymb(int* sourceArray, int len, int cntSymbToDelete)
 {
-    for (int i = 0; i + cntSymb < len; i++)
+    for (int i = 0; i + cntSymbToDelete < len; i++)
     {
-        temp[i] = temp[i + cntSymb];
+        sourceArray[i] = sourceArray[i + cntSymbToDelete];
     }
 }
 
@@ -220,6 +248,7 @@ void inputNumberInt(longNumber* number, int* errorCode)
 
     if (!feof(stdin) && fscanf(stdin, "%c", &temp))
     {
+        // Check first symbol
         if (temp == '-')
         {
             number->mantisaSign = 0;
@@ -254,26 +283,23 @@ void inputNumberInt(longNumber* number, int* errorCode)
 
         }
         
+        // Check end of input
         if (number->mantisaLen == (MAX_MANTISA) && !feof(stdin) && fscanf(stdin, "%c", &temp) && (temp != '\n'))
         {
             *errorCode = INPUT_ERROR;
         }
         
-        if (!*errorCode && MAX_MANTISA != number->mantisaLen)
+        if (!*errorCode)
         {
-            for (int i = 0; i < number->mantisaLen; i++)
-            {
-                *(number->mantisa + (MAX_MANTISA - 1 - i)) = *(number->mantisa + number->mantisaLen - 1 - i);
-                *(number->mantisa + number->mantisaLen - 1 - i) = 0;
-            }
+            shiftMantisToRight(number);
         }
     }
 }
 
-int countLeadingZero(int* temp, int len)
+int countLeadingZero(int* sourceArray, int len)
 {
     int leadingZero = 0;
-    while (temp[leadingZero] == 0 && leadingZero < len)
+    while (sourceArray[leadingZero] == 0 && leadingZero < len)
     {
         leadingZero++;
     }
@@ -281,14 +307,14 @@ int countLeadingZero(int* temp, int len)
     return leadingZero;
 }
 
-void normalizeBase10(int* temp, int len)
+void normalizeBase10(int* sourceArray, int len)
 {
     for (int i = len - 1; i > 0; i--)
     {
-        if (temp[i] >= 10)
+        if (sourceArray[i] >= 10)
         {
-            temp[i - 1] += temp[i] / 10;
-            temp[i] %= 10;
+            sourceArray[i - 1] += sourceArray[i] / 10;
+            sourceArray[i] %= 10;
         }
     }
 }
