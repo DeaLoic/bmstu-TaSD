@@ -1,0 +1,121 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Отчет по ЛР-1.md</title><style></style></head><body id="preview">
+<h1 class="code-line" data-line-start=0 data-line-end=1 ><a id="__1_0"></a>Отчет по ЛР-1</h1>
+<h3 class="code-line" data-line-start=1 data-line-end=2 ><a id="_22_1"></a>Вариант 22.</h3>
+<h4 class="code-line" data-line-start=2 data-line-end=3 ><a id="__735_2"></a>Хетагуров Павел Иу7-35Б</h4>
+<h3 class="code-line" data-line-start=4 data-line-end=5 ><a id="1____4"></a>1. Описание условия задачи</h3>
+<p class="has-line-data" data-line-start="6" data-line-end="7"><strong>Цель:</strong> Реализация арифметических операций над числами, выходящими за разрядную сетку персонального компьютера, выбор необходимых типов данных для хранения и обработки указанных чисел.</p>
+<p class="has-line-data" data-line-start="8" data-line-end="9"><strong>Условие задачи:</strong> Смоделировать операцию умножения действительного числа в форме ±m.n Е±K, где суммарная длина мантиссы (m+n) - до 30 значащих цифр, а величина порядка K - до 5 цифр, на целое число длиной до 30 десятичных цифр. Результат выдать в форме ±0.m1 Е±K1, где m1 - до 30 значащих цифр, а K1 - до 5 цифр.</p>
+<p class="has-line-data" data-line-start="10" data-line-end="11">Программа должна осуществлять ввод чисел и выдавать либо верный результат в указанном формате (при корректных данных), либо сообщение о невозможности произвести счет.</p>
+<h4 class="code-line" data-line-start=12 data-line-end=13 ><a id="____12"></a>ТЗ и внешняя спецификация</h4>
+<ol>
+<li class="has-line-data" data-line-start="13" data-line-end="15"><strong>Исходные данные и результаты (типы, форматы, точность, способ передачи, ограничения):</strong><br>
+<strong>Исходные данные</strong>:</li>
+</ol>
+<ol>
+<li class="has-line-data" data-line-start="15" data-line-end="16">Целое десятичное число в формате: ±m</li>
+<li class="has-line-data" data-line-start="16" data-line-end="28">Вещественное десятичное число в формате: ±m.n e|Е ±K<br>
+<strong>Способ передачи</strong>: Ввод в консоль с клавиатуры (стандартный поток ввода).<br>
+<strong>Ограничения</strong>:
+<ol>
+<li class="has-line-data" data-line-start="19" data-line-end="20">Числа вводятся без пробелов, иначе считывается часть, идущаяя до пробела</li>
+<li class="has-line-data" data-line-start="20" data-line-end="21">Знак + можно опускать. Ведущие нули можно опускать. Незначащие нули в дробной части можно опускать.</li>
+<li class="has-line-data" data-line-start="21" data-line-end="22">Единственный ноль в записи порядка опускать нельзя</li>
+<li class="has-line-data" data-line-start="22" data-line-end="23">Суммарная длина мантиссы &lt;= 30, длина порядка &lt;= 5, без учета знаков</li>
+<li class="has-line-data" data-line-start="23" data-line-end="24">Можно вводить как ‘E’ как в верхнем, так и в нижнем регистре (латинский алфавит)</li>
+<li class="has-line-data" data-line-start="24" data-line-end="25">Длина целого числа &lt;= 30 без учета знака</li>
+<li class="has-line-data" data-line-start="25" data-line-end="28">Дублирующиеся знаки – ошибка.<br>
+Разделитель – строго точка (не запятая)</li>
+</ol>
+</li>
+</ol>
+<p class="has-line-data" data-line-start="28" data-line-end="31"><strong>Выходные данные:</strong><br>
+Вещественное число в формате: ±0.m1 Е ±K1<br>
+Точность: До 30-ти значащих цифр;</p>
+<ul>
+<li class="has-line-data" data-line-start="31" data-line-end="33"><strong>Способ передачи</strong>: Вывод в консоль (стандартный поток вывода).<br>
+<strong>Ограничения</strong>:</li>
+<li class="has-line-data" data-line-start="33" data-line-end="34">Суммарная длина мантиссы (m1) &lt;= 30, длина порядка (K1) &lt;= 5</li>
+</ul>
+<p class="has-line-data" data-line-start="36" data-line-end="38"><strong>Способ обращения к программе</strong>: Вызов консольного приложения app.exe, ввод с клавиатуры.<br>
+<strong>Описание возможных аварийных ситуаций и ошибок пользователя:</strong></p>
+<ol>
+<li class="has-line-data" data-line-start="38" data-line-end="39">Некорректный ввод.</li>
+<li class="has-line-data" data-line-start="39" data-line-end="41">Превышение по модулю величины порядка в процессе вычисления.</li>
+</ol>
+<h3 class="code-line" data-line-start=41 data-line-end=42 ><a id="2_____41"></a>2.Описание  внутренних структур данных</h3>
+<p class="has-line-data" data-line-start="42" data-line-end="47">!(/Screenshot_1.png)<br>
+<strong>Обоснование выбора</strong><br>
+Данная структура выбрана, так как позволяет хранить все данные, нужные для обработки вместе.<br>
+Эта же структура используется как для хранения целого (порядок = 0), так и для хранения вещественного числа<br>
+<strong>Описание полей</strong></p>
+<ul>
+<li class="has-line-data" data-line-start="47" data-line-end="48">.mantisaSign - Целое число. Знак мантисы (1 для положительного, 0 для отрицательного)</li>
+<li class="has-line-data" data-line-start="48" data-line-end="49">.dotPos - Целое число. Номер цифры, перед которой была введена точка. (-1, если точка не была введена)</li>
+<li class="has-line-data" data-line-start="49" data-line-end="50">.mantisaLen - Целое число, длинна мантисы</li>
+<li class="has-line-data" data-line-start="50" data-line-end="51">.mantisa - Целочисленный массив.</li>
+<li class="has-line-data" data-line-start="51" data-line-end="52">.exp - Целое число. Экспонента</li>
+</ul>
+<h3 class="code-line" data-line-start=52 data-line-end=53 ><a id="3__52"></a>3.Функциональные тесты</h3>
+<table class="table table-striped table-bordered">
+<thead>
+<tr>
+<th>Исходные данные</th>
+<th>Выходные</th>
+<th>Описание теста</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>++1  1e1</td>
+<td>Wrong input</td>
+<td>Проверка ввода двойного знака</td>
+</tr>
+<tr>
+<td>1e1  1e1</td>
+<td>Wrong input</td>
+<td>Проверка ввода буквы в целочисленное</td>
+</tr>
+<tr>
+<td>1  1</td>
+<td>Wrong input</td>
+<td>Проверка ввода целого в вещественное</td>
+</tr>
+<tr>
+<td>1 +1E999999</td>
+<td>Wrong input</td>
+<td>Некорректная мантиса</td>
+</tr>
+<tr>
+<td>+1  .1.e+1</td>
+<td>Wrong input</td>
+<td>Проверка ввода некоретного формата вещественного</td>
+</tr>
+<tr>
+<td>123 -10e-1</td>
+<td>-0.123E+3</td>
+<td>Корректные данные</td>
+</tr>
+<tr>
+<td>0000 +9999…999(30)E-99999</td>
+<td>+0.0E+0</td>
+<td>Умножение нуля на граничное значение</td>
+</tr>
+<tr>
+<td>-1111(30) -1111(30)E10</td>
+<td>+0.123456790123456790123456790123E+69</td>
+<td>Переполнение в процессе выполнения (округление, потеря точности)</td>
+</tr>
+<tr>
+<td>+0000000(29)1 +.000(29)1e+0</td>
+<td>+0.0E+1</td>
+<td>Во входных незначащие нули</td>
+</tr>
+<tr>
+<td>1 1E99999</td>
+<td>Exponent too large</td>
+<td>Переполнение порядка</td>
+</tr>
+</tbody>
+</table>
+
+</body></html>
