@@ -7,6 +7,6 @@
 void longMultiply(longNumber* numberFirst, longNumber* numberSecond, longNumber* result, int* errorCode);
 
 // If digit >= 10, then leftDigit = digit div 10, digit = digit mod 10
-void rounding(int* temp, int oldLen);
+void rounding(int* temp, int oldLen, int newLen);
 
 #endif

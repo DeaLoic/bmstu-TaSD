@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define DEBUG_ARIPH 0
+#define DEBUG_ARIPH 1
 
 void longMultiply(longNumber* numberFirst, longNumber* numberSecond, longNumber* result, int* errorCode)
 {
@@ -43,7 +43,7 @@ void longMultiply(longNumber* numberFirst, longNumber* numberSecond, longNumber*
     // rounding
     if (delSymbs < MAX_MANTISA)
     {
-        rounding(temp, MAX_MANTISA * 2);
+        rounding(temp, MAX_MANTISA * 2, MAX_MANTISA);
         delSymbs = countLeadingZero(temp, MAX_MANTISA * 2);
 
         result->mantisaLen = MAX_MANTISA;
@@ -111,9 +111,9 @@ void longMultiply(longNumber* numberFirst, longNumber* numberSecond, longNumber*
     }
 }
 
-void rounding(int* temp, int oldLen)
+void rounding(int* temp, int oldLen, int newLen)
 {
-    for (int i = oldLen - 1; i > 0; i--)
+    for (int i = oldLen - 1; i > newLen - 1; i--)
     {
         if (temp[i] >= 5)
         {
@@ -121,4 +121,5 @@ void rounding(int* temp, int oldLen)
             temp[i] = 0;
         }
     }
+    normalizeBase10(temp, oldLen);
 }
