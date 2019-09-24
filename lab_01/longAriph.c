@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define DEBUG_ARIPH 1
+#define DEBUG_ARIPH 0
 
 void longMultiply(longNumber* numberFirst, longNumber* numberSecond, longNumber* result, int* errorCode)
 {
