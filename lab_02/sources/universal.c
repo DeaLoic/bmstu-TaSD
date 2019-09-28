@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <string.h>
+#include "errorCodes.h"
+#include "universal.h"
 
 void swapDbl(double* first, double* second)
 {
@@ -22,4 +25,28 @@ void printIntArray(int* array, int len)
         printf(" %d", array[i]);
     }
     printf("\n");
+}
+
+int inputString(FILE* f, char* string, int size)
+{
+    int errorCode = SUCCES;
+    if (fgets(string, size, f) == NULL)
+    {
+        errorCode = INCORRECT_INPUT;
+    }
+    else
+    {
+        if (strlen(string) == size - 1 && (string[size - 2] != '\n') && !feof(f))
+        {
+            int tempChar = fgetc(f);
+            if (tempChar != '\n')
+            {
+                ungetc(tempChar, f);
+                errorCode = INCORRECT_INPUT;
+            }
+        }
+        string[strcspn(string, "\n")] = '\0';
+    }
+
+    return errorCode;
 }
