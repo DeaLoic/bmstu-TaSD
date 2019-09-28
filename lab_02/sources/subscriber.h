@@ -54,7 +54,8 @@ typedef struct
     char keySurname[MAX_SURNAME_LEN];
 } subscriberKey_t;
 
-int inputSubscriber(subscriber_t* subscriber, FILE* source);
+int inputSubscriberConsole(subscriber_t* subscriber);
+int inputSubscriberFile(subscriber_t* subscriber, FILE* source);
 int printSubscriber(subscriber_t* subscriber);
 int setSubscriberEmpty(subscriber_t* subscriber);
 

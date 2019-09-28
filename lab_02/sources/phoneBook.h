@@ -18,7 +18,8 @@ typedef struct
 
 } phoneBookKeyTable_t;
 
-int inputPhoneBook(phoneBook_t* phoneBook, FILE* source);
+int inputPhoneBookFile(phoneBook_t* phoneBook, FILE* source);
+int inputPhoneBookConsole(phoneBook_t* phoneBook);
 int setPhoneBookEmpty(phoneBook_t* phoneBook);
 int setPhoneBookByKeyTable(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTable);
 int printPhoneBook(phoneBook_t* phoneBook);

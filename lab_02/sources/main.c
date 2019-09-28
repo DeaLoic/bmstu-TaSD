@@ -37,7 +37,7 @@ int main(int argc, char** argv)
                 FILE* source = fopen(filename, "r");
                 if (source)
                 {
-                    errorCode = inputPhoneBook(&phoneBook, filename);
+                    errorCode = inputPhoneBookFile(&phoneBook, filename);
                     fclose(source);
                     if (!errorCode)
                     {
@@ -60,7 +60,7 @@ int main(int argc, char** argv)
                 setPhoneBookEmpty(&phoneBook);
                 setKeyTableEmpty(&keyTable);
 
-                errorCode = inputPhoneBook(&phoneBook, stdin);
+                errorCode = inputPhoneBookConsole(&phoneBook);
 
                 if (!errorCode)
                 {
@@ -172,7 +172,18 @@ int main(int argc, char** argv)
             case 9:
                 if (phoneBook.subscribersCount)
                 {
-                    compareSorting();
+                    compareSorting(&phoneBook, &keyTable);
+                }
+                else
+                {
+                    printf("\nPhone book is empty\n");
+                }
+                break;
+            
+            case 10:
+                if (phoneBook.subscribersCount)
+                {
+                    findWeekBirthday(&phoneBook);
                 }
                 else
                 {
@@ -180,7 +191,7 @@ int main(int argc, char** argv)
                 }
                 break;
 
-            case 10:
+            case 11:
                 if (phoneBook.subscribersCount)
                 {
                     sortKeyTable(&keyTable, &compareKeyByPosition);
@@ -224,6 +235,7 @@ void printMenu()
     printf("7.  Print phone book by key table\n");
     printf("8.  Sort (qsort)\n");
     printf("9.  Compare sorting\n");
-    printf("10. Unsort (reset to raw)\n");
+    printf("10. Find friends with birthday in week\n");
+    printf("11. Unsort (reset to raw)\n");
     printf("\nYour choose: ");
 }
