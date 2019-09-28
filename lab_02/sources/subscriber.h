@@ -14,7 +14,7 @@
 
 typedef struct
 {
-    char birthday[MAX_BIRTHDAY_LEN] //format YYYYMMDD
+    char birthday[MAX_BIRTHDAY_LEN]; //format YYYYMMDD
 
 } privateInfo_t;
 
@@ -52,6 +52,7 @@ typedef struct
 {
     int position;
     char keySurname[MAX_SURNAME_LEN];
+    
 } subscriberKey_t;
 
 int inputSubscriberConsole(subscriber_t* subscriber);
@@ -65,10 +66,12 @@ int createSubscriber(subscriber_t* subscriberSource, char* surname, char* name, 
 
 int compareSubscribersBySurname(subscriber_t* subscriberFirst, subscriber_t* subscriberSecond);
 
-int createKey(subscriberKey_t* key, subscriber_t* subscriber, int pos);
+int createKey(subscriberKey_t* key, char* surname, int pos);
 int setKeyEmpty(subscriberKey_t* key);
 int copyKey(subscriberKey_t* keySource, subscriberKey_t* keyDestination);
 int printKey(subscriberKey_t* subscriber);
 
 int compareKeyBySurname(subscriberKey_t* keyFirst, subscriberKey_t* keySecond);
 int compareKeyByPosition(subscriberKey_t* keyFirst, subscriberKey_t* keySecond);
+
+#endif

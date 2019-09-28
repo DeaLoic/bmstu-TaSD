@@ -8,3 +8,5 @@
 
 int compareSorting();
 int findWeekBirthday();
+
+#endif

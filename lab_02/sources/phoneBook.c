@@ -16,7 +16,7 @@ int inputPhoneBookFile(phoneBook_t* phoneBook, FILE* source)
     phoneBook->subscribers = (subscriber_t*)malloc(sizeof(subscriber_t) * startCount);
     int i = 0;
     subscriber_t* tempBook = NULL;
-    while (phoneBook->subscribers && !feof(f))
+    while (phoneBook->subscribers && !feof(source))
     {
         errorCode = inputSubscriberFile(phoneBook->subscribers + i, source);
         phoneBook->subscribersCount += 1;
@@ -64,7 +64,7 @@ int inputPhoneBookConsole(phoneBook_t* phoneBook)
     phoneBook->subscribers = (subscriber_t*)malloc(sizeof(subscriber_t) * startCount);
     int i = 0;
     subscriber_t* tempBook = NULL;
-    while (phoneBook->subscribers && !feof(f))
+    while (phoneBook->subscribers && !feof(stdin))
     {
         errorCode = inputSubscriberConsole(phoneBook->subscribers + i);
         phoneBook->subscribersCount += 1;
@@ -113,7 +113,7 @@ int setPhoneBookEmpty(phoneBook_t* phoneBook)
 
 int setPhoneBookByKeyTable(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTable)
 {
-    return SUCCES
+    return SUCCES;
 }
 
 int printPhoneBook(phoneBook_t* phoneBook)
@@ -123,6 +123,8 @@ int printPhoneBook(phoneBook_t* phoneBook)
     {
         printSubscriber(phoneBook->subscribers + i);
     }
+
+    return SUCCES;
 }
 
 int printPhoneBookByKeyTable(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTable)
@@ -132,6 +134,8 @@ int printPhoneBookByKeyTable(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTab
     {
         printSubscriber(phoneBook->subscribers + keyTable->keys[i].position);
     }
+
+    return SUCCES;
 }
 
 int addRecord(phoneBook_t* phoneBook, subscriber_t* subscriber)
@@ -149,7 +153,7 @@ int addRecord(phoneBook_t* phoneBook, subscriber_t* subscriber)
         errorCode = MEMORY_ERROR;
     }
     
-    return SUCCES;
+    return errorCode;
 }
 
 int deleteRecord(phoneBook_t* phoneBook, int position)
@@ -165,7 +169,8 @@ int deleteRecord(phoneBook_t* phoneBook, int position)
         subscriber_t* temp = (subscriber_t*)realloc(phoneBook->subscribers, phoneBook->subscribersCount - 1);
         if (temp)
         {
-            phoneBook->subscribersCount = temp;
+            phoneBook->subscribers = temp;
+            phoneBook->subscribersCount -= 1;
         }
         else
         {
@@ -176,11 +181,16 @@ int deleteRecord(phoneBook_t* phoneBook, int position)
     {
         errorCode = INCORRECT_INPUT;
     }
+
+    return errorCode;
 }
+
 int deletePhoneBook(phoneBook_t* phoneBook)
 {
     free(phoneBook->subscribers);
     setPhoneBookEmpty(phoneBook);
+
+    return SUCCES;
 }
 
 int createKeyTable(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTable)
@@ -214,10 +224,12 @@ int printKeyTable(phoneBookKeyTable_t* keyTable)
 {
     int errorCode = SUCCES;
     printf("| Position | Keys |\n");
-    for (int i = 0; i < keyTable; i++)
+    for (int i = 0; i < keyTable->keysCount; i++)
     {
         printKey(keyTable->keys + i);
     }
+
+    return errorCode;
 }
 
 int addKey(phoneBookKeyTable_t* keyTable, subscriberKey_t* key)
@@ -235,7 +247,7 @@ int addKey(phoneBookKeyTable_t* keyTable, subscriberKey_t* key)
         errorCode = MEMORY_ERROR;
     }
     
-    return SUCCES;
+    return errorCode;
 }
 
 //TODO swap key 
@@ -249,10 +261,11 @@ int deleteKey(phoneBookKeyTable_t* keyTable, int position)
             swapSubscriberKey(keyTable->keys + i, keyTable->keys + i + 1);
         }
 
-        subscriber_t* temp = (subscriber_t*)realloc(keyTable->keys, keyTable->keysCount - 1);
+        subscriberKey_t* temp = (subscriberKey_t*)realloc(keyTable->keys, keyTable->keysCount - 1);
         if (temp)
         {
-            keyTable->keysCount = temp;
+            keyTable->keys = temp;
+            keyTable->keysCount -= 1;
         }
         else
         {
@@ -263,12 +276,16 @@ int deleteKey(phoneBookKeyTable_t* keyTable, int position)
     {
         errorCode = INCORRECT_INPUT;
     }
+
+    return errorCode;
 }
 
 int deleteKeyTable(phoneBookKeyTable_t* keyTable)
 {
     free(keyTable->keys);
     setKeyTableEmpty(keyTable);
+
+    return SUCCES;
 }
 
 int sortKeyTable(phoneBookKeyTable_t* keyTable, int (*condition)(subscriberKey_t*, subscriberKey_t*))
@@ -277,26 +294,30 @@ int sortKeyTable(phoneBookKeyTable_t* keyTable, int (*condition)(subscriberKey_t
     {
         for (int j = 0;  j + 1 < keyTable->keysCount - j; j++)
         {
-            if (*condition(keyTable->keys + j, keyTable->keys + j + 1))
+            if (condition(keyTable->keys + j, keyTable->keys + j + 1))
             {
                 swapSubscriberKey(keyTable->keys + j, keyTable->keys + j + 1);
             }
         }
     }
+
+    return SUCCES;
 }
 
-int sortPhoneBook(phoneBook_t* phoneBook, int (*condition)(subscriber_t* , subscriber_t*)))
+int sortPhoneBook(phoneBook_t* phoneBook, int (*condition)(subscriber_t* , subscriber_t*))
 {
     for (int i = 0; i + 1 < phoneBook->subscribersCount; i++)
     {
         for (int j = 0;  j + 1 < phoneBook->subscribersCount - j; j++)
         {
-            if (*condition(phoneBook->subscribers + j, phoneBook->subscribers + j + 1))
+            if (condition(phoneBook->subscribers + j, phoneBook->subscribers + j + 1))
             {
                 swapSubscriber(phoneBook->subscribers + j, phoneBook->subscribers + j + 1);
             }
         }
     }
+
+    return SUCCES;
 }
 
 int copyKeyTable(phoneBookKeyTable_t* keyTableSource, phoneBookKeyTable_t* keyTableDest)
@@ -305,8 +326,10 @@ int copyKeyTable(phoneBookKeyTable_t* keyTableSource, phoneBookKeyTable_t* keyTa
 
     for (int i = 0; i < keyTableDest->keysCount; i++)
     {
-        copySubscriberKey(keyTableSource->keys + i, keyTableDest->keys + i);
+        copyKey(keyTableSource->keys + i, keyTableDest->keys + i);
     }
+
+    return SUCCES;
 }
 
 int copyPhoneBook(phoneBook_t* phoneBookSource, phoneBook_t* phoneBookDest)
@@ -315,24 +338,30 @@ int copyPhoneBook(phoneBook_t* phoneBookSource, phoneBook_t* phoneBookDest)
 
     for (int i = 0; i < phoneBookDest->subscribersCount; i++)
     {
-        copySubscribe(phoneBookSource->subscribers + i, phoneBookDest->subscribers + i);
+        copySubscriber(phoneBookSource->subscribers + i, phoneBookDest->subscribers + i);
     }
+
+    return SUCCES;
 }
 
 int swapSubscriberKey(subscriberKey_t* first, subscriberKey_t* second)
 {
     subscriberKey_t temp;
-    setKeyEmpty(temp);
+    setKeyEmpty(&temp);
     copyKey(first, &temp);
     copyKey(second, first);
     copyKey(&temp, second);
+    
+    return SUCCES;
 }
 
 int swapSubscriber(subscriber_t* first, subscriber_t* second)
 {
     subscriber_t temp;
-    setSubscriberEmpty(temp);
+    setSubscriberEmpty(&temp);
     copySubscriber(first, &temp);
     copySubscriber(second, first);
     copySubscriber(&temp, second);
+
+    return SUCCES;
 }

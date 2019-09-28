@@ -36,6 +36,8 @@ int deleteKey(phoneBookKeyTable_t* keyTable, int position);
 int deleteKeyTable(phoneBookKeyTable_t* keyTable);
 
 int sortKeyTable(phoneBookKeyTable_t* keyTable, int (*condition)(subscriberKey_t*, subscriberKey_t*));
-int sortPhoneBook(phoneBook_t* phoneBook, int (*condition)(subscriber_t* , subscriber_t*)));
+int sortPhoneBook(phoneBook_t* phoneBook, int (*condition)(subscriber_t* , subscriber_t*));
 int copyKeyTable(phoneBookKeyTable_t* keyTableSource, phoneBookKeyTable_t* keyTableDest);
 int copyPhoneBook(phoneBook_t* phoneBookSource, phoneBook_t* phoneBookDest);
+
+#endif

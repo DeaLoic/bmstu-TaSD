@@ -3,13 +3,14 @@
 #include "errorCodes.h"
 #include "subscriber.h"
 #include "phoneBook.h"
+#include "taskLogic.h"
 
 #define RELEASE 1    // For information messages
 #define DEBUG 0      // For debug messages
 
 void printMenu();
 
-int main(int argc, char** argv)
+int main(void)
 {
     int errorCode = SUCCES;
 
@@ -37,11 +38,11 @@ int main(int argc, char** argv)
                 FILE* source = fopen(filename, "r");
                 if (source)
                 {
-                    errorCode = inputPhoneBookFile(&phoneBook, filename);
+                    errorCode = inputPhoneBookFile(&phoneBook, source);
                     fclose(source);
                     if (!errorCode)
                     {
-                        createKeyTable(&phoneBook, &keyTable)
+                        createKeyTable(&phoneBook, &keyTable);
                     }
                     else
                     {
@@ -64,7 +65,7 @@ int main(int argc, char** argv)
 
                 if (!errorCode)
                 {
-                    createKeyTable(&phoneBook, &keyTable)
+                    createKeyTable(&phoneBook, &keyTable);
                 }
                 else
                 {
@@ -78,7 +79,7 @@ int main(int argc, char** argv)
                 if (phoneBook.subscribersCount)
                 {
                     setSubscriberEmpty(&tempSubscriber);
-                    errorCode = inputSubscriber(&tempSubscriber, stdin);
+                    errorCode = inputSubscriberConsole(&tempSubscriber);
                     if (!errorCode)
                     {
                         errorCode = addRecord(&phoneBook, &tempSubscriber);
@@ -138,7 +139,7 @@ int main(int argc, char** argv)
             case 6:
                 if (keyTable.keysCount)
                 {
-                    printKeyTable(keyTable);
+                    printKeyTable(&keyTable);
                 }
                 else
                 {
@@ -149,7 +150,7 @@ int main(int argc, char** argv)
             case 7:
                 if (phoneBook.subscribersCount)
                 {
-                    printPhoneBookByKeyTable(phoneBook, keyTable);
+                    printPhoneBookByKeyTable(&phoneBook, &keyTable);
                 }
                 else
                 {
@@ -202,7 +203,7 @@ int main(int argc, char** argv)
                 break;
 
             default:
-                printf("\nPls, choose point from menu\n")
+                printf("\nPls, choose point from menu\n");
                 break;
             
         }

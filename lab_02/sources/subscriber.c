@@ -53,7 +53,7 @@ int inputSubscriberConsole(subscriber_t* subscriber)
     }
     if (!errorCode && !subscriber->status)
     {
-        printf("Input birthday (format YYYYMMDD): ", MAX_BIRTHDAY_LEN - 1);
+        printf("Input birthday (format YYYYMMDD): ");
         errorCode = inputString(stdin, subscriber->info.privateInfo.birthday, MAX_BIRTHDAY_LEN);
         if (!errorCode && !isBirthdayCorrect(subscriber->info.privateInfo.birthday))
         {
@@ -70,7 +70,7 @@ int inputSubscriberFile(subscriber_t* subscriber, FILE* source)
     int cnt = 0;
     int cntSymb = 0;
     char temp;
-    while (fscanf(stdin, "%c", temp) == 1 && temp != '\n')
+    while (fscanf(stdin, "%c", &temp) == 1 && temp != '\n')
     {
         if (temp == ';')
         {
@@ -132,15 +132,17 @@ int printSubscriber(subscriber_t* subscriber)
 {
     if (subscriber->status)
     {
-        printf("%s %s %s %s %s %s %s\n", subscriber->surname, subscriber->name, subscriber->phone,
+        printf("%s %s %s %s %d %s %s\n", subscriber->surname, subscriber->name, subscriber->phone,
                                     subscriber->address, subscriber->status, subscriber->info.workInfo.company,
                                     subscriber->info.workInfo.position);
     }
     else
     {
-        printf("%s %s %s %s %s %s\n", subscriber->surname, subscriber->name, subscriber->phone,
+        printf("%s %s %s %s %d %s\n", subscriber->surname, subscriber->name, subscriber->phone,
                                     subscriber->address, subscriber->status, subscriber->info.privateInfo.birthday);
     }
+
+    return SUCCES;
 }
 
 int setSubscriberEmpty(subscriber_t* subscriber)
@@ -152,6 +154,8 @@ int setSubscriberEmpty(subscriber_t* subscriber)
     subscriber->status = 0;
     subscriber->info.workInfo.company[0] = '\0';
     subscriber->info.workInfo.position[0] = '\0';
+
+    return SUCCES;
 }
 
 int copySubscriber(subscriber_t* subscriberSource, subscriber_t* subscriberDestination)
@@ -200,10 +204,11 @@ int copyKey(subscriberKey_t* keySource, subscriberKey_t* keyDestination)
     return SUCCES;
 }
 
-int setKeyEmpty(subscriberKey_t* key);
+int setKeyEmpty(subscriberKey_t* key)
 {
-    key->pos = 0;
+    key->position = 0;
     key->keySurname[0] = '\0';
+
     return SUCCES;
 }
 int printKey(subscriberKey_t* key)
@@ -216,9 +221,10 @@ int compareKeyBySurname(subscriberKey_t* keyFirst, subscriberKey_t* keySecond)
 {
     return (strcmp(keyFirst->keySurname, keySecond->keySurname) > 0);  // First > second
 }
+
 int compareKeyByPosition(subscriberKey_t* keyFirst, subscriberKey_t* keySecond)
 {
-    return (keyFirst->position > keySecond->position)
+    return (keyFirst->position > keySecond->position);
 }
 
 int isBirthdayCorrect(char* str)
