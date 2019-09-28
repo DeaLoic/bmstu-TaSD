@@ -64,7 +64,7 @@ int inputPhoneBookConsole(phoneBook_t* phoneBook)
     phoneBook->subscribers = (subscriber_t*)malloc(sizeof(subscriber_t) * startCount);
     int i = 0;
     subscriber_t* tempBook = NULL;
-    while (phoneBook->subscribers && !feof(stdin))
+    while (phoneBook->subscribers && !feof(stdin) && !errorCode)
     {
         errorCode = inputSubscriberConsole(phoneBook->subscribers + i);
         phoneBook->subscribersCount += 1;

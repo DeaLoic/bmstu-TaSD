@@ -9,6 +9,7 @@ int isBirthdayCorrect(char* str);
 
 int inputSubscriberConsole(subscriber_t* subscriber)
 {
+    getchar();
     printf("Input surname (max %d symbls): ", MAX_SURNAME_LEN - 1);
     int errorCode = inputString(stdin, subscriber->surname, MAX_SURNAME_LEN);
 

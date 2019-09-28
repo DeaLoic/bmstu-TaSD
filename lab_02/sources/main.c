@@ -25,7 +25,7 @@ int main(void)
     setSubscriberEmpty(&tempSubscriber);
     int temp = 0;
 
-    while (!errorCode)
+    while (!errorCode && choose != 0)
     {
         printMenu();
         scanf("%d", &choose);
@@ -42,6 +42,7 @@ int main(void)
                     fclose(source);
                     if (!errorCode)
                     {
+                        printf("Done reading file");
                         createKeyTable(&phoneBook, &keyTable);
                     }
                     else
@@ -205,7 +206,6 @@ int main(void)
             default:
                 printf("\nPls, choose point from menu\n");
                 break;
-            
         }
     }
     if (errorCode)
