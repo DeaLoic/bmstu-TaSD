@@ -160,7 +160,6 @@ int main(int argc, char** argv)
             case 8:
                 if (phoneBook.subscribersCount)
                 {
-                    sortPhoneBook(&phoneBook, &compareSubscribersBySurname);
                     sortKeyTable(&keyTable, &compareKeyBySurname);
                 }
                 else
@@ -168,8 +167,19 @@ int main(int argc, char** argv)
                     printf("\nPhone book is empty\n");
                 }
                 break;
-            
+
             case 9:
+                if (phoneBook.subscribersCount)
+                {
+                    sortPhoneBook(&phoneBook, &compareSubscribersBySurname);
+                }
+                else
+                {
+                    printf("\nPhone book is empty\n");
+                }
+                break;
+
+            case 10:
                 if (phoneBook.subscribersCount)
                 {
                     compareSorting(&phoneBook, &keyTable);
@@ -180,22 +190,10 @@ int main(int argc, char** argv)
                 }
                 break;
             
-            case 10:
-                if (phoneBook.subscribersCount)
-                {
-                    findWeekBirthday(&phoneBook);
-                }
-                else
-                {
-                    printf("\nPhone book is empty\n");
-                }
-                break;
-
             case 11:
                 if (phoneBook.subscribersCount)
                 {
-                    sortKeyTable(&keyTable, &compareKeyByPosition);
-                    setPhoneBookByKeyTable(&phoneBook, &keyTable);
+                    findWeekBirthday(&phoneBook);
                 }
                 else
                 {
@@ -229,13 +227,13 @@ void printMenu()
     printf("1.  Input data from file phoneBook.txt\n");
     printf("2.  Input data from console\n");
     printf("3.  Add data from console\n");
-    printf("4.  Delete data from temp handler\n");
+    printf("4.  Delete data by surname value\n");
     printf("5.  Print phone book\n");
     printf("6.  Print key table\n");
     printf("7.  Print phone book by key table\n");
-    printf("8.  Sort (qsort)\n");
-    printf("9.  Compare sorting\n");
-    printf("10. Find friends with birthday in week\n");
-    printf("11. Unsort (reset to raw)\n");
+    printf("8.  Sort key table\n");
+    printf("9.  Sort phone book\n");
+    printf("10. Compare sorting\n");
+    printf("11. Find friends with birthday in week\n");
     printf("\nYour choose: ");
 }

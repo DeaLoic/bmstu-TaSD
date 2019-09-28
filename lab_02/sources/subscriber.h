@@ -67,6 +67,7 @@ int compareSubscribersBySurname(subscriber_t* subscriberFirst, subscriber_t* sub
 
 int createKey(subscriberKey_t* key, subscriber_t* subscriber, int pos);
 int setKeyEmpty(subscriberKey_t* key);
+int copyKey(subscriberKey_t* keySource, subscriberKey_t* keyDestination);
 int printKey(subscriberKey_t* subscriber);
 
 int compareKeyBySurname(subscriberKey_t* keyFirst, subscriberKey_t* keySecond);

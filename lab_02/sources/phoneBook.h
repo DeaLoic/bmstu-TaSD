@@ -32,7 +32,7 @@ int createKeyTable(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTable);
 int setKeyTableEmpty(phoneBookKeyTable_t* keyTable);
 int printKeyTable(phoneBookKeyTable_t* keyTable);
 int addKey(phoneBookKeyTable_t* keyTable, subscriberKey_t* key);
-int deleteKey(phoneBookKeyTable_t* keyTable, int positionInPhoneBook);
+int deleteKey(phoneBookKeyTable_t* keyTable, int position);
 int deleteKeyTable(phoneBookKeyTable_t* keyTable);
 
 int sortKeyTable(phoneBookKeyTable_t* keyTable, int (*condition)(subscriberKey_t*, subscriberKey_t*));

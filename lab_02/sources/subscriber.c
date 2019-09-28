@@ -132,13 +132,13 @@ int printSubscriber(subscriber_t* subscriber)
 {
     if (subscriber->status)
     {
-        printf("%s %s %s %s %s %s %s", subscriber->surname, subscriber->name, subscriber->phone,
+        printf("%s %s %s %s %s %s %s\n", subscriber->surname, subscriber->name, subscriber->phone,
                                     subscriber->address, subscriber->status, subscriber->info.workInfo.company,
                                     subscriber->info.workInfo.position);
     }
     else
     {
-        printf("%s %s %s %s %s %s", subscriber->surname, subscriber->name, subscriber->phone,
+        printf("%s %s %s %s %s %s\n", subscriber->surname, subscriber->name, subscriber->phone,
                                     subscriber->address, subscriber->status, subscriber->info.privateInfo.birthday);
     }
 }
@@ -187,10 +187,16 @@ int compareSubscribersBySurname(subscriber_t* subscriberFirst, subscriber_t* sub
     return (strcmp(subscriberFirst->surname, subscriberSecond->surname) > 0);  // First > second
 }
 
-int createKey(subscriberKey_t* key, subscriber_t* subscriber, int pos)
+int createKey(subscriberKey_t* key, char* surname, int pos)
 {
     key->position = pos;
-    strcpy(key->keySurname, subscriber->surname);
+    strcpy(key->keySurname, surname);
+    return SUCCES;
+}
+
+int copyKey(subscriberKey_t* keySource, subscriberKey_t* keyDestination)
+{
+    createKey(keyDestination, keySource->keySurname, keySource->position);
     return SUCCES;
 }
 
@@ -202,7 +208,7 @@ int setKeyEmpty(subscriberKey_t* key);
 }
 int printKey(subscriberKey_t* key)
 {
-    printf("%d %s", key->position, key->keySurname);
+    printf("%d %s\n", key->position, key->keySurname);
     return SUCCES;
 }
 
@@ -233,5 +239,4 @@ int isBirthdayCorrect(char* str)
     }
 
     return exitCode;
-    
 }
