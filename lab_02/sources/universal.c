@@ -32,7 +32,7 @@ int inputString(FILE* f, char* string, int size)
     int errorCode = SUCCES;
     if (fgets(string, size, f) == NULL)
     {
-        errorCode = INCORRECT_INPUT;
+        errorCode = INPUT_ERROR;
     }
     else
     {
@@ -42,7 +42,7 @@ int inputString(FILE* f, char* string, int size)
             if (tempChar != '\n')
             {
                 ungetc(tempChar, f);
-                errorCode = INCORRECT_INPUT;
+                errorCode = INPUT_ERROR;
             }
         }
         string[strcspn(string, "\n")] = '\0';

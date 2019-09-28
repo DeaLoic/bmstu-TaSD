@@ -20,8 +20,8 @@ typedef struct
 
 typedef struct
 {
-    char position[MAX_POSITION_LEN];
     char company[MAX_COMPANY_LEN];
+    char position[MAX_POSITION_LEN];
 
 } workInfo_t;
 
@@ -41,7 +41,7 @@ typedef struct
 {
     char surname[MAX_SURNAME_LEN];
     char name[MAX_NAME_LEN];
-    char phone[MAX_PHONE_LEN];      //format D-DDD-DDD-DD-DD
+    char phone[MAX_PHONE_LEN];
     char address[MAX_ADDRESS_LEN];
     subscriberStatus status;
     extraInfo info;
@@ -67,7 +67,7 @@ int compareSubscribersBySurname(subscriber_t* subscriberFirst, subscriber_t* sub
 
 int createKey(subscriberKey_t* key, subscriber_t* subscriber, int pos);
 int setKeyEmpty(subscriberKey_t* key);
-int printKey(subscriber_t* subscriber);
+int printKey(subscriberKey_t* subscriber);
 
 int compareKeyBySurname(subscriberKey_t* keyFirst, subscriberKey_t* keySecond);
 int compareKeyByPosition(subscriberKey_t* keyFirst, subscriberKey_t* keySecond);
