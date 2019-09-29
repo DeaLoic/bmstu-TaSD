@@ -41,6 +41,7 @@ int inputSubscriberConsole(subscriber_t* subscriber)
         {
             errorCode = INPUT_ERROR;
         }
+        getchar();
     }
     if (!errorCode && subscriber->status)
     {
@@ -71,7 +72,7 @@ int inputSubscriberFile(subscriber_t* subscriber, FILE* source)
     int cnt = 0;
     int cntSymb = 0;
     char temp;
-    while (fscanf(stdin, "%c", &temp) == 1 && temp != '\n')
+    while (fscanf(source, "%c", &temp) == 1 && temp != '\n')
     {
         if (temp == ';')
         {
@@ -131,15 +132,15 @@ int inputSubscriberFile(subscriber_t* subscriber, FILE* source)
 
 int printSubscriber(subscriber_t* subscriber)
 {
-    if (subscriber->status)
+    if (subscriber->status == work)
     {
-        printf("%s %s %s %s %d %s %s\n", subscriber->surname, subscriber->name, subscriber->phone,
+        printf("%10s %10s %10s %10s %d %10s %10s\n", subscriber->surname, subscriber->name, subscriber->phone,
                                     subscriber->address, subscriber->status, subscriber->info.workInfo.company,
                                     subscriber->info.workInfo.position);
     }
     else
     {
-        printf("%s %s %s %s %d %s\n", subscriber->surname, subscriber->name, subscriber->phone,
+        printf("%10s %10s %10s %10s %d %10s\n", subscriber->surname, subscriber->name, subscriber->phone,
                                     subscriber->address, subscriber->status, subscriber->info.privateInfo.birthday);
     }
 

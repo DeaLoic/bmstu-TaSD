@@ -4,6 +4,7 @@
 #include "subscriber.h"
 #include "phoneBook.h"
 #include "taskLogic.h"
+#include "universal.h"
 
 #define RELEASE 1    // For information messages
 #define DEBUG 0      // For debug messages
@@ -24,6 +25,7 @@ int main(void)
     setKeyTableEmpty(&keyTable);
     setSubscriberEmpty(&tempSubscriber);
     int temp = 0;
+    char tempSurname[MAX_SURNAME_LEN];
 
     while (!errorCode && choose != 0)
     {
@@ -103,12 +105,15 @@ int main(void)
                 break;
 
             case 4:
-                if (phoneBook.subscribersCount > 1)
+                if (phoneBook.subscribersCount)
                 {
-                    printf("\nInput position to delete\n");
+                    printf("\nInput surname to delete\n");
 
-                    if ((scanf("%d", &temp) == 1) && temp >= 0 && temp < phoneBook.subscribersCount)
+                    errorCode = inputString(stdin, tempSurname, MAX_SURNAME_LEN);
+
+                    if (!errorCode)
                     {
+                        findC
                         errorCode = deleteRecord(&phoneBook, temp);
                         if (errorCode)
                         {
@@ -118,7 +123,7 @@ int main(void)
                     else
                     {
                         printf("Incorrect position, try again\n");
-                    }   
+                    }
                 }
                 else
                 {

@@ -19,6 +19,7 @@ int inputPhoneBookFile(phoneBook_t* phoneBook, FILE* source)
     while (phoneBook->subscribers && !feof(source))
     {
         errorCode = inputSubscriberFile(phoneBook->subscribers + i, source);
+        printf("readed c code: %d\n", errorCode);
         phoneBook->subscribersCount += 1;
         i++;
         if (i == startCount)
@@ -37,7 +38,7 @@ int inputPhoneBookFile(phoneBook_t* phoneBook, FILE* source)
             }
         }
     }
-    if (!errorCode)
+    if (!errorCode && phoneBook->subscribersCount)
     {
         tempBook = (subscriber_t*)realloc(phoneBook->subscribers, sizeof(subscriber_t) * phoneBook->subscribersCount);
         if (tempBook)
