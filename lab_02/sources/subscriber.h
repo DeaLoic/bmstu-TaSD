@@ -64,14 +64,17 @@ int copySubscriber(subscriber_t* subscriberSource, subscriber_t* subscriberDesti
 int createSubscriber(subscriber_t* subscriberSource, char* surname, char* name, char* phone, char* address,
                      subscriberStatus status, extraInfo info);
 
-int compareSubscribersBySurname(subscriber_t* subscriberFirst, subscriber_t* subscriberSecond);
+int compareSubscribersBySurname(const void* subscriberFirst, const void* subscriberSecond);
 
 int createKey(subscriberKey_t* key, char* surname, int pos);
 int setKeyEmpty(subscriberKey_t* key);
 int copyKey(subscriberKey_t* keySource, subscriberKey_t* keyDestination);
 int printKey(subscriberKey_t* subscriber);
 
-int compareKeyBySurname(subscriberKey_t* keyFirst, subscriberKey_t* keySecond);
-int compareKeyByPosition(subscriberKey_t* keyFirst, subscriberKey_t* keySecond);
+int compareKeyBySurname(const void* keyFirst, const void* keySecond);
+int compareKeyByPosition(const void* keyFirst, const void* keySecond);
+
+int isSurnameMatch(subscriber_t* subscriber, char* surname);
+int isSourcePosition(subscriberKey_t* key, int pos);
 
 #endif

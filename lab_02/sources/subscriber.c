@@ -9,7 +9,6 @@ int isBirthdayCorrect(char* str);
 
 int inputSubscriberConsole(subscriber_t* subscriber)
 {
-    getchar();
     printf("Input surname (max %d symbls): ", MAX_SURNAME_LEN - 1);
     int errorCode = inputString(stdin, subscriber->surname, MAX_SURNAME_LEN);
 
@@ -41,7 +40,11 @@ int inputSubscriberConsole(subscriber_t* subscriber)
         {
             errorCode = INPUT_ERROR;
         }
-        getchar();
+        
+        if (getchar() != '\n')
+        {
+            errorCode = INPUT_ERROR;
+        }
     }
     if (!errorCode && subscriber->status)
     {
@@ -57,10 +60,11 @@ int inputSubscriberConsole(subscriber_t* subscriber)
     {
         printf("Input birthday (format YYYYMMDD): ");
         errorCode = inputString(stdin, subscriber->info.privateInfo.birthday, MAX_BIRTHDAY_LEN);
-        if (!errorCode && !isBirthdayCorrect(subscriber->info.privateInfo.birthday))
+        if ((errorCode) || !isBirthdayCorrect(subscriber->info.privateInfo.birthday))
         {
             errorCode = INPUT_ERROR;
         }
+        printf("\nbirthday: %s\n", subscriber->info.privateInfo.birthday);
     }
 
     return errorCode;
@@ -134,16 +138,22 @@ int printSubscriber(subscriber_t* subscriber)
 {
     if (subscriber->status == work)
     {
-        printf("%10s %10s %10s %10s %d %10s %10s\n", subscriber->surname, subscriber->name, subscriber->phone,
+        printf("%10s %10s %10s %10s %7d %10s %10s\n", subscriber->surname, subscriber->name, subscriber->phone,
                                     subscriber->address, subscriber->status, subscriber->info.workInfo.company,
                                     subscriber->info.workInfo.position);
     }
     else
     {
-        printf("%10s %10s %10s %10s %d %10s\n", subscriber->surname, subscriber->name, subscriber->phone,
+        printf("%10s %10s %10s %10s %7d %10s\n", subscriber->surname, subscriber->name, subscriber->phone,
                                     subscriber->address, subscriber->status, subscriber->info.privateInfo.birthday);
     }
 
+    return SUCCES;
+}
+
+int printKey(subscriberKey_t* key)
+{
+    printf("%10d %10s\n", key->position, key->keySurname);
     return SUCCES;
 }
 
@@ -188,9 +198,12 @@ int createSubscriber(subscriber_t* subscriberDestination, char* surname, char* n
     return SUCCES;
 }
 
-int compareSubscribersBySurname(subscriber_t* subscriberFirst, subscriber_t* subscriberSecond)
+int compareSubscribersBySurname(const void* subscriberFirst, const void* subscriberSecond)
 {
-    return (strcmp(subscriberFirst->surname, subscriberSecond->surname) > 0);  // First > second
+    subscriber_t* subA = (subscriber_t*)subscriberFirst;
+    subscriber_t* subB = (subscriber_t*)subscriberSecond;
+
+    return (strcmp(subA->surname, subB->surname));  // First > second
 }
 
 int createKey(subscriberKey_t* key, char* surname, int pos)
@@ -213,20 +226,20 @@ int setKeyEmpty(subscriberKey_t* key)
 
     return SUCCES;
 }
-int printKey(subscriberKey_t* key)
+
+int compareKeyBySurname(const void* keyFirst, const void* keySecond)
 {
-    printf("%d %s\n", key->position, key->keySurname);
-    return SUCCES;
+    subscriberKey_t* keyA = (subscriberKey_t *)keyFirst;
+    subscriberKey_t* keyB = (subscriberKey_t *)keySecond;
+
+    return (strcmp(keyA->keySurname, keyB->keySurname));  // First > second => return > 0
 }
 
-int compareKeyBySurname(subscriberKey_t* keyFirst, subscriberKey_t* keySecond)
+int compareKeyByPosition(const void* keyFirst, const void* keySecond)
 {
-    return (strcmp(keyFirst->keySurname, keySecond->keySurname) > 0);  // First > second
-}
-
-int compareKeyByPosition(subscriberKey_t* keyFirst, subscriberKey_t* keySecond)
-{
-    return (keyFirst->position > keySecond->position);
+    subscriberKey_t* keyA = (subscriberKey_t *)keyFirst;
+    subscriberKey_t* keyB = (subscriberKey_t *)keySecond;
+    return (keyA->position - keyB->position);
 }
 
 int isBirthdayCorrect(char* str)
@@ -238,6 +251,29 @@ int isBirthdayCorrect(char* str)
         while (i < MAX_BIRTHDAY_LEN && exitCode)
         {
             exitCode = isdigit(str[i]);
+            if (exitCode)
+            {
+                switch (i)
+                {
+                    case 4:
+                        exitCode = (str[i] - '0' <= 1);
+                        break;
+                    
+                    case 5:
+                        exitCode = ((str[i - 1] - '0' == 1) ? (str[i] - '0') <= 1 : 1);
+                        break;
+                    
+                    case 6:
+                        exitCode = (str[i] - '0' <= 3);
+                        break;
+                    
+                    case 7:
+                        exitCode = ((str[i - 1] - '0' == 3) ? (str[i] - '0') <= 1 : 1);
+                        break;
+                    default:
+                        break;
+                }
+            }
             i++;
         }
     }
@@ -247,4 +283,14 @@ int isBirthdayCorrect(char* str)
     }
 
     return exitCode;
+}
+
+int isSurnameMatch(subscriber_t* subscriber, char* surname)
+{
+    return !strcmp(subscriber->surname, surname);
+}
+
+int isSourcePosition(subscriberKey_t* key, int pos)
+{
+    return (key->position == pos);
 }

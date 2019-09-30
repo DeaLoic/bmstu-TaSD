@@ -21,23 +21,32 @@ int main(void)
     phoneBook_t phoneBook;
     phoneBookKeyTable_t keyTable;
     subscriber_t tempSubscriber;
+    subscriberKey_t tempKey;
     setPhoneBookEmpty(&phoneBook);
     setKeyTableEmpty(&keyTable);
     setSubscriberEmpty(&tempSubscriber);
+    setKeyEmpty(&tempKey);
     int temp = 0;
+    FILE* source = NULL;
     char tempSurname[MAX_SURNAME_LEN];
 
     while (!errorCode && choose != 0)
     {
+        fseek(stdin, 0, SEEK_END);
         printMenu();
-        scanf("%d", &choose);
+        if (!scanf("%d", &choose))
+        {
+            choose = -1;
+        }
+        system("cls");
+        fseek(stdin, 0, SEEK_END);
 
         switch (choose)
         {
             case 1:
                 setPhoneBookEmpty(&phoneBook);
                 setKeyTableEmpty(&keyTable);
-                FILE* source = fopen(filename, "r");
+                source = fopen(filename, "r");
                 if (source)
                 {
                     errorCode = inputPhoneBookFile(&phoneBook, source);
@@ -86,9 +95,18 @@ int main(void)
                     if (!errorCode)
                     {
                         errorCode = addRecord(&phoneBook, &tempSubscriber);
+                        printf("Error after added record: %d\n", errorCode);
+                        if (!errorCode)
+                        {
+                            createKey(&tempKey, phoneBook.subscribers[phoneBook.subscribersCount - 1].surname,
+                                                phoneBook.subscribersCount - 1);
+                            printf("keys count: %d\n", keyTable.keysCount);
+                            printKey(&tempKey);
+                            errorCode = addKey(&keyTable, &tempKey);
+                        }
                         if (errorCode)
                         {
-                            printf("\nError in memory");
+                            printf("\nError in memory. Panic exit");
                         }
                     }
                     else
@@ -96,29 +114,59 @@ int main(void)
                         printf("\nIncorrect input. Record doesnt add\n");
                         errorCode = SUCCES;
                     }
+                    setKeyEmpty(&tempKey);
                     setSubscriberEmpty(&tempSubscriber);
                 }
                 else
                 {
-                    printf("\nPhone book doesnt exist\n");
+                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
                 }
                 break;
 
             case 4:
                 if (phoneBook.subscribersCount)
                 {
+                    printPhoneBookByKeyTable(&phoneBook, &keyTable);
                     printf("\nInput surname to delete\n");
 
                     errorCode = inputString(stdin, tempSurname, MAX_SURNAME_LEN);
 
                     if (!errorCode)
                     {
-                        findC
-                        errorCode = deleteRecord(&phoneBook, temp);
-                        if (errorCode)
+                        temp = findFirstByCondition(&phoneBook, &isSurnameMatch, tempSurname);
+                        if (temp >= 0)
+                        {
+                            errorCode = deleteRecord(&phoneBook, temp);
+                            if (!errorCode)
+                            {
+                                temp = findKeyByCondition(&keyTable, &isSourcePosition, temp);
+                                errorCode = deleteKey(&keyTable, temp);
+                                if (!errorCode)
+                                {
+                                    for (int i = 0; i < keyTable.keysCount; i++)
+                                    {
+                                        if (keyTable.keys[i].position > temp)
+                                        {
+                                            keyTable.keys[i].position -= 1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            printf("Record doesnt found");
+                        }
+                        
+                        if (errorCode == MEMORY_ERROR)
                         {
                             printf("Memory error, panic exit\n");
                         }
+                        else
+                        {
+                            errorCode = SUCCES;
+                        }
+                        
                     }
                     else
                     {
@@ -127,7 +175,7 @@ int main(void)
                 }
                 else
                 {
-                    printf("\nCount of records in phone book <= 1. Deleting impossible.\n");
+                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
                 }
                 break;
             
@@ -138,7 +186,7 @@ int main(void)
                 }
                 else
                 {
-                    printf("\nPhone book doesnt exist\n");
+                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
                 }
                 break;
             
@@ -160,51 +208,79 @@ int main(void)
                 }
                 else
                 {
-                    printf("\nPhone book doesnt exist\n");
+                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
                 }
                 break;
 
             case 8:
                 if (phoneBook.subscribersCount)
                 {
-                    sortKeyTable(&keyTable, &compareKeyBySurname);
+                    sortKeyTableBubble(&keyTable, &compareKeyBySurname);
                 }
                 else
                 {
-                    printf("\nPhone book is empty\n");
+                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
                 }
                 break;
 
             case 9:
                 if (phoneBook.subscribersCount)
                 {
-                    sortPhoneBook(&phoneBook, &compareSubscribersBySurname);
+                    sortPhoneBookBubble(&phoneBook, &compareSubscribersBySurname);
+                    deleteKeyTable(&keyTable);
+                    setKeyTableEmpty(&keyTable);
+                    createKeyTable(&phoneBook, &keyTable);
                 }
                 else
                 {
-                    printf("\nPhone book is empty\n");
+                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
                 }
                 break;
 
             case 10:
                 if (phoneBook.subscribersCount)
                 {
+                    sortKeyTableQsort(&keyTable, &compareKeyBySurname);
+                }
+                else
+                {
+                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
+                }
+                break;
+
+            case 11:
+                if (phoneBook.subscribersCount)
+                {
+                    sortPhoneBookQsort(&phoneBook, &compareSubscribersBySurname);
+                    deleteKeyTable(&keyTable);
+                    setKeyTableEmpty(&keyTable);
+                    createKeyTable(&phoneBook, &keyTable);
+                }
+                else
+                {
+                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
+                }
+                break;
+
+            case 12:
+                if (phoneBook.subscribersCount)
+                {
                     compareSorting(&phoneBook, &keyTable);
                 }
                 else
                 {
-                    printf("\nPhone book is empty\n");
+                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
                 }
                 break;
             
-            case 11:
+            case 13:
                 if (phoneBook.subscribersCount)
                 {
                     findWeekBirthday(&phoneBook);
                 }
                 else
                 {
-                    printf("\nPhone book is empty\n");
+                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
                 }
                 break;
 
@@ -237,9 +313,12 @@ void printMenu()
     printf("5.  Print phone book\n");
     printf("6.  Print key table\n");
     printf("7.  Print phone book by key table\n");
-    printf("8.  Sort key table\n");
-    printf("9.  Sort phone book\n");
-    printf("10. Compare sorting\n");
-    printf("11. Find friends with birthday in week\n");
+    printf("8.  Sort key table bubble\n");
+    printf("9.  Sort phone book bubble\n");
+    printf("10. Sort key table qsort\n");
+    printf("11. Sort phone book qsort\n");
+    printf("12. Compare sorting\n");
+    printf("13. Find friends with birthday in week\n");
+    printf("14. Write phone book to phoneBook.csv");
     printf("\nYour choose: ");
 }

@@ -1,8 +1,11 @@
 #ifndef __PHONE_BOOK_H__
 #define __PHONE_BOOK_H__
 
+#include <limits.h>
 #include <stdio.h>
 #include "subscriber.h"
+
+#define MAX_RECORDS (INT_MAX - 1)
 
 typedef struct
 {
@@ -28,6 +31,9 @@ int addRecord(phoneBook_t* phoneBook, subscriber_t* subscriber);
 int deleteRecord(phoneBook_t* phoneBook, int position);
 int deletePhoneBook(phoneBook_t* phoneBook);
 
+int findFirstByCondition(phoneBook_t* phoneBook, int (*condition)(subscriber_t*, char*), char* str);
+int findKeyByCondition(phoneBookKeyTable_t* keyTable, int (condition)(subscriberKey_t*, int), int integer);
+
 int createKeyTable(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTable);
 int setKeyTableEmpty(phoneBookKeyTable_t* keyTable);
 int printKeyTable(phoneBookKeyTable_t* keyTable);
@@ -35,8 +41,10 @@ int addKey(phoneBookKeyTable_t* keyTable, subscriberKey_t* key);
 int deleteKey(phoneBookKeyTable_t* keyTable, int position);
 int deleteKeyTable(phoneBookKeyTable_t* keyTable);
 
-int sortKeyTable(phoneBookKeyTable_t* keyTable, int (*condition)(subscriberKey_t*, subscriberKey_t*));
-int sortPhoneBook(phoneBook_t* phoneBook, int (*condition)(subscriber_t* , subscriber_t*));
+int sortKeyTableBubble(phoneBookKeyTable_t* keyTable, int (*condition)(const void*, const void*));
+int sortPhoneBookBubble(phoneBook_t* phoneBook, int (*condition)(const void* , const void*));
+int sortKeyTableQsort(phoneBookKeyTable_t* keyTable, int (*condition)(const void*, const void*));
+int sortPhoneBookQsort(phoneBook_t* phoneBook, int (*condition)(const void* , const void*));
 int copyKeyTable(phoneBookKeyTable_t* keyTableSource, phoneBookKeyTable_t* keyTableDest);
 int copyPhoneBook(phoneBook_t* phoneBookSource, phoneBook_t* phoneBookDest);
 

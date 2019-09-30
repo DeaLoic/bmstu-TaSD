@@ -1,7 +1,7 @@
 all: app.exe
 
 app.exe:
-	gcc -Wall -Werror -pedantic main.c phoneBook.c subscriber.c taskLogic.c universal.c -o app.exe
+	gcc -Wall -pedantic main.c phoneBook.c subscriber.c taskLogic.c universal.c -o app.exe
 
 clean:
 	rm *.exe

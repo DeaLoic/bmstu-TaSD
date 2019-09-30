@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "errorCodes.h"
 #include "subscriber.h"
 #include "phoneBook.h"
@@ -16,14 +17,22 @@ int inputPhoneBookFile(phoneBook_t* phoneBook, FILE* source)
     phoneBook->subscribers = (subscriber_t*)malloc(sizeof(subscriber_t) * startCount);
     int i = 0;
     subscriber_t* tempBook = NULL;
-    while (phoneBook->subscribers && !feof(source))
+    while (phoneBook->subscribers && !errorCode && !feof(source) && phoneBook->subscribersCount < MAX_RECORDS)
     {
         errorCode = inputSubscriberFile(phoneBook->subscribers + i, source);
-        printf("readed c code: %d\n", errorCode);
-        phoneBook->subscribersCount += 1;
+        if (!errorCode)
+        {
+            phoneBook->subscribersCount += 1;
+        }
+
         i++;
         if (i == startCount)
         {
+            if (startCount == MAX_RECORDS / 2)
+            {
+                step = 1;
+                startCount = MAX_RECORDS;
+            }
             startCount *= step;
             tempBook = (subscriber_t*)realloc(phoneBook->subscribers, sizeof(subscriber_t) * startCount);
             if (tempBook)
@@ -59,47 +68,43 @@ int inputPhoneBookFile(phoneBook_t* phoneBook, FILE* source)
 int inputPhoneBookConsole(phoneBook_t* phoneBook)
 {
     int errorCode = SUCCES;
-    int step = 2;
-    int startCount = 10;
-    phoneBook->subscribersCount = 0;
-    phoneBook->subscribers = (subscriber_t*)malloc(sizeof(subscriber_t) * startCount);
-    int i = 0;
-    subscriber_t* tempBook = NULL;
-    while (phoneBook->subscribers && !feof(stdin) && !errorCode)
+    int startCount = 0;
+    printf("How many records will be add? (Input 0 for decline, or integer positive < %d)\n", MAX_RECORDS);
+    fseek(stdin, 0, SEEK_END);
+    if (scanf("%d", &startCount) && startCount >= 0 && startCount <= MAX_RECORDS)
     {
-        errorCode = inputSubscriberConsole(phoneBook->subscribers + i);
-        phoneBook->subscribersCount += 1;
-        i++;
-        if (i == startCount)
-        {
-            startCount *= step;
-            tempBook = (subscriber_t*)realloc(phoneBook->subscribers, sizeof(subscriber_t) * startCount);
-            if (tempBook)
-            {
-                phoneBook->subscribers = tempBook;
-            }
-            else
-            {
-                free(phoneBook->subscribers);
-                setPhoneBookEmpty(phoneBook);
-                errorCode = MEMORY_ERROR;
-            }
-        }
-    }
-    if (!errorCode)
-    {
-        tempBook = (subscriber_t*)realloc(phoneBook->subscribers, sizeof(subscriber_t) * phoneBook->subscribersCount);
-        if (tempBook)
-        {
-            phoneBook->subscribers = tempBook;
-        }
-        else
+        phoneBook->subscribers = (subscriber_t*)malloc(sizeof(subscriber_t) * startCount);
+        phoneBook->subscribersCount = 0;
+        
+        if (!phoneBook->subscribers)
         {
             free(phoneBook->subscribers);
             setPhoneBookEmpty(phoneBook);
             errorCode = MEMORY_ERROR;
         }
     }
+    if (getchar() != '\n')
+    {
+        errorCode = INPUT_ERROR;
+    }
+
+    int i = 0;
+    while (phoneBook->subscribers && i < startCount && !errorCode)
+    {
+        errorCode = inputSubscriberConsole(phoneBook->subscribers + i);
+        if (!errorCode)
+        {
+            phoneBook->subscribersCount += 1;
+        }
+        i++;
+    }
+    if (errorCode && (errorCode != MEMORY_ERROR))
+    {
+        printf("Error in input. ");
+        errorCode = SUCCES;
+    }
+
+    printf("Correct records: %d\n", phoneBook->subscribersCount);
 
     return errorCode;
 }
@@ -119,7 +124,7 @@ int setPhoneBookByKeyTable(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTable
 
 int printPhoneBook(phoneBook_t* phoneBook)
 {
-    printf("| Surname | Name | Phone | Address | Status | Variable Part |\n");
+    printf("| Surname |   Name   |   Phone  |  Address | Status | Variable Part |\n");
     for (int i = 0; i < phoneBook->subscribersCount; i++)
     {
         printSubscriber(phoneBook->subscribers + i);
@@ -130,7 +135,7 @@ int printPhoneBook(phoneBook_t* phoneBook)
 
 int printPhoneBookByKeyTable(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTable)
 {
-    printf("| Surname | Name | Phone | Address | Status | Variable Part |\n");
+    printf("| Surname |   Name   |   Phone  |  Address  | Status | Variable Part |\n");
     for (int i = 0; i < keyTable->keysCount; i++)
     {
         printSubscriber(phoneBook->subscribers + keyTable->keys[i].position);
@@ -139,10 +144,22 @@ int printPhoneBookByKeyTable(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTab
     return SUCCES;
 }
 
+int printKeyTable(phoneBookKeyTable_t* keyTable)
+{
+    int errorCode = SUCCES;
+    printf("| Position | Keys |\n");
+    for (int i = 0; i < keyTable->keysCount; i++)
+    {
+        printKey(keyTable->keys + i);
+    }
+
+    return errorCode;
+}
+
 int addRecord(phoneBook_t* phoneBook, subscriber_t* subscriber)
 {
     int errorCode = SUCCES;
-    subscriber_t* temp = (subscriber_t*)realloc(phoneBook->subscribers, phoneBook->subscribersCount + 1);
+    subscriber_t* temp = (subscriber_t*)realloc(phoneBook->subscribers, sizeof(subscriber_t) * (phoneBook->subscribersCount + 1));
     if (temp)
     {
         phoneBook->subscribers = temp;
@@ -160,15 +177,15 @@ int addRecord(phoneBook_t* phoneBook, subscriber_t* subscriber)
 int deleteRecord(phoneBook_t* phoneBook, int position)
 {
     int errorCode = SUCCES;
-    if (position >= 0 && position <= phoneBook->subscribersCount && phoneBook->subscribersCount > 1)
+    if (position >= 0 && position <= phoneBook->subscribersCount)
     {
         for (int i = position; i + 1 < phoneBook->subscribersCount; i++)
         {
             swapSubscriber(phoneBook->subscribers + i, phoneBook->subscribers + i + 1);
         }
 
-        subscriber_t* temp = (subscriber_t*)realloc(phoneBook->subscribers, phoneBook->subscribersCount - 1);
-        if (temp)
+        subscriber_t* temp = (subscriber_t*)realloc(phoneBook->subscribers, sizeof(subscriber_t) * (phoneBook->subscribersCount - 1));
+        if (temp || (phoneBook->subscribersCount - 1) == 0)
         {
             phoneBook->subscribers = temp;
             phoneBook->subscribersCount -= 1;
@@ -221,27 +238,18 @@ int setKeyTableEmpty(phoneBookKeyTable_t* keyTable)
     return SUCCES;
 }
 
-int printKeyTable(phoneBookKeyTable_t* keyTable)
-{
-    int errorCode = SUCCES;
-    printf("| Position | Keys |\n");
-    for (int i = 0; i < keyTable->keysCount; i++)
-    {
-        printKey(keyTable->keys + i);
-    }
-
-    return errorCode;
-}
 
 int addKey(phoneBookKeyTable_t* keyTable, subscriberKey_t* key)
 {
     int errorCode = SUCCES;
-    subscriberKey_t* temp = (subscriberKey_t*)realloc(keyTable->keys, keyTable->keysCount + 1);
+    subscriberKey_t* temp = (subscriberKey_t*)realloc(keyTable->keys, sizeof(subscriberKey_t) * (keyTable->keysCount + 1));
+
+    printf("temp: %d, source: %d\n", temp, keyTable->keys);
     if (temp)
     {
         keyTable->keys = temp;
         keyTable->keysCount += 1;
-        copyKey(keyTable->keys + keyTable->keysCount - 1, key);
+        copyKey(key, keyTable->keys + keyTable->keysCount - 1);
     }
     else
     {
@@ -255,15 +263,15 @@ int addKey(phoneBookKeyTable_t* keyTable, subscriberKey_t* key)
 int deleteKey(phoneBookKeyTable_t* keyTable, int position)
 {
     int errorCode = SUCCES;
-    if (position >= 0 && position <= keyTable->keysCount && keyTable->keysCount > 1)
+    if (position >= 0 && position <= keyTable->keysCount)
     {
         for (int i = position; i + 1 < keyTable->keysCount; i++)
         {
             swapSubscriberKey(keyTable->keys + i, keyTable->keys + i + 1);
         }
 
-        subscriberKey_t* temp = (subscriberKey_t*)realloc(keyTable->keys, keyTable->keysCount - 1);
-        if (temp)
+        subscriberKey_t* temp = (subscriberKey_t*)realloc(keyTable->keys, sizeof(subscriberKey_t) * (keyTable->keysCount - 1));
+        if (temp || (keyTable->keysCount - 1) == 0)
         {
             keyTable->keys = temp;
             keyTable->keysCount -= 1;
@@ -289,13 +297,13 @@ int deleteKeyTable(phoneBookKeyTable_t* keyTable)
     return SUCCES;
 }
 
-int sortKeyTable(phoneBookKeyTable_t* keyTable, int (*condition)(subscriberKey_t*, subscriberKey_t*))
+int sortKeyTableBubble(phoneBookKeyTable_t* keyTable, int (*condition)(const void*, const void*))
 {
     for (int i = 0; i + 1 < keyTable->keysCount; i++)
     {
         for (int j = 0;  j + 1 < keyTable->keysCount - j; j++)
         {
-            if (condition(keyTable->keys + j, keyTable->keys + j + 1))
+            if (condition(keyTable->keys + j, keyTable->keys + j + 1) > 0)
             {
                 swapSubscriberKey(keyTable->keys + j, keyTable->keys + j + 1);
             }
@@ -305,18 +313,32 @@ int sortKeyTable(phoneBookKeyTable_t* keyTable, int (*condition)(subscriberKey_t
     return SUCCES;
 }
 
-int sortPhoneBook(phoneBook_t* phoneBook, int (*condition)(subscriber_t* , subscriber_t*))
+int sortPhoneBookBubble(phoneBook_t* phoneBook, int (*condition)(const void* , const void*))
 {
     for (int i = 0; i + 1 < phoneBook->subscribersCount; i++)
     {
         for (int j = 0;  j + 1 < phoneBook->subscribersCount - j; j++)
         {
-            if (condition(phoneBook->subscribers + j, phoneBook->subscribers + j + 1))
+            if (condition(phoneBook->subscribers + j, phoneBook->subscribers + j + 1) > 0)
             {
                 swapSubscriber(phoneBook->subscribers + j, phoneBook->subscribers + j + 1);
             }
         }
     }
+
+    return SUCCES;
+}
+
+int sortKeyTableQsort(phoneBookKeyTable_t* keyTable, int (*condition)(const void*, const void*))
+{
+    qsort(keyTable->keys, keyTable->keysCount, sizeof(subscriberKey_t), condition);
+
+    return SUCCES;
+}
+
+int sortPhoneBookQsort(phoneBook_t* phoneBook, int (*condition)(const void* , const void*))
+{
+    qsort(phoneBook->subscribers, phoneBook->subscribersCount, sizeof(subscriber_t), condition);
 
     return SUCCES;
 }
@@ -365,4 +387,34 @@ int swapSubscriber(subscriber_t* first, subscriber_t* second)
     copySubscriber(&temp, second);
 
     return SUCCES;
+}
+
+int findFirstByCondition(phoneBook_t* phoneBook, int (*condition)(subscriber_t*, char*), char* str)
+{
+    int i = 0;
+    while (i < phoneBook->subscribersCount && !condition(phoneBook->subscribers + i, str))
+    {
+        i++;
+    }
+    if (i == phoneBook->subscribersCount)
+    {
+        i = -1;
+    }
+
+    return i;
+}
+
+int findKeyByCondition(phoneBookKeyTable_t* keyTable, int (condition)(subscriberKey_t*, int), int integer)
+{
+    int i = 0;
+    while (i < keyTable->keysCount && !condition(keyTable->keys + i, integer))
+    {
+        i++;
+    }
+    if (i == keyTable->keysCount)
+    {
+        i = -1;
+    }
+
+    return i;
 }
