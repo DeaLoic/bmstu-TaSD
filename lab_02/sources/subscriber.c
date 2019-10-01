@@ -5,8 +5,6 @@
 #include "universal.h"
 #include "subscriber.h"
 
-int isBirthdayCorrect(char* str);
-
 int inputSubscriberConsole(subscriber_t* subscriber)
 {
     printf("Input surname (max %d symbls): ", MAX_SURNAME_LEN - 1);
@@ -64,7 +62,6 @@ int inputSubscriberConsole(subscriber_t* subscriber)
         {
             errorCode = INPUT_ERROR;
         }
-        printf("\nbirthday: %s\n", subscriber->info.privateInfo.birthday);
     }
 
     return errorCode;
@@ -248,32 +245,9 @@ int isBirthdayCorrect(char* str)
     if (strlen(str) == MAX_BIRTHDAY_LEN - 1)
     {
         int i = 0;
-        while (i < MAX_BIRTHDAY_LEN && exitCode)
+        while (i < MAX_BIRTHDAY_LEN - 1 && exitCode)
         {
             exitCode = isdigit(str[i]);
-            if (exitCode)
-            {
-                switch (i)
-                {
-                    case 4:
-                        exitCode = (str[i] - '0' <= 1);
-                        break;
-                    
-                    case 5:
-                        exitCode = ((str[i - 1] - '0' == 1) ? (str[i] - '0') <= 1 : 1);
-                        break;
-                    
-                    case 6:
-                        exitCode = (str[i] - '0' <= 3);
-                        break;
-                    
-                    case 7:
-                        exitCode = ((str[i - 1] - '0' == 3) ? (str[i] - '0') <= 1 : 1);
-                        break;
-                    default:
-                        break;
-                }
-            }
             i++;
         }
     }
@@ -293,4 +267,47 @@ int isSurnameMatch(subscriber_t* subscriber, char* surname)
 int isSourcePosition(subscriberKey_t* key, int pos)
 {
     return (key->position == pos);
+}
+
+
+int strToInt(char* str)
+{
+    int len = strlen(str);
+    int res = 0;
+    for (int i = len - 1, pow = 1; i >= 0; i -= 1, pow*=10)
+    {
+        res += (str[i] - '0') * pow;
+    }
+
+    return res;
+}
+
+int dateToDay(int date)
+{
+    return (date % 100 + date / 100 * 31) % (31 * 12);
+}
+int isBirthdayNextWeek(subscriber_t* subscriber, char* birthday)
+{
+    int exitCode = 0;
+    int curDays = dateToDay(strToInt(birthday));
+    int nextWeek = (curDays + 7) % (31 * 12);
+    if (nextWeek == 0)
+    {
+        nextWeek++;
+    }
+    int tempDate = 0;
+    if (subscriber->status == private)
+    {
+        tempDate = dateToDay(strToInt(subscriber->info.privateInfo.birthday + 4));
+        if (nextWeek > curDays)
+        {
+            exitCode = (nextWeek >= tempDate && tempDate >= curDays);
+        }
+        else if (tempDate <= nextWeek || tempDate >= curDays)
+        {
+            exitCode = 1;
+        }
+        
+    }
+    return (exitCode);
 }

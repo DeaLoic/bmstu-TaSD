@@ -16,7 +16,8 @@ int main(void)
     int errorCode = SUCCES;
 
     int choose = 1;
-    char filename[] = "phoneBook.txt";
+
+    char filename[] = "phoneBook.csv";
 
     phoneBook_t phoneBook;
     phoneBookKeyTable_t keyTable;
@@ -43,6 +44,8 @@ int main(void)
 
         switch (choose)
         {
+            case 0:
+                break;
             case 1:
                 setPhoneBookEmpty(&phoneBook);
                 setKeyTableEmpty(&keyTable);
@@ -276,11 +279,42 @@ int main(void)
             case 13:
                 if (phoneBook.subscribersCount)
                 {
-                    findWeekBirthday(&phoneBook);
+                    fseek(stdin, 0, SEEK_END);
+                    errorCode = inputString(stdin, tempSurname, MAX_BIRTHDAY_LEN);
+                    if ((errorCode) || !isBirthdayCorrect(tempSurname))
+                    {
+                        printf("Incorrect input.\n");
+                        errorCode = SUCCES;
+                    }
+                    else
+                    {
+                        printByCondition(&phoneBook, &isBirthdayNextWeek, tempSurname + 4);
+                    }
                 }
                 else
                 {
                     printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
+                }
+                break;
+            
+            case 14:
+                if (phoneBook.subscribersCount)
+                {
+                    source = fopen(filename, "w");
+                    if (source)
+                    {
+                        errorCode = dropPhoneBookToFile(&phoneBook, source);
+                    }
+                    else
+                    {
+                        printf("Error open file.\n");
+                    }
+                    
+                }
+                
+                else
+                {
+                   printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
                 }
                 break;
 
@@ -306,7 +340,7 @@ void printMenu()
 {
     printf("\n------------------MENU------------------\n");
     printf("0.  Exit\n");
-    printf("1.  Input data from file phoneBook.txt\n");
+    printf("1.  Input data from file phoneBook.csv\n");
     printf("2.  Input data from console\n");
     printf("3.  Add data from console\n");
     printf("4.  Delete data by surname value\n");

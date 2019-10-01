@@ -21,6 +21,8 @@ typedef struct
 
 } phoneBookKeyTable_t;
 
+
+int dropPhoneBookToFile(phoneBook_t* phoneBook, FILE* dest);
 int inputPhoneBookFile(phoneBook_t* phoneBook, FILE* source);
 int inputPhoneBookConsole(phoneBook_t* phoneBook);
 int setPhoneBookEmpty(phoneBook_t* phoneBook);
@@ -33,6 +35,7 @@ int deletePhoneBook(phoneBook_t* phoneBook);
 
 int findFirstByCondition(phoneBook_t* phoneBook, int (*condition)(subscriber_t*, char*), char* str);
 int findKeyByCondition(phoneBookKeyTable_t* keyTable, int (condition)(subscriberKey_t*, int), int integer);
+int printByCondition(phoneBook_t* phoneBook, int (*condition)(subscriber_t*, char*), char* str);
 
 int createKeyTable(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTable);
 int setKeyTableEmpty(phoneBookKeyTable_t* keyTable);

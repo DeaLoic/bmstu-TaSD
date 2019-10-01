@@ -301,7 +301,7 @@ int sortKeyTableBubble(phoneBookKeyTable_t* keyTable, int (*condition)(const voi
 {
     for (int i = 0; i + 1 < keyTable->keysCount; i++)
     {
-        for (int j = 0;  j + 1 < keyTable->keysCount - j; j++)
+        for (int j = 0;  j + 1 < keyTable->keysCount - i; j++)
         {
             if (condition(keyTable->keys + j, keyTable->keys + j + 1) > 0)
             {
@@ -317,7 +317,7 @@ int sortPhoneBookBubble(phoneBook_t* phoneBook, int (*condition)(const void* , c
 {
     for (int i = 0; i + 1 < phoneBook->subscribersCount; i++)
     {
-        for (int j = 0;  j + 1 < phoneBook->subscribersCount - j; j++)
+        for (int j = 0;  j + 1 < phoneBook->subscribersCount - i; j++)
         {
             if (condition(phoneBook->subscribers + j, phoneBook->subscribers + j + 1) > 0)
             {
@@ -394,6 +394,25 @@ int findFirstByCondition(phoneBook_t* phoneBook, int (*condition)(subscriber_t*,
     int i = 0;
     while (i < phoneBook->subscribersCount && !condition(phoneBook->subscribers + i, str))
     {
+        i++;
+    }
+    if (i == phoneBook->subscribersCount)
+    {
+        i = -1;
+    }
+
+    return i;
+}
+
+int printByCondition(phoneBook_t* phoneBook, int (*condition)(subscriber_t*, char*), char* str)
+{
+    int i = 0;
+    while (i < phoneBook->subscribersCount)
+    {
+        if (condition(phoneBook->subscribers + i, str))
+        {
+            printSubscriber(phoneBook->subscribers + i);
+        }
         i++;
     }
     if (i == phoneBook->subscribersCount)

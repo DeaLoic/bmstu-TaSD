@@ -76,5 +76,7 @@ int compareKeyByPosition(const void* keyFirst, const void* keySecond);
 
 int isSurnameMatch(subscriber_t* subscriber, char* surname);
 int isSourcePosition(subscriberKey_t* key, int pos);
+int isBirthdayNextWeek(subscriber_t* subscriber, char* birthday);
+int isBirthdayCorrect(char* str);
 
 #endif
