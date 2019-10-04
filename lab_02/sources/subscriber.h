@@ -7,7 +7,7 @@
 #define MAX_NAME_LEN       64
 #define MAX_PHONE_LEN      16
 #define MAX_BIRTHDAY_LEN   9
-#define MAX_ADDRESS_LEN    256
+#define MAX_ADDRESS_LEN    128
 #define MAX_POSITION_LEN   128
 #define MAX_COMPANY_LEN    128
 

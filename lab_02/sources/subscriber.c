@@ -27,7 +27,10 @@ int inputSubscriberConsole(subscriber_t* subscriber)
 {
     printf("Input surname (max %d symbls): ", MAX_SURNAME_LEN - 1);
     int errorCode = inputString(stdin, subscriber->surname, MAX_SURNAME_LEN);
-
+    if (strlen(subscriber->surname) == 0)
+    {
+        errorCode = INCORRECT_INPUT;
+    }
     if (!errorCode)
     {
         printf("Input name (max %d symbls): ", MAX_NAME_LEN - 1);

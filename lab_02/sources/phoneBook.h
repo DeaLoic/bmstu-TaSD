@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include "subscriber.h"
 
-#define MAX_RECORDS (INT_MAX - 1)
+#define MAX_RECORDS (2000)
 
 typedef struct
 {

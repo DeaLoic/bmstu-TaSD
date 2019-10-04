@@ -98,7 +98,6 @@ int main(void)
                     if (!errorCode)
                     {
                         errorCode = addRecord(&phoneBook, &tempSubscriber);
-                        printf("Error after added record: %d\n", errorCode);
                         if (!errorCode)
                         {
                             createKey(&tempKey, phoneBook.subscribers[phoneBook.subscribersCount - 1].surname,
@@ -120,7 +119,7 @@ int main(void)
                 }
                 else
                 {
-                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
+                    printf("\nPhone book is empty, pls choose 1 or 2 point to create\n");
                 }
                 break;
 
@@ -137,26 +136,31 @@ int main(void)
                         temp = findFirstByCondition(&phoneBook, &isSurnameMatch, tempSurname);
                         if (temp >= 0)
                         {
-                            errorCode = deleteRecord(&phoneBook, temp);
-                            if (!errorCode)
+                            while (temp >= 0)
                             {
-                                temp = findKeyByCondition(&keyTable, &isSourcePosition, temp);
-                                errorCode = deleteKey(&keyTable, temp);
+                                errorCode = deleteRecord(&phoneBook, temp);
                                 if (!errorCode)
                                 {
-                                    for (int i = 0; i < keyTable.keysCount; i++)
+                                    temp = findKeyByCondition(&keyTable, &isSourcePosition, temp);
+                                    errorCode = deleteKey(&keyTable, temp);
+                                    if (!errorCode)
                                     {
-                                        if (keyTable.keys[i].position > temp)
+                                        for (int i = 0; i < keyTable.keysCount; i++)
                                         {
-                                            keyTable.keys[i].position -= 1;
+                                            if (keyTable.keys[i].position > temp)
+                                            {
+                                                keyTable.keys[i].position -= 1;
+                                            }
                                         }
                                     }
                                 }
+                                temp = findFirstByCondition(&phoneBook, &isSurnameMatch, tempSurname);
                             }
+                            
                         }
                         else
                         {
-                            printf("Record doesnt found");
+                            printf("Records doesnt found\n");
                         }
                         
                         if (errorCode == MEMORY_ERROR)
@@ -176,7 +180,7 @@ int main(void)
                 }
                 else
                 {
-                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
+                    printf("\nPhone book is empty, pls choose 1 or 2 point to create\n");
                 }
                 break;
             
@@ -187,7 +191,7 @@ int main(void)
                 }
                 else
                 {
-                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
+                    printf("\nPhone book is empty, pls choose 1 or 2 point to create\n");
                 }
                 break;
             
@@ -209,7 +213,7 @@ int main(void)
                 }
                 else
                 {
-                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
+                    printf("\nPhone book is empty, pls choose 1 or 2 point to create\n");
                 }
                 break;
 
@@ -220,7 +224,7 @@ int main(void)
                 }
                 else
                 {
-                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
+                    printf("\nPhone book is empty, pls choose 1 or 2 point to create\n");
                 }
                 break;
 
@@ -234,7 +238,7 @@ int main(void)
                 }
                 else
                 {
-                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
+                    printf("\nPhone book is empty, pls choose 1 or 2 point to create\n");
                 }
                 break;
 
@@ -245,7 +249,7 @@ int main(void)
                 }
                 else
                 {
-                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
+                    printf("\nPhone book is empty, pls choose 1 or 2 point to create\n");
                 }
                 break;
 
@@ -259,7 +263,7 @@ int main(void)
                 }
                 else
                 {
-                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
+                    printf("\nPhone book is empty, pls choose 1 or 2 point to create\n");
                 }
                 break;
 
@@ -274,7 +278,7 @@ int main(void)
                 }
                 else
                 {
-                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
+                    printf("\nPhone book is empty, pls choose 1 or 2 point to create\n");
                 }
                 break;
             
@@ -296,7 +300,7 @@ int main(void)
                 }
                 else
                 {
-                   printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
+                   printf("\nPhone book is empty, pls choose 1 or 2 point to create\n");
                 }
                 break;
 
