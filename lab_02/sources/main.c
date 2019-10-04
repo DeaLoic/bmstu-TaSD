@@ -268,7 +268,7 @@ int main(void)
             case 12:
                 if (phoneBook.subscribersCount)
                 {
-                    compareSorting(&phoneBook, &keyTable);
+                    compareSorting();
                 }
                 else
                 {
@@ -279,17 +279,7 @@ int main(void)
             case 13:
                 if (phoneBook.subscribersCount)
                 {
-                    fseek(stdin, 0, SEEK_END);
-                    errorCode = inputString(stdin, tempSurname, MAX_BIRTHDAY_LEN);
-                    if ((errorCode) || !isBirthdayCorrect(tempSurname))
-                    {
-                        printf("Incorrect input.\n");
-                        errorCode = SUCCES;
-                    }
-                    else
-                    {
-                        printByCondition(&phoneBook, &isBirthdayNextWeek, tempSurname + 4);
-                    }
+                    printInWeekBirthday(&phoneBook);
                 }
                 else
                 {
@@ -303,15 +293,14 @@ int main(void)
                     source = fopen(filename, "w");
                     if (source)
                     {
-                        errorCode = dropPhoneBookToFile(&phoneBook, source);
+                        errorCode = dropPhoneBookToFile(&phoneBook, &keyTable, source);
+                        fclose(source);
                     }
                     else
                     {
                         printf("Error open file.\n");
                     }
-                    
                 }
-                
                 else
                 {
                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");

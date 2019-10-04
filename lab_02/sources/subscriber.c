@@ -4,6 +4,24 @@
 #include "errorCodes.h"
 #include "universal.h"
 #include "subscriber.h"
+#include "time.h"
+#include "stdlib.h"
+
+int dropRecordToFile(subscriber_t* subscriber, FILE* dest)
+{
+    fprintf(dest, "%s;%s;%s;%s;%d;", subscriber->surname, subscriber->name, subscriber->phone,
+                                    subscriber->address, subscriber->status);
+    if (subscriber->status == private)
+    {
+        fprintf(dest, "%s;", subscriber->info.privateInfo.birthday);
+    }
+    else
+    {
+        fprintf(dest, "%s;%s;", subscriber->info.workInfo.company, subscriber->info.workInfo.position);
+    }
+
+    return SUCCES;
+}
 
 int inputSubscriberConsole(subscriber_t* subscriber)
 {
@@ -174,6 +192,31 @@ int copySubscriber(subscriber_t* subscriberSource, subscriber_t* subscriberDesti
     return SUCCES;
 }
 
+int createRandomSubscriber(subscriber_t* subscriber)
+{
+    createRandomString(subscriber->surname, rand() % (MAX_SURNAME_LEN - 2) + 1);
+    createRandomString(subscriber->name, rand() % (MAX_NAME_LEN - 2) + 1);
+    createRandomString(subscriber->phone, rand() % (MAX_PHONE_LEN - 2) + 1);
+    createRandomString(subscriber->address, rand() % (MAX_ADDRESS_LEN - 2) + 1);
+    if (rand() % 2)
+    {
+        subscriber->status = 0;
+        char numbs[] = "0123456789";
+        for (int i = 0; i < MAX_BIRTHDAY_LEN; i++)
+        {
+            subscriber->info.privateInfo.birthday[i] = numbs[rand() % 10];
+        }
+    }
+    else
+    {
+        subscriber->status = 1;
+        createRandomString(subscriber->info.workInfo.position, rand() % (MAX_POSITION_LEN - 2) + 1);
+        createRandomString(subscriber->info.workInfo.company, rand() % (MAX_COMPANY_LEN - 2) + 1);
+    }
+
+    return SUCCES;
+}
+
 int createSubscriber(subscriber_t* subscriberDestination, char* surname, char* name, char* phone, char* address,
                      subscriberStatus status, extraInfo info)
 {
@@ -212,6 +255,7 @@ int createKey(subscriberKey_t* key, char* surname, int pos)
 
 int copyKey(subscriberKey_t* keySource, subscriberKey_t* keyDestination)
 {
+    (keyDestination->position) = keySource->position;
     createKey(keyDestination, keySource->keySurname, keySource->position);
     return SUCCES;
 }

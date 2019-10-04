@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
 #include "errorCodes.h"
 #include "universal.h"
 
@@ -49,4 +51,23 @@ int inputString(FILE* f, char* string, int size)
     }
 
     return errorCode;
+}
+
+int createRandomString(char* str, int len)
+{
+    if (len > 1)
+    {
+        char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.-#'?!";
+        int key = 0;
+        
+        for (int n = 0; n < len; n++)
+        {            
+            key = rand() % (int)(sizeof(charset) - 1);
+            str[n] = charset[key];
+        }
+
+            str[len] = '\0';
+    }
+
+    return SUCCES;
 }

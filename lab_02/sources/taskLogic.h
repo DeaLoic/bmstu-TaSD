@@ -7,6 +7,6 @@
 #include "phoneBook.h"
 
 int compareSorting();
-int findWeekBirthday();
+int printInWeekBirthday(phoneBook_t* phoneBook);
 
 #endif

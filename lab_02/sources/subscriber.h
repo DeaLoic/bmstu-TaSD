@@ -55,6 +55,7 @@ typedef struct
     
 } subscriberKey_t;
 
+int dropRecordToFile(subscriber_t* subscriber, FILE* dest);
 int inputSubscriberConsole(subscriber_t* subscriber);
 int inputSubscriberFile(subscriber_t* subscriber, FILE* source);
 int printSubscriber(subscriber_t* subscriber);
@@ -63,6 +64,7 @@ int setSubscriberEmpty(subscriber_t* subscriber);
 int copySubscriber(subscriber_t* subscriberSource, subscriber_t* subscriberDestination);
 int createSubscriber(subscriber_t* subscriberSource, char* surname, char* name, char* phone, char* address,
                      subscriberStatus status, extraInfo info);
+int createRandomSubscriber(subscriber_t* subscriber);
 
 int compareSubscribersBySurname(const void* subscriberFirst, const void* subscriberSecond);
 
