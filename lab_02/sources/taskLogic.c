@@ -6,42 +6,20 @@
 #include <time.h>
 #include <stdlib.h>
 
+int compareBookAtRecords(int size, int cntSorting, int (*sortBook)(phoneBook_t*, int (*)(const void* , const void*)),
+                         int (*sortKeys)(phoneBookKeyTable_t*, int (*)(const void*, const void*)),
+                         int (*secondSortBook)(phoneBook_t*, int (*)(const void* , const void*)),
+                         int (*secondSortKeys)(phoneBookKeyTable_t*, int (*)(const void*, const void*)));
+
 int compareSorting()
 {
-    phoneBook_t phoneBook, tempPhoneBook;
-    setPhoneBookEmpty(&phoneBook);
-    setPhoneBookEmpty(&tempPhoneBook);
-    
-    srand(time(NULL));
-    int recordsCnt = 100;
-    createRandomPhoneBook(&phoneBook, recordsCnt);
-    printf("Create book at %d records\n", recordsCnt);
+    printf("First sort - bubble\nSecond sort - qsort\n\n");
+    compareBookAtRecords(100, 100, sortPhoneBookBubble, sortKeyTableBubble, sortPhoneBookQsort, sortKeyTableQsort);
+    printf("\n");
+    compareBookAtRecords(500, 100, sortPhoneBookBubble, sortKeyTableBubble, sortPhoneBookQsort, sortKeyTableQsort);
+    printf("\n");
+    compareBookAtRecords(1000, 100, sortPhoneBookBubble, sortKeyTableBubble, sortPhoneBookQsort, sortKeyTableQsort);
 
-    phoneBookKeyTable_t keyTable, tempKeyTable;
-    setKeyTableEmpty(&keyTable);
-    setKeyTableEmpty(&tempKeyTable);
-    createKeyTable(&phoneBook, &keyTable);
-    copyKeyTable(&keyTable, &tempKeyTable);
-
-    clock_t start, stop;
-    int cntSorting = 1000;
-    start = clock();
-    for (int i = 0; i < cntSorting; i++)
-    {
-        copyPhoneBook(&phoneBook, &tempPhoneBook);
-        sortPhoneBookBubble(&tempPhoneBook, compareSubscribersBySurname);
-    }
-    stop = clock();
-    printf("Main table bubble sort %d time: %15lf\n", cntSorting, (double)(stop - start) / CLK_TCK);
-
-    start = clock();
-    for (int i = 0; i < cntSorting; i++)
-    {
-        copyKeyTable(&keyTable, &tempKeyTable);
-        sortKeyTableBubble(&tempKeyTable, compareKeyBySurname);
-    }
-    stop = clock();
-    printf("Keys table bubble sort %d time: %15lf\n", cntSorting, (double)(stop - start) / CLK_TCK);
 
     /*
     start = clock();
@@ -65,7 +43,10 @@ int compareSorting()
     return SUCCES;
 }
 
-int compareBookAtRecords(int size, int cntSorting)
+int compareBookAtRecords(int size, int cntSorting, int (*firstSortBook)(phoneBook_t*, int (*)(const void* , const void*)),
+                         int (*firstSortKeys)(phoneBookKeyTable_t*, int (*)(const void*, const void*)),
+                         int (*secondSortBook)(phoneBook_t*, int (*)(const void* , const void*)),
+                         int (*secondSortKeys)(phoneBookKeyTable_t*, int (*)(const void*, const void*)))
 {
     phoneBook_t phoneBook, tempPhoneBook;
     setPhoneBookEmpty(&phoneBook);
@@ -86,25 +67,45 @@ int compareBookAtRecords(int size, int cntSorting)
     for (int i = 0; i < cntSorting; i++)
     {
         copyPhoneBook(&phoneBook, &tempPhoneBook);
-        sortPhoneBookBubble(&tempPhoneBook, compareSubscribersBySurname);
+        firstSortBook(&tempPhoneBook, compareSubscribersBySurname);
     }
     stop = clock();
-    printf("Main table bubble sort %d time: %15lf\n", cntSorting, (double)(stop - start) / CLK_TCK);
+    printf("Main table first sort %d time: %15lf\n", cntSorting, (double)(stop - start) / CLK_TCK);
 
     start = clock();
     for (int i = 0; i < cntSorting; i++)
     {
         copyKeyTable(&keyTable, &tempKeyTable);
-        sortKeyTableBubble(&tempKeyTable, compareKeyBySurname);
+        firstSortKeys(&tempKeyTable, compareKeyBySurname);
     }
     stop = clock();
-    printf("Keys table bubble sort %d time: %15lf\n", cntSorting, (double)(stop - start) / CLK_TCK);
+    printf("Keys table first sort %d time: %15lf\n", cntSorting, (double)(stop - start) / CLK_TCK);
+
+    start = clock();
+    for (int i = 0; i < cntSorting; i++)
+    {
+        copyPhoneBook(&phoneBook, &tempPhoneBook);
+        secondSortBook(&tempPhoneBook, compareSubscribersBySurname);
+    }
+    stop = clock();
+    printf("Main table second sort %d time: %15lf\n", cntSorting, (double)(stop - start) / CLK_TCK);
+
+    start = clock();
+    for (int i = 0; i < cntSorting; i++)
+    {
+        copyKeyTable(&keyTable, &tempKeyTable);
+        secondSortKeys(&tempKeyTable, compareKeyBySurname);
+    }
+    stop = clock();
+    printf("Keys table second sort %d time: %15lf\n", cntSorting, (double)(stop - start) / CLK_TCK);
 
     deletePhoneBook(&phoneBook);
     deletePhoneBook(&tempPhoneBook);
 
     deleteKeyTable(&keyTable);
-    deleteKeyBook(&tempKeyBook);
+    deleteKeyTable(&tempKeyTable);
+
+    return SUCCES;
 }
 
 int printInWeekBirthday(phoneBook_t* phoneBook)

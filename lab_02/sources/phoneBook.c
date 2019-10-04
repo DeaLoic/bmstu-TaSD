@@ -160,7 +160,7 @@ int setPhoneBookByKeyTable(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTable
 
 int printPhoneBook(phoneBook_t* phoneBook)
 {
-    printf("| Surname |   Name   |   Phone  |  Address | Status | Variable Part |\n");
+    printf("| Surname |   Name   |   Phone  |  Address | Status | Variable Part \n");
     for (int i = 0; i < phoneBook->subscribersCount; i++)
     {
         printSubscriber(phoneBook->subscribers + i);
@@ -171,7 +171,7 @@ int printPhoneBook(phoneBook_t* phoneBook)
 
 int printPhoneBookByKeyTable(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTable)
 {
-    printf("| Surname |   Name   |   Phone  |  Address  | Status | Variable Part |\n");
+    printf("| Surname |   Name   |   Phone  |  Address  | Status | Variable Part \n");
     for (int i = 0; i < keyTable->keysCount; i++)
     {
         printSubscriber(phoneBook->subscribers + keyTable->keys[i].position);
@@ -183,7 +183,7 @@ int printPhoneBookByKeyTable(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTab
 int printKeyTable(phoneBookKeyTable_t* keyTable)
 {
     int errorCode = SUCCES;
-    printf("| Position | Keys |\n");
+    printf("| Position |  Keys  |\n");
     for (int i = 0; i < keyTable->keysCount; i++)
     {
         printKey(keyTable->keys + i);

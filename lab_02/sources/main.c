@@ -103,8 +103,6 @@ int main(void)
                         {
                             createKey(&tempKey, phoneBook.subscribers[phoneBook.subscribersCount - 1].surname,
                                                 phoneBook.subscribersCount - 1);
-                            printf("keys count: %d\n", keyTable.keysCount);
-                            printKey(&tempKey);
                             errorCode = addKey(&keyTable, &tempKey);
                         }
                         if (errorCode)
@@ -266,14 +264,7 @@ int main(void)
                 break;
 
             case 12:
-                if (phoneBook.subscribersCount)
-                {
                     compareSorting();
-                }
-                else
-                {
-                    printf("\nPhone book doesnt exist, pls choose 1 or 2 point to create\n");
-                }
                 break;
             
             case 13:
@@ -295,6 +286,8 @@ int main(void)
                     {
                         errorCode = dropPhoneBookToFile(&phoneBook, &keyTable, source);
                         fclose(source);
+
+                        printf("Data was writed in file.\n");
                     }
                     else
                     {
@@ -328,19 +321,24 @@ int main(void)
 void printMenu()
 {
     printf("\n------------------MENU------------------\n");
-    printf("0.  Exit\n");
+    printf("0.  Exit\n\n");
+
     printf("1.  Input data from file phoneBook.csv\n");
     printf("2.  Input data from console\n");
-    printf("3.  Add data from console\n");
+
+    printf("\n3.  Add data from console\n");
     printf("4.  Delete data by surname value\n");
-    printf("5.  Print phone book\n");
+
+    printf("\n5.  Print phone book\n");
     printf("6.  Print key table\n");
     printf("7.  Print phone book by key table\n");
-    printf("8.  Sort key table bubble\n");
+    
+    printf("\n8.  Sort key table bubble\n");
     printf("9.  Sort phone book bubble\n");
     printf("10. Sort key table qsort\n");
     printf("11. Sort phone book qsort\n");
-    printf("12. Compare sorting\n");
+
+    printf("\n12. Compare sorting\n");
     printf("13. Find friends with birthday in week\n");
     printf("14. Write phone book to phoneBook.csv");
     printf("\nYour choose: ");

@@ -153,14 +153,14 @@ int printSubscriber(subscriber_t* subscriber)
 {
     if (subscriber->status == work)
     {
-        printf("%10s %10s %10s %10s %7d %10s %10s\n", subscriber->surname, subscriber->name, subscriber->phone,
-                                    subscriber->address, subscriber->status, subscriber->info.workInfo.company,
+        printf("%10s %10s %10s %10s   work  Company: %10s  Position: %10s\n", subscriber->surname, subscriber->name, subscriber->phone,
+                                    subscriber->address, subscriber->info.workInfo.company,
                                     subscriber->info.workInfo.position);
     }
     else
     {
-        printf("%10s %10s %10s %10s %7d %10s\n", subscriber->surname, subscriber->name, subscriber->phone,
-                                    subscriber->address, subscriber->status, subscriber->info.privateInfo.birthday);
+        printf("%10s %10s %10s %10s private Birthday(YYYYMMDD): %10s\n", subscriber->surname, subscriber->name, subscriber->phone,
+                                    subscriber->address, subscriber->info.privateInfo.birthday);
     }
 
     return SUCCES;
