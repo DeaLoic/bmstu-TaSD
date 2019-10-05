@@ -47,6 +47,8 @@ int main(void)
             case 0:
                 break;
             case 1:
+                deletePhoneBook(&phoneBook);
+                deleteKeyTable(&keyTable);
                 setPhoneBookEmpty(&phoneBook);
                 setKeyTableEmpty(&keyTable);
                 source = fopen(filename, "r");

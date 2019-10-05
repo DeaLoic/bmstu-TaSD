@@ -11,7 +11,7 @@ int swapSubscriber(subscriber_t* first, subscriber_t* second);
 int dropPhoneBookToFile(phoneBook_t* phoneBook, phoneBookKeyTable_t* keyTable, FILE* dest)
 {
     dropRecordToFile(phoneBook->subscribers + keyTable->keys[0].position, dest);
-    for (int i = 0; i < phoneBook->subscribersCount; i++)
+    for (int i = 1; i < phoneBook->subscribersCount; i++)
     {
         fprintf(dest, "\n");
         dropRecordToFile(phoneBook->subscribers + keyTable->keys[i].position, dest);
