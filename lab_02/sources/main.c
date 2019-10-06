@@ -95,29 +95,36 @@ int main(void)
             case 3:
                 if (phoneBook.subscribersCount)
                 {
-                    setSubscriberEmpty(&tempSubscriber);
-                    errorCode = inputSubscriberConsole(&tempSubscriber);
-                    if (!errorCode)
-                    {
-                        errorCode = addRecord(&phoneBook, &tempSubscriber);
+                    if (phoneBook.subscribersCount < MAX_RECORDS)
+                    {    
+                        setSubscriberEmpty(&tempSubscriber);
+                        errorCode = inputSubscriberConsole(&tempSubscriber);
                         if (!errorCode)
                         {
-                            createKey(&tempKey, phoneBook.subscribers[phoneBook.subscribersCount - 1].surname,
-                                                phoneBook.subscribersCount - 1);
-                            errorCode = addKey(&keyTable, &tempKey);
+                            errorCode = addRecord(&phoneBook, &tempSubscriber);
+                            if (!errorCode)
+                            {
+                                createKey(&tempKey, phoneBook.subscribers[phoneBook.subscribersCount - 1].surname,
+                                                    phoneBook.subscribersCount - 1);
+                                errorCode = addKey(&keyTable, &tempKey);
+                            }
+                            if (errorCode)
+                            {
+                                printf("\nError in memory. Panic exit");
+                            }
                         }
-                        if (errorCode)
+                        else
                         {
-                            printf("\nError in memory. Panic exit");
+                            printf("\nIncorrect input. Record doesnt add\n");
+                            errorCode = SUCCES;
                         }
+                        setKeyEmpty(&tempKey);
+                        setSubscriberEmpty(&tempSubscriber);
                     }
                     else
                     {
-                        printf("\nIncorrect input. Record doesnt add\n");
-                        errorCode = SUCCES;
+                        printf("Max records reached. Cant add even more\n");
                     }
-                    setKeyEmpty(&tempKey);
-                    setSubscriberEmpty(&tempSubscriber);
                 }
                 else
                 {
@@ -302,7 +309,7 @@ int main(void)
                 }
                 else
                 {
-                   printf("\nPhone book is empty, pls choose 1 or 2 point to create\n");
+                   printf("\nPhone book is empty. You cant write empty table.\n");
                 }
                 break;
 
