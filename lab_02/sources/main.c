@@ -241,9 +241,6 @@ int main(void)
                 if (phoneBook.subscribersCount)
                 {
                     sortPhoneBookBubble(&phoneBook, &compareSubscribersBySurname);
-                    deleteKeyTable(&keyTable);
-                    setKeyTableEmpty(&keyTable);
-                    createKeyTable(&phoneBook, &keyTable);
                 }
                 else
                 {
@@ -266,9 +263,6 @@ int main(void)
                 if (phoneBook.subscribersCount)
                 {
                     sortPhoneBookQsort(&phoneBook, &compareSubscribersBySurname);
-                    deleteKeyTable(&keyTable);
-                    setKeyTableEmpty(&keyTable);
-                    createKeyTable(&phoneBook, &keyTable);
                 }
                 else
                 {
@@ -353,6 +347,6 @@ void printMenu()
 
     printf("\n12. Compare sorting\n");
     printf("13. Find friends with birthday in week\n");
-    printf("14. Write phone book to phoneBook.csv");
+    printf("14. Write phone book by key table to phoneBook.csv");
     printf("\nYour choose: ");
 }
