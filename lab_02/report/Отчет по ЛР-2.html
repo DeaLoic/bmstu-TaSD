@@ -1,0 +1,233 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Отчет по ЛР-2.html</title><style></style></head><body id="preview">
+<h1 class="code-line" data-line-start=0 data-line-end=1 ><a id="__2_0"></a>Отчет по ЛР-2</h1>
+<h3 class="code-line" data-line-start=2 data-line-end=3 ><a id="_22_2"></a>Вариант 22.</h3>
+<h4 class="code-line" data-line-start=4 data-line-end=5 ><a id="__735_4"></a>Хетагуров Павел Иу7-35Б</h4>
+<h3 class="code-line" data-line-start=6 data-line-end=7 ><a id="1____6"></a>1. Описание условия задачи</h3>
+<p class="has-line-data" data-line-start="8" data-line-end="9"><strong>Цель:</strong> приобрести навыки работы с типом данных &lt;&lt;запись&gt;&gt;</p>
+<p class="has-line-data" data-line-start="10" data-line-end="11">(структура), содержащим вариантную часть (объединение, смесь), и с данными,</p>
+<p class="has-line-data" data-line-start="12" data-line-end="13">хранящимися в таблицах, произвести сравнительный анализ реализации</p>
+<p class="has-line-data" data-line-start="14" data-line-end="15">алгоритмов сортировки и поиска информации в таблицах, при использовании</p>
+<p class="has-line-data" data-line-start="16" data-line-end="17">записей с большим числом полей, и тех же алгоритмов, при использовании</p>
+<p class="has-line-data" data-line-start="18" data-line-end="19">таблицы ключей; оценить эффективность программы по времени и по</p>
+<p class="has-line-data" data-line-start="20" data-line-end="21">используемому объему памяти при использовании различных структур и</p>
+<p class="has-line-data" data-line-start="22" data-line-end="23">эффективность использования различных алгоритмов сортировок.</p>
+<p class="has-line-data" data-line-start="24" data-line-end="25"><strong>Общее условие задачи:</strong> Создать таблицу, содержащую не менее 40 записей с вариантной частью. Произвести поиск информации по вариантному полю. Упорядочить таблицу, по возрастанию ключей</p>
+<p class="has-line-data" data-line-start="26" data-line-end="27">(где ключ – любое невариантное поле по выбору программиста), используя: а) исходную</p>
+<p class="has-line-data" data-line-start="28" data-line-end="29">таблицу; б) массив ключей, используя 2 разных алгоритма сортировки. Оценить</p>
+<p class="has-line-data" data-line-start="30" data-line-end="31">эффективность этих алгоритмов (по времени и по используемому объему памяти) при</p>
+<p class="has-line-data" data-line-start="32" data-line-end="33">различной реализации программы, то есть в случаях а) и б). Обосновать выбор алгоритма</p>
+<p class="has-line-data" data-line-start="34" data-line-end="35">сортировки. Оценка эффективности должна быть относительной (в %).</p>
+<p class="has-line-data" data-line-start="36" data-line-end="37"><strong>Вариантное условие задачи:</strong> Ввести список абонентов, содержащий фамилию, имя, телефон,</p>
+<p class="has-line-data" data-line-start="38" data-line-end="39">адрес, статус (личный – дата рождения: день, месяц, год;</p>
+<p class="has-line-data" data-line-start="40" data-line-end="41">служебный – должность, организация). Найти всех друзей, которых</p>
+<p class="has-line-data" data-line-start="42" data-line-end="43">необходимо поздравить с днем рождения в ближайшую неделю.</p>
+<h4 class="code-line" data-line-start=44 data-line-end=45 ><a id="____44"></a>ТЗ и внешняя спецификация</h4>
+<p class="has-line-data" data-line-start="46" data-line-end="47"><strong>Исходные данные и результаты (типы, форматы, способ передачи, ограничения):</strong></p>
+<p class="has-line-data" data-line-start="48" data-line-end="49"><strong>Исходные данные</strong>:</p>
+<ol>
+<li class="has-line-data" data-line-start="50" data-line-end="52">Файл в phoneBook.csv в формате csv, содержащий на каждой строчке - корректную запись, поля которой разделены симолом <code>;</code>. После последней записи <strong>НЕ</strong> следует пустая строка.</li>
+</ol>
+<p class="has-line-data" data-line-start="52" data-line-end="53"><strong>Способ передачи</strong>: Расположение в той же дирректории, что и исполняемый файл. Читается при исполнении программы.</p>
+<ol start="2">
+<li class="has-line-data" data-line-start="53" data-line-end="55">Информация, требуемая по заданию, хотя бы для одной записи.</li>
+</ol>
+<p class="has-line-data" data-line-start="55" data-line-end="56"><strong>Способ передачи</strong>: Ввод в консоль (стандартный поток ввода).</p>
+<p class="has-line-data" data-line-start="57" data-line-end="58">Если в программу не будут, переданы исходные данные - функционал будет ограничен.</p>
+<p class="has-line-data" data-line-start="59" data-line-end="60"><strong>Ограничения</strong>:</p>
+<ol>
+<li class="has-line-data" data-line-start="61" data-line-end="62">Вводимые поля не могут содержать символ <code>;</code>, иначе не гарантируется корректность при работе с файлом (запись и считывание)</li>
+<li class="has-line-data" data-line-start="62" data-line-end="63">Поле <code>birthday</code> состоит ровно из 8 цифр, дата вводится в формате YYYYMMDD без разделителей. Корректность даты контролируется пользователем.</li>
+<li class="has-line-data" data-line-start="63" data-line-end="64">В поле <code>status</code> записывается <code>0</code>, если статус личный, и <code>1</code>, если статус служебный.</li>
+<li class="has-line-data" data-line-start="64" data-line-end="65">Допускаются пустые поля, кроме полей <code>status</code>, <code>birthday</code>, <code>surname</code>.</li>
+<li class="has-line-data" data-line-start="65" data-line-end="66">Ведущие и заключительные пробелы - считаются частью поля и не удаляются.</li>
+<li class="has-line-data" data-line-start="66" data-line-end="67">Максимальный размер таблицы - 2000 записей</li>
+<li class="has-line-data" data-line-start="67" data-line-end="68">При расчете дат, считается, что в каждом месяце 31 день</li>
+<li class="has-line-data" data-line-start="68" data-line-end="69">Максимальная длинна для полей <code>surname</code> и <code>name</code> - 63 символов, <code>address</code>, <code>position</code> и <code>company</code> - 127 символов, <code>phone</code> - 15 символов.</li>
+<li class="has-line-data" data-line-start="69" data-line-end="70">При вводе из файла - корректность данных не проверяется.</li>
+<li class="has-line-data" data-line-start="70" data-line-end="71">Нельзя записать пустую таблицу в файл, так как иначе в файле окажутся некоректные данные.</li>
+<li class="has-line-data" data-line-start="71" data-line-end="73">Поиск и сортировка регистрочувствительны</li>
+</ol>
+<p class="has-line-data" data-line-start="73" data-line-end="74"><strong>Выходные данные:</strong></p>
+<p class="has-line-data" data-line-start="75" data-line-end="76">В зависимости от выбранных пунктов.</p>
+<ol>
+<li class="has-line-data" data-line-start="77" data-line-end="79">Пункты <code>Print phone book</code>, <code>print key table</code> и <code>Print phone book by key table</code></li>
+</ol>
+<p class="has-line-data" data-line-start="79" data-line-end="80">выводят в консоль (стандартный поток вывода) таблицу записей, таблицу ключей и таблицу записей по таблице ключей соответственно.</p>
+<ol start="2">
+<li class="has-line-data" data-line-start="80" data-line-end="81">Пункт <code>Compare sort</code> выводит в консоль (стандартный поток вывода) сравнение по времени пузырьковой и быстрой сортировок для таблиц из 100, 500 и 1000 записей, и соответствующих им таблиц ключей.</li>
+<li class="has-line-data" data-line-start="81" data-line-end="83">Пункт <code>Find friends with birthday in week</code> выводит в консоль (стандартный поток вывода) записи о людях с личным статусом и днем рождения в пределах недели от вводимой даты.</li>
+</ol>
+<p class="has-line-data" data-line-start="83" data-line-end="84"><strong>Способ обращения к программе</strong>: Запуск app.exe, ввод с клавиатуры или из файла phoneBook.csv, лежащего в той же дирректориии, что и исполняемый файл.</p>
+<p class="has-line-data" data-line-start="85" data-line-end="86"><strong>Описание возможных аварийных ситуаций и ошибок пользователя:</strong></p>
+<ol>
+<li class="has-line-data" data-line-start="87" data-line-end="88">Некорректный ввод.</li>
+<li class="has-line-data" data-line-start="88" data-line-end="89">Ошибка открытия файла</li>
+<li class="has-line-data" data-line-start="89" data-line-end="91">Невозможность выделения памяти</li>
+</ol>
+<h3 class="code-line" data-line-start=91 data-line-end=92 ><a id="2____91"></a>2.Описание внутренних структур данных</h3>
+<p class="has-line-data" data-line-start="93" data-line-end="94"><strong>Описание полей</strong></p>
+<p class="has-line-data" data-line-start="95" data-line-end="96"><a href="img/privateinfo.png">privateInfo_t</a></p>
+<ul>
+<li class="has-line-data" data-line-start="97" data-line-end="99">.birthday - Массив char.</li>
+</ul>
+<p class="has-line-data" data-line-start="99" data-line-end="100">Данная структура выбранна, так как является частью union, и в него может добавлятся информация помимо дня рождения позже.</p>
+<p class="has-line-data" data-line-start="101" data-line-end="102">Поле .birthday является массивом char, так как это позволяет легче сравнивать даты.</p>
+<p class="has-line-data" data-line-start="103" data-line-end="104"><a href="img/info.png">workInfo_t</a></p>
+<ul>
+<li class="has-line-data" data-line-start="105" data-line-end="106">.company - Массив char.</li>
+<li class="has-line-data" data-line-start="106" data-line-end="108">.position - Массив char</li>
+</ul>
+<p class="has-line-data" data-line-start="108" data-line-end="109">Данная структура выбранна по тем же соображениям, что и privateInfo_t</p>
+<p class="has-line-data" data-line-start="110" data-line-end="111"><a href="img/extrainfo.png">extraInfo</a></p>
+<ul>
+<li class="has-line-data" data-line-start="112" data-line-end="113">.privateInfo - поле типа privateInfo_t.</li>
+<li class="has-line-data" data-line-start="113" data-line-end="115">.workInfo - поле типа workInfo_t</li>
+</ul>
+<p class="has-line-data" data-line-start="115" data-line-end="116">Структура выбрана, так как позволяет реализовать выбор поля по условию</p>
+<p class="has-line-data" data-line-start="117" data-line-end="118"><a href="img/subscriber.png">subscriber_t</a></p>
+<ul>
+<li class="has-line-data" data-line-start="119" data-line-end="120">.surname - Массив char. Хранит текст</li>
+<li class="has-line-data" data-line-start="120" data-line-end="121">.name - Массив char. Хранит текст</li>
+<li class="has-line-data" data-line-start="121" data-line-end="122">.phone - Массив char, так как нет единого формата телефона.</li>
+<li class="has-line-data" data-line-start="122" data-line-end="123">.address - Массив char. Хранит текст</li>
+<li class="has-line-data" data-line-start="123" data-line-end="124">.status - enum subscriberStatus.</li>
+<li class="has-line-data" data-line-start="124" data-line-end="126">.info - поле типа extraInfo. Данные внутри выбираются, основываясь на .status</li>
+</ul>
+<p class="has-line-data" data-line-start="126" data-line-end="127">Была выбрана запись с вариантами, так как при существенном количистве информации любая память - критична. Сэкономить её помогает тип union, который хранит несколько типов данных в одном месте в памяти. Из-за того, что конкретное поле мы выбираем основываясь на поле status, гарантировано, что доступ к полю, ассоциированному с другим статусом нам не потребуется, и, как следствие, можно использовать union.</p>
+<p class="has-line-data" data-line-start="128" data-line-end="129"><a href="img/subscriberKey.png">subscriberKey_t</a></p>
+<ul>
+<li class="has-line-data" data-line-start="130" data-line-end="131">.position - позиция элемента в исходной таблице</li>
+<li class="has-line-data" data-line-start="131" data-line-end="133">.keySurname - ключ(surname)</li>
+</ul>
+<p class="has-line-data" data-line-start="133" data-line-end="134">В структуре хранится минимальная требуемая информация для обработки данных, что позволяет экономить количество времени, требуемого для обработки исходной структуры (subscriber_t)</p>
+<p class="has-line-data" data-line-start="135" data-line-end="136"><a href="img/phoneBook.png">phoneBook_t</a></p>
+<ul>
+<li class="has-line-data" data-line-start="137" data-line-end="138">.subscribers - динамический массив абонентов</li>
+<li class="has-line-data" data-line-start="138" data-line-end="140">.subscribersCount - количество абонентов.</li>
+</ul>
+<p class="has-line-data" data-line-start="140" data-line-end="141">Так как заранее неизвестно количество данных, а их размер может быть большим, разумно использовать динамичскую память. В данной структуре находится как динамический массив, так и указание на кол-во элементов в нем.</p>
+<p class="has-line-data" data-line-start="142" data-line-end="143"><a href="img/keyTable.png">phoneBookKeyTable_t</a></p>
+<ul>
+<li class="has-line-data" data-line-start="144" data-line-end="145">.keys - динамический массив ключей на основе абонентов.</li>
+<li class="has-line-data" data-line-start="145" data-line-end="147">.keysCount - количество ключей.</li>
+</ul>
+<p class="has-line-data" data-line-start="147" data-line-end="148">Так как (phoneBook_t) слишком массивен и долог в обработке, необходимо использовать более маленькую таблицу, содержащую только информацию, необходимую для обработки.</p>
+<h4 class="code-line" data-line-start=149 data-line-end=150 ><a id="4___149"></a>4. Оценка алгоритма.</h4>
+<p class="has-line-data" data-line-start="151" data-line-end="152">По памяти без испольщования дополнительного массива ключей: O(n), так как при добавлении новой записи, выделяется место только под неё.</p>
+<p class="has-line-data" data-line-start="153" data-line-end="154">По памяти при использовании дополнительного массива ключей: O(n + 0.12n) = O(n), так как для каждой новой записи необходим новый ключ, а какждый ключ равен 68 байт (против 532 для всей записи)(указано для моей машины).</p>
+<p class="has-line-data" data-line-start="155" data-line-end="156"><a href="img/sortCompare.png">sort comparing</a></p>
+<p class="has-line-data" data-line-start="157" data-line-end="158">По времени для сортировки пузырьком: O(время сравнение * число сравнений) + O(время для перемещения памяти * кол-во перемещений)</p>
+<ul>
+<li class="has-line-data" data-line-start="158" data-line-end="161">O(N^2) + O(time(sizeof(struct)) * N^2) = O(N^2) в худшем<br>
+O(N^2) + O(0) = O(N^2) в лучшем<br>
+Для qsort O(Время разделения массива * кол-во разбиений)  + O(Время переноса n элементов)</li>
+<li class="has-line-data" data-line-start="161" data-line-end="162">O(log(n) * n) + O(n * time(sizeof(struct))) - в худшем</li>
+<li class="has-line-data" data-line-start="162" data-line-end="164">O(n * log(n)) + O(0) - в лучшем</li>
+</ul>
+<h3 class="code-line" data-line-start=164 data-line-end=165 ><a id="3__164"></a>3.Функциональные тесты</h3>
+<p class="has-line-data" data-line-start="166" data-line-end="167">Так как считается, что в файле все данные корректны - ввод из файла не проверяется.</p>
+<table class="table table-striped table-bordered">
+<thead>
+<tr>
+<th>Исходные данные</th>
+<th>Выходные</th>
+<th>Описание теста</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Negative</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Пустая строка</td>
+<td>Incorrect input</td>
+<td>Проверка ввода некорректных данных</td>
+</tr>
+<tr>
+<td>В поле birthday введена буква</td>
+<td>Incorrect input</td>
+<td>Проверка ввода некорректного дня рождения</td>
+</tr>
+<tr>
+<td>В поле статус введена 2</td>
+<td>Incorrect input</td>
+<td>Некорретный статус</td>
+</tr>
+<tr>
+<td>В любое поле ввод большего чем требуется кол-ва символов</td>
+<td>Incorrect input</td>
+<td>Неверная длинна поля</td>
+</tr>
+<tr>
+<td>Добавление в таблицу с 2000 записями</td>
+<td>Max records reached. Cant add even more</td>
+<td>Переполнение таблицы</td>
+</tr>
+<tr>
+<td>Файл не в директории</td>
+<td>Cant open file</td>
+<td>Ошибка открытия файла</td>
+</tr>
+<tr>
+<td>Попытка удаления по несуществующему полю</td>
+<td>Records doesnt found</td>
+<td>Несуществующее поле</td>
+</tr>
+<tr>
+<td>Выбор пункта по сортировке или вывода при пустой таблице</td>
+<td>Phone book is empty</td>
+<td>Попытка обработки пустой таблицы</td>
+</tr>
+<tr>
+<td><strong>Positive</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Сортировка отсортированной в обратном порядке таблицы</td>
+<td>Корректный вывод</td>
+<td>Проверка сортировок</td>
+</tr>
+<tr>
+<td>Ввод максимальной длинны поля</td>
+<td>Корректная работа</td>
+<td>Граничное значение длинны поля</td>
+</tr>
+<tr>
+<td>У всех абонентов одинаковые фамилии. Удаление по ней</td>
+<td>Корректная работа (таблица пуста)</td>
+<td>Удаление всех записей</td>
+</tr>
+<tr>
+<td>Сортировка таблицы из одной записи</td>
+<td>Таблица не изменилась</td>
+<td>Граничные значения для сортировки</td>
+</tr>
+</tbody>
+</table>
+<h3 class="code-line" data-line-start=185 data-line-end=186 ><a id="__185"></a>Контрольные вопросы</h3>
+<h4 class="code-line" data-line-start=186 data-line-end=187 ><a id="_______186"></a><strong>Как выделяется память под вариантную часть запись?</strong></h4>
+<p class="has-line-data" data-line-start="187" data-line-end="188">Выделяется память под самую большую возможную часть записи.  Вариантная часть всегда последняя в структуре, но может быть вложенная т.е содержать вариантное поле</p>
+<h4 class="code-line" data-line-start=188 data-line-end=189 ><a id="__________188"></a><strong>Что будет, если в вариантную часть ввести данные, несоответствующие описанным?</strong></h4>
+<p class="has-line-data" data-line-start="189" data-line-end="191">Конфликт типов. Ошибка трансляции<br>
+</p>
+<h4 class="code-line" data-line-start=191 data-line-end=192 ><a id="___________191"></a><strong>Кто должен следить за правильностью выполнения операций с вариантной частью записей?</strong></h4>
+<p class="has-line-data" data-line-start="192" data-line-end="193">Программист</p>
+<h4 class="code-line" data-line-start=193 data-line-end=194 ><a id="________193"></a><strong>Что представляет собой таблица ключей, зачем она нужна?</strong></h4>
+<p class="has-line-data" data-line-start="194" data-line-end="196">Таблица, элементы исходной таблицы представляются в виде ключа(опорных полей и индекса в исходной таблице)<br>
+Нужна для ускорение работы с БД, записи в которой слишком массивны и доступ к каждому из полей записи постоянно не требуется.</p>
+<h4 class="code-line" data-line-start=196 data-line-end=197 ><a id="________________196"></a><strong>В каких случаях эффективнее обрабатывать данные в самой таблице, а в каких - в таблице ключей?</strong></h4>
+<p class="has-line-data" data-line-start="197" data-line-end="199">Если память, занимаемая ключом, несущественно меньше исходной, то при относительно малом количестве записей эффективней будет обрабатывать в самой таблице, так как будет существенный выйгрыш по памяти, и незначительный проигрыш по времени.<br>
+В остальных случаях будет незначительный проигрыш по памяти, но существенный выигрыш по времени при обработке в таблице ключей.</p>
+<h4 class="code-line" data-line-start=200 data-line-end=201 ><a id="_________200"></a><strong>Какие способы сортировки предпочтительнее для обработки таблиц и почему?</strong></h4>
+<p class="has-line-data" data-line-start="201" data-line-end="204">Устойчивые - из-за особенностей применения  &lt;/br&gt;<br>
+Использующие наименьшее кол-во перестановок, так как записи в таблице могут занимать большой объем памяти (их перестановка долгая).<br>
+Использующие наименьшее кол-во доп памяти, так как записи в таблице могут занимать большой объем памяти (потребуется слишком много доп памяти)</p>
+<h3 class="code-line" data-line-start=205 data-line-end=206 ><a id="_205"></a>Вывод</h3>
+<p class="has-line-data" data-line-start="206" data-line-end="207">Так как время работы сортировок зависит как от кол-ва сравниваемых элементов, так и от их размера, то, как проиллюстрировано на скриншоте выше, при увеличении или памяти, или кол-ва элементов - увеличивается время.</p>
+<p class="has-line-data" data-line-start="208" data-line-end="210">Поэтому использование таблицы ключей рационально, так как при том же кол-ве записей уменьшается размер каждой записи и, как следствие, уменьшается время выполнения сортировки.<br>
+Таким образом, при увеличении использования памяти в 1.12 раза (для хранения таблицы ключей) скорость выполнения уменьшается примерно в 4 раза.</p>
+
+</body></html>
