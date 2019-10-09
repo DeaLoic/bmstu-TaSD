@@ -136,7 +136,7 @@ int main(void)
                 if (phoneBook.subscribersCount)
                 {
                     printPhoneBookByKeyTable(&phoneBook, &keyTable);
-                    printf("\nInput surname to delete\n");
+                    printf("\nInput surname to delete (case sensitive)\n");
 
                     errorCode = inputString(stdin, tempSurname, MAX_SURNAME_LEN);
 
@@ -241,6 +241,9 @@ int main(void)
                 if (phoneBook.subscribersCount)
                 {
                     sortPhoneBookBubble(&phoneBook, &compareSubscribersBySurname);
+                    deleteKeyTable(&keyTable);
+                    setKeyTableEmpty(&keyTable);
+                    createKeyTable(&phoneBook, &keyTable);
                 }
                 else
                 {
@@ -263,6 +266,9 @@ int main(void)
                 if (phoneBook.subscribersCount)
                 {
                     sortPhoneBookQsort(&phoneBook, &compareSubscribersBySurname);
+                    deleteKeyTable(&keyTable);
+                    setKeyTableEmpty(&keyTable);
+                    createKeyTable(&phoneBook, &keyTable);
                 }
                 else
                 {
@@ -340,13 +346,14 @@ void printMenu()
     printf("6.  Print key table\n");
     printf("7.  Print phone book by key table\n");
     
-    printf("\n8.  Sort key table bubble\n");
-    printf("9.  Sort phone book bubble\n");
+    printf("\nSorting is unstable\n");
+    printf("8.  Sort key table bubble\n");
+    printf("9.  Sort phone book bubble (key table will be update)\n");
     printf("10. Sort key table qsort\n");
-    printf("11. Sort phone book qsort\n");
+    printf("11. Sort phone book qsort (key table will be update)\n");
 
     printf("\n12. Compare sorting\n");
     printf("13. Find friends with birthday in week\n");
-    printf("14. Write phone book by key table to phoneBook.csv");
+    printf("14. Write phone book to phoneBook.csv");
     printf("\nYour choose: ");
 }

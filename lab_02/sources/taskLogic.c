@@ -115,6 +115,7 @@ int printInWeekBirthday(phoneBook_t* phoneBook)
     int errorCode = SUCCES;
     char tempBirthday[MAX_BIRTHDAY_LEN];
 
+    printf("Input current date: ");
     errorCode = inputString(stdin, tempBirthday, MAX_BIRTHDAY_LEN);
 
     if ((errorCode) || !isBirthdayCorrect(tempBirthday))
