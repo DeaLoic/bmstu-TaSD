@@ -40,3 +40,8 @@ void fprintf_int64(FILE* source, int64_t *elem)
 {
     fprintf(source, "%" PRId64, *elem);
 }
+
+void fprintf_int(FILE* source, int *elem)
+{
+    fprintf(source, "%d", *elem);
+}
