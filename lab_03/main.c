@@ -35,5 +35,5 @@ int main()
     delete_smatrix_content(&smatrix);
 
     getchar();getchar();
-    return SUCCES;
+    return error_code;
 }

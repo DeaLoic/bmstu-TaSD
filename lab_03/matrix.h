@@ -5,7 +5,7 @@
 #include <inttypes.h>
 #include "array.h"
 
-typedef lint_arr_t *matrix_body;
+typedef int_arr_t *matrix_body;
 
 typedef struct
 {
@@ -35,7 +35,7 @@ int delete_row(matrix_t *matrix, int index_to_delete);
 int add_row(matrix_t *matrix);
 int swap_row(matrix_t *matrix, int first_row_index, int second_row_index);
 int move_row_to_end(matrix_t *matrix, int row_index);
-int insert_row(matrix_t *matrix, lint_arr_t row_to_insert, int pos);
+int insert_row(matrix_t *matrix, int_arr_t row_to_insert, int pos);
 
 // Column handler
 // base
@@ -43,7 +43,7 @@ int delete_col(matrix_t *matrix, int index_to_delete);
 int add_col(matrix_t *matrix);
 int swap_col(matrix_t *matrix, int first_row_index, int second_row_index);
 int move_col_to_end(matrix_t *matrix, int col_index);
-int insert_col(matrix_t *matrix, lint_arr_t col_to_insert, int pos);
+int insert_col(matrix_t *matrix, int_arr_t col_to_insert, int pos);
 
 // Full matrix handler
 int find_min_by_col(matrix_t *matrix, int *rowres, int *colres);

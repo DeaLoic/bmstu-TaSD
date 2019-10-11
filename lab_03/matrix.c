@@ -152,7 +152,7 @@ int input_matrix(matrix_t *matrix)
 
     while (i < matrix->n && !error_code)
     {
-        error_code = input_array((matrix->body)[i], matrix->m, sizeof(int), stdin, (int (*)(FILE*, void*))fscanf_int64);
+        error_code = input_array((matrix->body)[i], matrix->m, sizeof(int), stdin, (int (*)(FILE*, void*))fscanf_int);
         i++;
     }
 
@@ -182,7 +182,7 @@ void output_matrix(matrix_t *matrix)
 {
     for (int i = 0; i < matrix->n; i++)
     {
-        print_array((matrix->body)[i], matrix->m, sizeof(int), stdout, (void (*)(FILE*, void*))fprintf_int64);
+        print_array((matrix->body)[i], matrix->m, sizeof(int), stdout, (void (*)(FILE*, void*))fprintf_int);
     }
 }
 
@@ -427,7 +427,7 @@ int scalar_multiply_row_col(matrix_t *first_matrix, matrix_t *second_matrix, int
 {
     int result = 0;
 
-    for (int i = 0; i < first_matrix->n; i++)
+    for (int i = 0; i < second_matrix->m; i++)
     {
         result += ((first_matrix->body)[row][i] * (second_matrix->body)[i][col]);
     }
@@ -437,9 +437,9 @@ int scalar_multiply_row_col(matrix_t *first_matrix, matrix_t *second_matrix, int
 
 int multiply_matrix(matrix_t *first_matrix, matrix_t *second_matrix, matrix_t *res)
 {
-    for (int i = 0; i < res->n; i++)
+    for (int i = 0; i < first_matrix->n; i++)
     {
-        for (int j = 0; j < res->n; j++)
+        for (int j = 0; j < second_matrix->m; j++)
         {
             (res->body)[i][j] = scalar_multiply_row_col(first_matrix, second_matrix, i, j);
         }

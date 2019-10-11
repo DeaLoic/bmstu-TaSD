@@ -251,32 +251,25 @@ int multiply_matrix_row(sparse_matrix *matrix_row, sparse_matrix *smatrix, spars
 {
     int cnt_nonzero = 0;
     int error_code = SUCCES;
-
-    change_size_smatrix(sres, matrix_row->n, matrix_row->m, cnt_nonzero);
-
+    sres->cnt_non_zero = 0;
     int is_zero_row = 0;
     int res = 0;
-    for (int i = 0; i < sres->n; i++)
+    for (int i = 0; i < sres->n && !error_code; i++)
     {
         sres->rows_start[i] = cnt_nonzero;
         is_zero_row = 1;
 
-        for (int j = 0; j < sres->m; j++)
+        for (int j = 0; j < sres->m && !error_code; j++)
         {
             res = multiply_row_col(matrix_row, smatrix, i, j);
             if (res)
             {
-                if (cnt_nonzero == sres->cnt_non_zero)
-                {
-                    error_code = change_size_smatrix(sres, matrix_row->n, matrix_row->m, cnt_nonzero * 2 + 1);
-                }
-
                 is_zero_row = 0;
 
-                cnt_nonzero++;
-                (sres->cnt_non_zero)++;
                 sres->column_for_values[cnt_nonzero] = j;
                 sres->values[cnt_nonzero] = res;
+                cnt_nonzero++;
+                (sres->cnt_non_zero)++;
             }
         }
 
@@ -284,6 +277,14 @@ int multiply_matrix_row(sparse_matrix *matrix_row, sparse_matrix *smatrix, spars
         {
             sres->rows_start[i] = -1;
         }
+    }
+    if (!error_code)
+    {
+        error_code = change_size_smatrix(sres, matrix_row->n, matrix_row->m, cnt_nonzero);
+    }
+    else
+    {
+        delete_smatrix_content(sres);
     }
 
     return error_code;

@@ -45,3 +45,15 @@ void fprintf_int(FILE* source, int *elem)
 {
     fprintf(source, "%d", *elem);
 }
+
+int fscanf_int(FILE* source, int *elem)
+{
+    return fscanf(source, "%d", elem);
+}
+
+uint64_t tick(void)
+{
+    uint64_t d;
+    __asm__ __volatile__("rdtsc" : "=A" (d));
+    return d;
+}
