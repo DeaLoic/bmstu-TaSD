@@ -6,8 +6,8 @@ app.exe:
 test.exe:
 	gcc -Wall test.c array.c universal.c sparse_matrix.c -o test.exe
 
-test:
-	gcc -Wall test.c array.c universal.c sparse_matrix.c -o test -lm
+main.out:
+	gcc -Wall test.c array.c universal.c sparse_matrix.c -o main.out -lm
 
-main:
-	gcc -Wall test.c array.c universal.c sparse_matrix.c -o test -lm
+test.out:
+	gcc -Wall test.c array.c universal.c sparse_matrix.c -o test.out -lm
