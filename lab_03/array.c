@@ -114,7 +114,7 @@ int change_size_array(void *array_p, int new_size, size_t size_elem)
 
     void *new_array_head = realloc(*(char**)array_p, new_size * size_elem);
 
-    if (new_array_head)
+    if (new_array_head || new_size == 0)
     {
         error_code = SUCCES;
         memmove(array_p, &new_array_head, sizeof(void*));
