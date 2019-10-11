@@ -17,15 +17,20 @@ typedef struct
 } sparse_matrix;
 
 //CDIO
-int create_smatrix(sparse_matrix *smatrix);
+int set_null_matrix(sparse_matrix *smatrix);
 int delete_smatrix_content(sparse_matrix *smatrix);
-int input_smatrix(sparse_matrix *smatrix, FILE *source);
+int input_smatrix(sparse_matrix *smatrix);
+int input_smatrix_row(sparse_matrix *matrix_row);
 int print_smatrix_pretty(sparse_matrix *smatrix);
 int print_smatrix_source(sparse_matrix *smatrix);
 
+
 int change_size_smatrix(sparse_matrix *smatrix, int n, int m, int non_zero);
 
-int is_in(int_arr_t arr, int n, int64_t elem);
+int multiply_matrix_row(sparse_matrix *smatrix, sparse_matrix *matrix_row, sparse_matrix *sres);
+int multiply_row_col(sparse_matrix *matrix_row, sparse_matrix *smatrix, int row, int col);
+
+int is_col_busy(int_arr_t arr, int n, int col);
 int cnt_nonzero_in_row(sparse_matrix *smatrix, int row);
 int is_smatrix_correct(sparse_matrix *smatrix);
 
