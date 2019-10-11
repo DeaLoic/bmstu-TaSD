@@ -5,3 +5,9 @@ app.exe:
 
 test.exe:
 	gcc -Wall test.c array.c universal.c sparse_matrix.c -o test.exe
+
+test:
+	gcc -Wall test.c array.c universal.c sparse_matrix.c -o test
+
+main:
+	gcc -Wall test.c array.c universal.c sparse_matrix.c -o test
