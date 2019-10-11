@@ -52,7 +52,7 @@ int input_smatrix(sparse_matrix *smatrix, FILE *source)
     int error_code = INCORRECT_INPUT;
     if (is_smatrix_correct(smatrix))
     {
-        error_code = SUCCES;
+        error_code = INPUT_ERROR;
         
         int temp_elem = 0;
         int col = 0;
@@ -61,11 +61,38 @@ int input_smatrix(sparse_matrix *smatrix, FILE *source)
         char temp_char;
         int is_row_empty = 1;
         int readed_elems = 0;
+        int cnt_non_zero_rows = 0;
+        int row = 0;
 
-        printf("Input col_number and element through the gap: \"col_number element\"\n");
-        for (int row = 0; row < smatrix->n && !error_code; row++)
+        printf("Input n, m, number of nonzero rows and count of nonzero elements\n");
+        if (!(scanf("%d", &(smatrix->n)) == 1 && smatrix->n > 0 && scanf("%d", &(smatrix->m)) == 1 && smatrix->m > 0 &&
+              scanf("%d", &cnt_non_zero_rows) == 1 && cnt_non_zero_rows >= 0 && cnt_non_zero_rows <= smatrix->n &&
+              scanf("%d", &(smatrix->cnt_non_zero)) && smatrix->cnt_non_zero >= 0 && smatrix->cnt_non_zero <= cnt_non_zero_rows * smatrix->m))
         {
-            printf("Input row No %3d: ", row);
+        	error_code = SUCCES;
+        	printf("Pls, input numbers of row from low to high\n");
+        }
+        else
+        {
+        	printf("Incorrect input\n");
+        }
+
+        int row_cnt = 0;
+        int temp_row = -1;
+        while (row_cnt < cnt_non_zero_rows && !error_code)
+        {
+            printf("Input nonzero row number: ");
+
+            if (scanf("%d", &temp_row) == 1 && temp_row > row)
+            {
+            	row = temp_row;
+            }
+            else
+            {
+            	error_code = INCORRECT_INPUT;
+            	printf("Incorrect input. Next time - input numbers of row from low to high\n");
+            }
+
             temp_char = getchar();
             is_row_empty = 1;
             readed_elems = 0;
@@ -93,8 +120,6 @@ int input_smatrix(sparse_matrix *smatrix, FILE *source)
             {
                 smatrix->rows_start[row] = -1;
             }
-
-            printf("end");
         }
     }
 
@@ -143,20 +168,22 @@ int is_in(int_arr_t arr, int n, int64_t elem)
 
 int cnt_nonzero_in_row(sparse_matrix *smatrix, int row)
 {
-    int len = 0;
+    int len = 1;
     if (smatrix->rows_start[row] != -1)
     {
+    	// printf("nonzero row start %d ", smatrix->rows_start[row]);
         while (row + len < smatrix->n && smatrix->rows_start[row + len] == -1)
         {
             len += 1;
         }
+        // printf("%d \n", len);
         if (row + len == smatrix->n)
         {
             len = smatrix->cnt_non_zero - smatrix->rows_start[row];
         }
         else
         {
-            len = smatrix->rows_start[row + len] - smatrix->rows_start[row];
+            len = smatrix->rows_start[row + len] - (smatrix->rows_start)[row];
         }
     }
 
@@ -171,10 +198,11 @@ int print_smatrix_pretty(sparse_matrix *smatrix)
     {
         for (int j = 0; j < smatrix->m; j++)
         {
+        	// printf("\nCnt nonzero %d, col %d, row %d, is_in %d ", cnt_nonzero_in_row(smatrix, i), j, i, is_in(smatrix->column_for_values + smatrix->rows_start[i], cnt_nonzero_in_row(smatrix, i), j));
             pos = is_in(smatrix->column_for_values + smatrix->rows_start[i], cnt_nonzero_in_row(smatrix, i), j);
             if (pos != -1)
             {
-                printf("%d ", smatrix->values[pos]);
+                printf("%d ", smatrix->values[pos + smatrix->rows_start[i]]);
             }
             else
             {
