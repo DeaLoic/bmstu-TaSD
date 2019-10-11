@@ -6,8 +6,7 @@
 int main()
 {
     int side = 10;
-    int percent = 33;
-    compare_time(side, percent);
+    compare_time(side);
 
     getchar();getchar();
     return SUCCES;

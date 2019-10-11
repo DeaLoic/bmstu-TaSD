@@ -101,7 +101,7 @@ int cnt_time(int side, int percent)
 
     create_matrix(&matrix_res, smatrix_row.n, smatrix.m);
 
-    printf("\nPercent %d%% Side: %d\n", percent, side);
+    printf("\nPercent %d%% Elements main %d Elements row %d\n", percent, smatrix.cnt_non_zero, smatrix_row.cnt_non_zero);
 
     change_size_smatrix(&sres, smatrix_row.n, smatrix.m, smatrix_row.n * smatrix.m);
     //printf("%d %d %d %d %d %d\n", matrix_res.n, matrix_res.m, matrix.n, matrix.m, matrix_res.n, matrix_res.m);
@@ -110,6 +110,7 @@ int cnt_time(int side, int percent)
     multiply_matrix_row(&smatrix_row, &smatrix, &sres);
     standart_tick = tick() - standart_tick;
     printf("Compact matrix imagine. %I64d processor time\n", standart_tick);
+    change_size_smatrix(&sres, sres.n, sres.m, sres.cnt_non_zero);
 
     standart_tick = tick();
     multiply_matrix(&matrix_row, &matrix, &matrix_res);
@@ -128,19 +129,23 @@ int cnt_time(int side, int percent)
     return SUCCES;
 }
 
-int compare_time(int side, int percent)
+int compare_time(int side)
 {
+    int percent = 70;
+    int twice_percent = 80;
+    int triple_percent = 95;
+
     cnt_time(side, percent);
-    cnt_time(side, percent * 2);
-    cnt_time(side, percent * 3);
+    cnt_time(side, twice_percent);
+    cnt_time(side, triple_percent);
 
     cnt_time(side * 5, percent);
-    cnt_time(side * 5, percent * 2);
-    cnt_time(side * 5, percent * 3);
+    cnt_time(side * 5, twice_percent);
+    cnt_time(side * 5, triple_percent);
 
     cnt_time(side * 10, percent);
-    cnt_time(side * 10, percent * 2);
-    cnt_time(side * 10, percent * 3);
+    cnt_time(side * 10, twice_percent);
+    cnt_time(side * 10, triple_percent);
 
     return SUCCES;
 }

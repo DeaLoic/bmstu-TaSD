@@ -254,33 +254,35 @@ int multiply_matrix_row(sparse_matrix *matrix_row, sparse_matrix *smatrix, spars
     sres->cnt_non_zero = 0;
     int is_zero_row = 0;
     int res = 0;
-    for (int i = 0; i < sres->n && !error_code; i++)
+    int i = 0;
+    sres->rows_start[0] = cnt_nonzero;
+    is_zero_row = 1;
+
+    for (int j = 0; j < sres->m && !error_code; j++)
     {
-        sres->rows_start[i] = cnt_nonzero;
-        is_zero_row = 1;
-
-        for (int j = 0; j < sres->m && !error_code; j++)
+        res = multiply_row_col(matrix_row, smatrix, 0, j);
+        if (res)
         {
-            res = multiply_row_col(matrix_row, smatrix, i, j);
-            if (res)
-            {
-                is_zero_row = 0;
+            is_zero_row = 0;
 
-                sres->column_for_values[cnt_nonzero] = j;
-                sres->values[cnt_nonzero] = res;
-                cnt_nonzero++;
-                (sres->cnt_non_zero)++;
-            }
-        }
-
-        if (is_zero_row)
-        {
-            sres->rows_start[i] = -1;
+            sres->column_for_values[cnt_nonzero] = j;
+            sres->values[cnt_nonzero] = res;
+            cnt_nonzero++;
+            (sres->cnt_non_zero)++;
         }
     }
+
+    if (is_zero_row)
+    {
+        sres->rows_start[i] = -1;
+    }
+
     if (!error_code)
     {
-        error_code = change_size_smatrix(sres, matrix_row->n, matrix_row->m, cnt_nonzero);
+        is_zero_row = 1;
+        //uint64_t tic = tick();
+        //error_code = change_size_smatrix(sres, matrix_row->n, matrix_row->m, cnt_nonzero);
+        //printf("rw %I64d \n", tick() - tic);
     }
     else
     {
