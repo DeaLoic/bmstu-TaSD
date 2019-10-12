@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "sparse_matrix.h"
 #include "error_codes.h"
+#include "logic.h"
 
 int main()
 {
@@ -24,9 +25,11 @@ int main()
             print_smatrix_pretty(&smatrix);
             sparse_matrix sres;
             set_null_matrix(&sres);
-            change_size_smatrix(&sres, 1, smatrix.m, 0);
+            change_size_smatrix(&sres, 1, smatrix.m, smatrix.m);
             multiply_matrix_row(&smatrix_row, &smatrix, &sres);
+            change_size_smatrix(&sres, sres.n, sres.m, sres.m * sres.n);
             print_smatrix_pretty(&sres);
+            compare_time(1000);
             delete_smatrix_content(&sres);
         }
         delete_smatrix_content(&smatrix_row);

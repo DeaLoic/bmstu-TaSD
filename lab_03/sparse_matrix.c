@@ -295,21 +295,19 @@ int multiply_matrix_row(sparse_matrix *matrix_row, sparse_matrix *smatrix, spars
 int multiply_row_col(sparse_matrix *matrix_row, sparse_matrix *smatrix, int row, int col)
 {
     int res = 0;
-    int cur_pos_col_in_row = 0;
     int cur_col_in_row = 0;
     int cur_elem_smatrix_pos = 0;
 
     for (int i = 0; i < cnt_nonzero_in_row(matrix_row, row); i++)
     {
-        cur_pos_col_in_row = (matrix_row->rows_start[row]) + i;
-        cur_col_in_row = (matrix_row->column_for_values[cur_pos_col_in_row]);
+        cur_col_in_row = (matrix_row->column_for_values[i]);
         if (smatrix->rows_start[cur_col_in_row] != -1)
         {
             cur_elem_smatrix_pos = is_col_busy(smatrix->column_for_values + smatrix->rows_start[cur_col_in_row], cnt_nonzero_in_row(smatrix, cur_col_in_row), col);
             if (cur_elem_smatrix_pos != -1)
             {
                 cur_elem_smatrix_pos += smatrix->rows_start[cur_col_in_row];
-                res += (matrix_row->values[cur_pos_col_in_row]) * (smatrix->values[cur_elem_smatrix_pos]);
+                res += (matrix_row->values[i]) * (smatrix->values[cur_elem_smatrix_pos]);
             }
         }
     }

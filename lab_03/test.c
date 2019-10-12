@@ -5,8 +5,8 @@
 
 int main()
 {
-    int side = 10;
-    compare_time(side);
+    int size = 100;
+    compare_time(size);
 
     getchar();getchar();
     return SUCCES;

@@ -76,7 +76,7 @@ int create_random_smatrix(sparse_matrix *smatrix, int n, int m, int percent_of_s
     return error_code;
 }
 
-int cnt_time(int side, int percent)
+int cnt_time(int size, int percent)
 {
     sparse_matrix smatrix_row;
     sparse_matrix smatrix;
@@ -85,8 +85,8 @@ int cnt_time(int side, int percent)
     set_null_matrix(&smatrix);
     set_null_matrix(&smatrix_row);
 
-    create_random_smatrix(&smatrix_row, 1, side, percent);
-    create_random_smatrix(&smatrix, side, side, percent);
+    create_random_smatrix(&smatrix_row, 1, size, percent);
+    create_random_smatrix(&smatrix, size, size, percent);
 
     matrix_t matrix_row;
     matrix_t matrix_res;
@@ -101,7 +101,7 @@ int cnt_time(int side, int percent)
 
     create_matrix(&matrix_res, smatrix_row.n, smatrix.m);
 
-    printf("\nPercent %d%% Elements main %d Elements row %d\n", percent, smatrix.cnt_non_zero, smatrix_row.cnt_non_zero);
+    printf("\nPercent %d%%\n", percent);
 
     change_size_smatrix(&sres, smatrix_row.n, smatrix.m, smatrix_row.n * smatrix.m);
     //printf("%d %d %d %d %d %d\n", matrix_res.n, matrix_res.m, matrix.n, matrix.m, matrix_res.n, matrix_res.m);
@@ -109,7 +109,7 @@ int cnt_time(int side, int percent)
     uint64_t standart_tick = tick();
     multiply_matrix_row(&smatrix_row, &smatrix, &sres);
     standart_tick = tick() - standart_tick;
-    printf("Compact matrix imagine. %I64d processor time\n", standart_tick);
+    printf("Compact matrix imagine.  %I64d processor time\n", standart_tick);
     change_size_smatrix(&sres, sres.n, sres.m, sres.cnt_non_zero);
 
     standart_tick = tick();
@@ -129,23 +129,29 @@ int cnt_time(int side, int percent)
     return SUCCES;
 }
 
-int compare_time(int side)
+int compare_time(int size)
 {
-    int percent = 70;
-    int twice_percent = 80;
+    int percent = 75;
+    int twice_percent = 85;
     int triple_percent = 95;
+    
+    printf("\nSize: %dx%d\n", size, size);
 
-    cnt_time(side, percent);
-    cnt_time(side, twice_percent);
-    cnt_time(side, triple_percent);
+    cnt_time(size, percent);
+    cnt_time(size, twice_percent);
+    cnt_time(size, triple_percent);
 
-    cnt_time(side * 5, percent);
-    cnt_time(side * 5, twice_percent);
-    cnt_time(side * 5, triple_percent);
+    printf("\nSize: %dx%d\n", size * 5, size * 5);
 
-    cnt_time(side * 10, percent);
-    cnt_time(side * 10, twice_percent);
-    cnt_time(side * 10, triple_percent);
+    cnt_time(size * 5, percent);
+    cnt_time(size * 5, twice_percent);
+    cnt_time(size * 5, triple_percent);
+
+    printf("\nSize: %dx%d\n", size * 10, size * 10);
+
+    cnt_time(size * 10, percent);
+    cnt_time(size * 10, twice_percent);
+    cnt_time(size * 10, triple_percent);
 
     return SUCCES;
 }
