@@ -18,6 +18,7 @@ typedef struct
 int create_matrix(matrix_t *matrix, int n, int m);
 void delete_matrix(matrix_t *matrix);
 int input_matrix(matrix_t *matrix);
+int input_non_zero(matrix_t *matrix, int *non_zero_elems);
 
 void output_matrix(matrix_t *matrix);
 int is_input_size_matrix(int *n, int *m);

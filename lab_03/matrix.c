@@ -63,6 +63,40 @@ void delete_matrix(matrix_t *matrix)
     }
 }
 
+int input_non_zero(matrix_t *matrix, int *cnt_non_zero)
+{
+    int error_code = INCORRECT_INPUT;
+    int i = 0;
+    int temp_col = 0;
+    int temp_row = 0;
+    int temp_value = 0;
+    printf("Input count of non-zero elements: ");
+    if (scanf("%d", cnt_non_zero) == 1 && *cnt_non_zero >= 0 && *cnt_non_zero <= (matrix->n * matrix->m))
+    {
+        error_code = SUCCES;
+        printf("\nPls input elements in format (index_row, index_col, nonzero_value\n");
+    }
+    else
+    {
+        *cnt_non_zero = 0;
+        printf("\nIncorrect input\n");
+    }
+
+    while (i < *cnt_non_zero && scanf("%d %d %d", &temp_row, &temp_col, &temp_value) == 3 && temp_row >= 0 && temp_col >= 0 &&\
+           temp_row <= matrix->n && temp_col <= matrix->n && temp_value != 0 &&matrix->body[temp_row][temp_col] == 0 && !error_code)
+    {
+        matrix->body[temp_row][temp_col] = temp_value;
+        i++;
+    }
+    if (i != *cnt_non_zero)
+    {
+        printf("Incorrect input\n");
+        error_code = INCORRECT_INPUT;
+    }
+
+    return error_code;
+}
+
 int init_null_matrix(matrix_t *matrix)
 {
     matrix->body = NULL;

@@ -26,6 +26,7 @@ int main()
             print_smatrix_pretty(&smatrix_row);
             printf("\n");
             print_smatrix_pretty(&smatrix);
+            print_smatrix_source(&smatrix);
             sparse_matrix sres;
             set_null_matrix(&sres);
             change_size_smatrix(&sres, 1, smatrix.m, smatrix.m);

@@ -4,6 +4,7 @@
 #include "sparse_matrix.h"
 
 int sparse_to_classic_matrix(sparse_matrix *smatrix, matrix_t *matrix);
+int matrix_pack(matrix_t *source, sparse_matrix *dest, int cnt_nonzero_source);
 int create_random_smatrix(sparse_matrix *smatrix, int n, int m, int percent_of_sparsed);
 int cnt_time(int size, int percent);
 int compare_time(int size);

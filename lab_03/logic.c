@@ -31,6 +31,26 @@ int sparse_to_classic_matrix(sparse_matrix *smatrix, matrix_t *matrix)
     return error_code;
 }
 
+int matrix_pack(matrix_t *source, sparse_matrix *dest, int cnt_nonzero_source)
+{
+    int cnt_nonzero = 0;
+    int error_code = change_size_smatrix(dest, source->n, source->m, cnt_nonzero_source);
+    for (int i = 0; i < source->n && !error_code; i++)
+    {
+        dest->rows_start[i] = cnt_nonzero;
+        for (int j = 0; i < source->m; j++)
+        {
+            if (source->body[i][j] != 0)
+            {
+                dest->values[cnt_nonzero] = source->body[i][j];
+                dest->column_for_values[cnt_nonzero] = j;
+            }
+        }
+    }
+
+    return error_code;
+}
+
 int create_random_smatrix(sparse_matrix *smatrix, int n, int m, int percent_of_sparsed)
 {
     srand(time(0));
