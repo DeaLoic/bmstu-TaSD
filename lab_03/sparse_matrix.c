@@ -48,7 +48,7 @@ int input_smatrix_row(sparse_matrix *matrix_row)
         }
 
         for (int i = 0; i < matrix_row->cnt_non_zero && !error_code; i++)
-        {
+        {   
             if (scanf("%d %d", &temp_col, &temp_elem) && temp_col >= 0 && temp_col < matrix_row->m && temp_elem != 0\
             && is_col_busy(matrix_row->column_for_values, i, temp_col) == -1)
             {
@@ -188,7 +188,8 @@ int is_col_busy(int_arr_t arr, int n, int col)
 int cnt_nonzero_in_row(sparse_matrix *smatrix, int row)
 {
     int len = 1;
-    if (smatrix->rows_start[row] != -1)
+    int cur_col_start = smatrix->rows_start[row];
+    if (cur_col_start != -1)
     {
     	// printf("nonzero row start %d ", smatrix->rows_start[row]);
         while (row + len < smatrix->n && smatrix->rows_start[row + len] == -1)
@@ -198,11 +199,11 @@ int cnt_nonzero_in_row(sparse_matrix *smatrix, int row)
         // printf("%d \n", len);
         if (row + len == smatrix->n)
         {
-            len = smatrix->cnt_non_zero - smatrix->rows_start[row];
+            len = smatrix->cnt_non_zero - cur_col_start;
         }
         else
         {
-            len = smatrix->rows_start[row + len] - (smatrix->rows_start)[row];
+            len = smatrix->rows_start[row + len] - (cur_col_start);
         }
     }
     else
@@ -258,7 +259,7 @@ int multiply_matrix_row(sparse_matrix *matrix_row, sparse_matrix *smatrix, spars
     sres->rows_start[0] = cnt_nonzero;
     is_zero_row = 1;
 
-    for (int j = 0; j < sres->m && !error_code; j++)
+    for (int j = 0; j < smatrix->m && !error_code; j++)
     {
         res = multiply_row_col(matrix_row, smatrix, 0, j);
         if (res)
@@ -297,13 +298,14 @@ int multiply_row_col(sparse_matrix *matrix_row, sparse_matrix *smatrix, int row,
     int res = 0;
     int cur_col_in_row = 0;
     int cur_elem_smatrix_pos = 0;
-
-    for (int i = 0; i < cnt_nonzero_in_row(matrix_row, row); i++)
+    int nonzero_in_row = cnt_nonzero_in_row(matrix_row, row);
+    for (int i = 0; i < nonzero_in_row; i++)
     {
         cur_col_in_row = (matrix_row->column_for_values[i]);
         if (smatrix->rows_start[cur_col_in_row] != -1)
         {
-            cur_elem_smatrix_pos = is_col_busy(smatrix->column_for_values + smatrix->rows_start[cur_col_in_row], cnt_nonzero_in_row(smatrix, cur_col_in_row), col);
+            cur_elem_smatrix_pos = is_col_busy(smatrix->column_for_values + smatrix->rows_start[cur_col_in_row],\
+                                              cnt_nonzero_in_row(smatrix, cur_col_in_row), col);
             if (cur_elem_smatrix_pos != -1)
             {
                 cur_elem_smatrix_pos += smatrix->rows_start[cur_col_in_row];

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <time.h>
 #include "matrix.h"
 #include "sparse_matrix.h"
@@ -109,14 +110,14 @@ int cnt_time(int size, int percent)
     uint64_t standart_tick = tick();
     multiply_matrix_row(&smatrix_row, &smatrix, &sres);
     standart_tick = tick() - standart_tick;
-    printf("Compact matrix imagine.  %I64d processor time\n", standart_tick);
+    printf("Compact matrix imagine.  %" PRIu64 " :processor time\n", standart_tick);
     change_size_smatrix(&sres, sres.n, sres.m, sres.cnt_non_zero);
 
     standart_tick = tick();
     multiply_matrix(&matrix_row, &matrix, &matrix_res);
     standart_tick = tick() - standart_tick;
 
-    printf("Standart matrix imagine. %I64d processor time\n", standart_tick);
+    printf("Standart matrix imagine. %" PRIu64 " processor time\n", standart_tick);
 
     delete_smatrix_content(&smatrix_row);
     delete_smatrix_content(&smatrix);
