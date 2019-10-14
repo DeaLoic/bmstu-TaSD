@@ -27,6 +27,8 @@ int delete_smatrix_content(sparse_matrix *smatrix)
     smatrix->m = 0;
     smatrix->cnt_non_zero = 0;
 
+    set_null_matrix(smatrix);
+
     return SUCCES;
 }
 
@@ -41,7 +43,8 @@ int input_smatrix(sparse_matrix *smatrix)
     int stop = 0;
     char buff[128];
 
-    printf("Input non zero elements in format (row col value)\nFor interrupt input enter -1 in row position\n0 <= row < %d\n0 <= col < %d", smatrix->n, smatrix->m);
+    printf("Input non zero elements in format (row col value). Every next element row must be >= previouse row"
+    "\nFor interrupt input enter -1 in row position\n0 <= row < %d\n0 <= col < %d", smatrix->n, smatrix->m);
     while (!stop && cnt_non_zero != (smatrix->n * smatrix->m))
     {
         fflush(stdin);
@@ -60,16 +63,19 @@ int input_smatrix(sparse_matrix *smatrix)
             {
                 error_code = change_size_smatrix(smatrix, smatrix->n, smatrix->m, cnt_non_zero + 20);
             }
-
-            if (smatrix->rows_start[cur_row_index] == 0)
+           
+            if (smatrix->rows_start[cur_row_index] == 0 && cur_row_index != 0)
             {
                 smatrix->rows_start[cur_row_index] = cnt_non_zero;
             }
+            else if (cur_row_index == 0)
+            {
+                smatrix->rows_start[cur_row_index] = 0;
+            }
             if (find_col_index(smatrix->column_for_values + smatrix->rows_start[cur_row_index], \
                         cnt_non_zero - smatrix->rows_start[cur_row_index], \
-                        smatrix->rows_start[cur_row_index]) == -1)
+                        cur_col_index) == -1)
             {
-
                 smatrix->values[cnt_non_zero] = cur_element;
                 smatrix->column_for_values[cnt_non_zero] = cur_col_index;
                 cnt_non_zero++;
@@ -93,8 +99,9 @@ int input_smatrix(sparse_matrix *smatrix)
         printf("Matrix filled. Succes write %d element(s)\n", cnt_non_zero);
     }
 
+    //printf("\nasddf\n");
+    //print_smatrix_source(smatrix);
     change_size_smatrix(smatrix, smatrix->n, smatrix->m, cnt_non_zero);
-    print_smatrix_source(smatrix);
 
     for (int i = 1; i < smatrix->n; i++)
     {
@@ -122,7 +129,7 @@ int change_size_smatrix(sparse_matrix *smatrix, int n, int m, int non_zero)
     {
         for (int i = smatrix->n; i < n; i++)
         {
-        	if (i > 0)
+        	if (i != 0)
         	{
         		smatrix->rows_start[i] = smatrix->rows_start[i - 1];
         	}
@@ -168,16 +175,17 @@ int print_smatrix_pretty(sparse_matrix *smatrix)
 
     for (int i = 0; i < smatrix->n; i++)
     {
+        if (i == smatrix->n - 1)
+        {
+            cur_len = smatrix->cnt_non_zero - smatrix->rows_start[i];
+        }
+        else
+        {
+            cur_len = smatrix->rows_start[i + 1] - smatrix->rows_start[i];
+        }
+        //printf("\n i: %d cur_len: %d cntnonzero: %d\n", i, cur_len, smatrix->cnt_non_zero);
         for (int j = 0; j < smatrix->m; j++)
         {
-            if (i == smatrix->n - 1)
-            {
-                cur_len = smatrix->cnt_non_zero - smatrix->rows_start[i];
-            }
-            else
-            {
-                cur_len = smatrix->rows_start[i + 1] - smatrix->rows_start[i];
-            }
 
             pos = find_col_index(smatrix->column_for_values + smatrix->rows_start[i], cur_len, j);
             if (pos != -1)
@@ -206,12 +214,74 @@ int print_smatrix_source(sparse_matrix *smatrix)
 
 int multiply_matrix_row(sparse_matrix *matrix_row, sparse_matrix *smatrix, sparse_matrix *sres)
 {
-    
+    int cnt_nonzero = 0;
+    int error_code = SUCCES;
+    change_size_smatrix(sres, matrix_row->n, smatrix->m, 0);
+    sres->cnt_non_zero = 0;
+    int res = 0;
+    sres->rows_start[0] = 0;
+
+    for (int j = 0; j < smatrix->m && !error_code; j++)
+    {
+        res = multiply_row_col(matrix_row, smatrix, 0, j);
+        if (res)
+        {
+            if (cnt_nonzero == sres->cnt_non_zero)
+            {
+                change_size_smatrix(sres, matrix_row->n, smatrix->m, cnt_nonzero + 20);
+            }
+            sres->column_for_values[cnt_nonzero] = j;
+            sres->values[cnt_nonzero] = res;
+            cnt_nonzero++;
+        }
+    }
+
+    if (!error_code)
+    {
+        uint64_t tic = tick();
+        error_code = change_size_smatrix(sres, matrix_row->n, smatrix->m, cnt_nonzero);
+        printf("rw %I64d \n", tick() - tic);
+    }
+    else
+    {
+        delete_smatrix_content(sres);
+    }
+
+    return error_code;
 }
 
 int multiply_row_col(sparse_matrix *matrix_row, sparse_matrix *smatrix, int row, int col)
 {
-    
+    int res = 0;
+    int cur_col_in_row = 0;
+    int cur_elem_smatrix_pos = 0;
+    int nonzero_in_row = matrix_row->cnt_non_zero;
+    int cur_len_smatrix = 0;
+    for (int i = 0; i < nonzero_in_row; i++)
+    {
+        cur_col_in_row = (matrix_row->column_for_values[i]);
+        if (cur_col_in_row == smatrix->n - 1)
+        {
+            cur_len_smatrix = smatrix->cnt_non_zero - smatrix->rows_start[cur_col_in_row];
+        }
+        else
+        {
+            cur_len_smatrix = smatrix->rows_start[cur_col_in_row + 1] - smatrix->rows_start[cur_col_in_row];
+        }
+        
+        if (cur_len_smatrix)
+        {
+            cur_elem_smatrix_pos = find_col_index(smatrix->column_for_values + smatrix->rows_start[cur_col_in_row],\
+                                              cur_len_smatrix, col);
+            if (cur_elem_smatrix_pos != -1)
+            {
+                cur_elem_smatrix_pos += smatrix->rows_start[cur_col_in_row];
+                res += (matrix_row->values[i]) * (smatrix->values[cur_elem_smatrix_pos]);
+            }
+        }
+    }
+
+    return res;
 }
 
 int is_smatrix_correct(sparse_matrix *smatrix)
