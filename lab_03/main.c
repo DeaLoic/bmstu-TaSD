@@ -13,20 +13,27 @@ int main()
     int error_code = SUCCES;
 
     set_null_matrix(&smatrix);
+    int n;
+    int m;
+    scanf("%d %d", &(n), &(m));
+    change_size_smatrix(&smatrix, n, m, 0);
     error_code = input_smatrix(&smatrix);
     if (!error_code)
     {
         sparse_matrix smatrix_row;
         set_null_matrix(&smatrix_row);
         change_size_smatrix(&smatrix_row, 1, smatrix.m, 0);
+        printf("\n");
         printf("Input no-zero elements in vector-row: ");
-        error_code = input_smatrix_row(&smatrix_row);
+        error_code = input_smatrix(&smatrix_row);
         if (!error_code)
         {
             print_smatrix_pretty(&smatrix_row);
-            print_smatrix_source(&smatrix_row);
+            printf("\n");
+            //print_smatrix_source(&smatrix_row);
             printf("\n");
             print_smatrix_pretty(&smatrix);
+            printf("\n");
             print_smatrix_source(&smatrix);
             sparse_matrix sres;
             set_null_matrix(&sres);
@@ -37,6 +44,7 @@ int main()
             printf("result time compact imagination: %" PRIu64 " processors ticks\n", tick() - start);
 
             print_smatrix_pretty(&sres);
+            printf("\n");
 
             matrix_t matrix;
             matrix_t matrix_row;
@@ -48,14 +56,21 @@ int main()
 
             sparse_to_classic_matrix(&smatrix, &matrix);
             sparse_to_classic_matrix(&smatrix_row, &matrix_row);
+            output_matrix(&matrix);
+            printf("\n");
+            output_matrix(&matrix_row);
+            printf("\n");
 
             create_matrix(&matrix_res, smatrix_row.n, smatrix.m);
+            output_matrix(&matrix_res);
+            printf("\n");
             start = tick();
-            multiply_matrix(&matrix_row, &matrix, &matrix);
+            multiply_matrix(&matrix_row, &matrix, &matrix_res);
             printf("result time normal imagination: %" PRIu64 " processors ticks\n", tick() - start);
             
             output_matrix(&matrix_res);
-            //compare_time(1000);
+
+            compare_time(100);
             delete_smatrix_content(&sres);
         }
         delete_smatrix_content(&smatrix_row);

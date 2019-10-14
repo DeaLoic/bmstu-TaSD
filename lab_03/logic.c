@@ -31,7 +31,6 @@ int sparse_to_classic_matrix(sparse_matrix *smatrix, matrix_t *matrix)
                 ((matrix->body)[i][smatrix->column_for_values[smatrix->rows_start[i] + j]]) = ((smatrix->values)[(smatrix->rows_start)[i] + j]);
                 //printf("i %d, j %d, el %d, el %d\n", i, smatrix->rows_start[i] + j, ((matrix->body)[i][smatrix->column_for_values[smatrix->rows_start[i] + j]]), ((smatrix->values)[(smatrix->rows_start)[i] + j]));
             }
-            
         }
     }
 
@@ -121,16 +120,15 @@ int cnt_time(int size, int percent)
 
     create_matrix(&matrix_res, smatrix_row.n, smatrix.m);
 
-    printf("\nPercent %d%%\n", percent);
 
     change_size_smatrix(&sres, smatrix_row.n, smatrix.m, smatrix_row.n * smatrix.m);
+    printf("\nPercent %d%%\n", percent);
     //printf("%d %d %d %d %d %d\n", matrix_res.n, matrix_res.m, matrix.n, matrix.m, matrix_res.n, matrix_res.m);
 
     uint64_t standart_tick = tick();
     multiply_matrix_row(&smatrix_row, &smatrix, &sres);
     standart_tick = tick() - standart_tick;
     printf("Compact matrix imagine.  %" PRIu64 " :processor time\n", standart_tick);
-    change_size_smatrix(&sres, sres.n, sres.m, sres.cnt_non_zero);
 
     standart_tick = tick();
     multiply_matrix(&matrix_row, &matrix, &matrix_res);

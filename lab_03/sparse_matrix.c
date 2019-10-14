@@ -81,6 +81,9 @@ int input_smatrix(sparse_matrix *smatrix)
                 cnt_non_zero++;
 
                 last_row_index = cur_row_index;
+
+                if (cur_row_index <= smatrix->n - 1)
+                smatrix->rows_start[cur_row_index + 1] = cnt_non_zero;
             }
             else
             {
@@ -221,9 +224,17 @@ int multiply_matrix_row(sparse_matrix *matrix_row, sparse_matrix *smatrix, spars
     int res = 0;
     sres->rows_start[0] = 0;
 
+    int_arr_t buffer_array;
+    create_array(&buffer_array, matrix_row->m, sizeof(int));
+
+    for (int i = 0; i < matrix_row->cnt_non_zero; i++)
+    {
+        buffer_array[matrix_row->column_for_values[i]] = matrix_row->values[i];
+    }
+
     for (int j = 0; j < smatrix->m && !error_code; j++)
     {
-        res = multiply_row_col(matrix_row, smatrix, 0, j);
+        res = multiply_scalar_row_col(buffer_array, smatrix, j);
         if (res)
         {
             if (cnt_nonzero == sres->cnt_non_zero)
@@ -238,9 +249,7 @@ int multiply_matrix_row(sparse_matrix *matrix_row, sparse_matrix *smatrix, spars
 
     if (!error_code)
     {
-        uint64_t tic = tick();
         error_code = change_size_smatrix(sres, matrix_row->n, smatrix->m, cnt_nonzero);
-        printf("rw %I64d \n", tick() - tic);
     }
     else
     {
@@ -250,37 +259,35 @@ int multiply_matrix_row(sparse_matrix *matrix_row, sparse_matrix *smatrix, spars
     return error_code;
 }
 
-int multiply_row_col(sparse_matrix *matrix_row, sparse_matrix *smatrix, int row, int col)
+int multiply_scalar_row_col(int_arr_t buffer_array, sparse_matrix *smatrix, int col)
 {
     int res = 0;
     int cur_col_in_row = 0;
-    int cur_elem_smatrix_pos = 0;
-    int nonzero_in_row = matrix_row->cnt_non_zero;
-    int cur_len_smatrix = 0;
-    for (int i = 0; i < nonzero_in_row; i++)
+    
+    for (int i = 0; i < smatrix->n - 1; i++)
     {
-        cur_col_in_row = (matrix_row->column_for_values[i]);
-        if (cur_col_in_row == smatrix->n - 1)
+        if (buffer_array[i])
         {
-            cur_len_smatrix = smatrix->cnt_non_zero - smatrix->rows_start[cur_col_in_row];
-        }
-        else
-        {
-            cur_len_smatrix = smatrix->rows_start[cur_col_in_row + 1] - smatrix->rows_start[cur_col_in_row];
-        }
-        
-        if (cur_len_smatrix)
-        {
-            cur_elem_smatrix_pos = find_col_index(smatrix->column_for_values + smatrix->rows_start[cur_col_in_row],\
-                                              cur_len_smatrix, col);
-            if (cur_elem_smatrix_pos != -1)
+            cur_col_in_row = find_col_index(smatrix->column_for_values + smatrix->rows_start[i], (smatrix->rows_start[i + 1] - smatrix->rows_start[i]), col);
+            if (cur_col_in_row != -1)
             {
-                cur_elem_smatrix_pos += smatrix->rows_start[cur_col_in_row];
-                res += (matrix_row->values[i]) * (smatrix->values[cur_elem_smatrix_pos]);
+                res += buffer_array[i] * smatrix->values[smatrix->rows_start[i] + cur_col_in_row];
             }
         }
     }
 
+    
+    if (buffer_array[smatrix->n - 1])
+    {   
+        cur_col_in_row = find_col_index(smatrix->column_for_values + smatrix->rows_start[smatrix->n - 1],
+                                        smatrix->cnt_non_zero - smatrix->rows_start[smatrix->n - 1],
+                                        col);
+        if (cur_col_in_row != -1)
+        {
+            res += buffer_array[smatrix->n - 1] * smatrix->values[smatrix->rows_start[smatrix->n - 1] + cur_col_in_row];
+        }
+    }
+    
     return res;
 }
 
