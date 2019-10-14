@@ -11,20 +11,27 @@
 int sparse_to_classic_matrix(sparse_matrix *smatrix, matrix_t *matrix)
 {
     int error_code = SUCCES;
-    delete_matrix(matrix);
+    int cnt_len;
     error_code = create_matrix(matrix, smatrix->n, smatrix->m);
     if (!error_code)
     {
         for (int i = 0; i < smatrix->n; i++)
         {
-            if (smatrix->rows_start[i] != -1)
+            if (i == (smatrix->n - 1))
             {
-                for (int j = 0; j < cnt_nonzero_in_row(smatrix, i); j++)
-                {
-                    ((matrix->body)[i][smatrix->column_for_values[smatrix->rows_start[i] + j]]) = ((smatrix->values)[(smatrix->rows_start)[i] + j]);
-                    //printf("i %d, j %d, el %d, el %d\n", i, smatrix->rows_start[i] + j, ((matrix->body)[i][smatrix->column_for_values[smatrix->rows_start[i] + j]]), ((smatrix->values)[(smatrix->rows_start)[i] + j]));
-                }
+                cnt_len = smatrix->cnt_non_zero - smatrix->rows_start[i];
             }
+            else
+            {
+                cnt_len = smatrix->rows_start[i + 1] - smatrix->rows_start[i];
+            }
+
+            for (int j = 0; j < cnt_len; j++)
+            {
+                ((matrix->body)[i][smatrix->column_for_values[smatrix->rows_start[i] + j]]) = ((smatrix->values)[(smatrix->rows_start)[i] + j]);
+                //printf("i %d, j %d, el %d, el %d\n", i, smatrix->rows_start[i] + j, ((matrix->body)[i][smatrix->column_for_values[smatrix->rows_start[i] + j]]), ((smatrix->values)[(smatrix->rows_start)[i] + j]));
+            }
+            
         }
     }
 
@@ -53,22 +60,19 @@ int matrix_pack(matrix_t *source, sparse_matrix *dest, int cnt_nonzero_source)
 
 int create_random_smatrix(sparse_matrix *smatrix, int n, int m, int percent_of_sparsed)
 {
-    srand(time(0));
+    srand(time(NULL));
     int error_code = change_size_smatrix(smatrix, n, m, 0);
     int res;
     int cnt_nonzero = 0;
-    int is_row_empty = 1;
     for (int i = 0; i < n && !error_code; i++)
     {
         smatrix->rows_start[i] = cnt_nonzero;
-        is_row_empty = 1;
                 
         for (int j = 0; j < m && !error_code; j++)
         {
             res = rand() % 100;
             if (res < (100 - percent_of_sparsed))
             {
-                is_row_empty = 0;
                 if (cnt_nonzero == smatrix->cnt_non_zero)
                 {
                     error_code = change_size_smatrix(smatrix, smatrix->n, smatrix->m, cnt_nonzero * 2 + 1);
@@ -78,11 +82,6 @@ int create_random_smatrix(sparse_matrix *smatrix, int n, int m, int percent_of_s
                 smatrix->values[cnt_nonzero] = res + 1;
                 cnt_nonzero++;
             }
-        }
-        
-        if (is_row_empty)
-        {
-            smatrix->rows_start[i] = -1;
         }
     }
     if (!error_code)

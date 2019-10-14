@@ -5,8 +5,14 @@
 
 int main()
 {
-    int size = 100;
-    compare_time(size);
+    sparse_matrix smatrix;
+    set_null_matrix(&smatrix);
+    scanf("%d %d", &(smatrix.n), &(smatrix.m));
+    input_smatrix(&smatrix);
+    printf("\n");
+
+    print_smatrix_pretty(&smatrix);
+    print_smatrix_source(&smatrix);
 
     getchar();getchar();
     return SUCCES;

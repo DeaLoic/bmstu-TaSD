@@ -30,7 +30,7 @@ int change_size_smatrix(sparse_matrix *smatrix, int n, int m, int non_zero);
 int multiply_matrix_row(sparse_matrix *matrix_row, sparse_matrix *smatrix, sparse_matrix *sres);
 int multiply_row_col(sparse_matrix *matrix_row, sparse_matrix *smatrix, int row, int col);
 
-int is_col_busy(int_arr_t arr, int n, int col);
+int find_col_index(int_arr_t arr, int n, int col);
 int cnt_nonzero_in_row(sparse_matrix *smatrix, int row);
 int is_smatrix_correct(sparse_matrix *smatrix);
 

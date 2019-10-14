@@ -24,6 +24,7 @@ int main()
         if (!error_code)
         {
             print_smatrix_pretty(&smatrix_row);
+            print_smatrix_source(&smatrix_row);
             printf("\n");
             print_smatrix_pretty(&smatrix);
             print_smatrix_source(&smatrix);
