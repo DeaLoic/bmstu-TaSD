@@ -125,16 +125,17 @@ int cnt_time(int size, int percent)
     printf("\nPercent %d%%\n", percent);
     //printf("%d %d %d %d %d %d\n", matrix_res.n, matrix_res.m, matrix.n, matrix.m, matrix_res.n, matrix_res.m);
 
+    uint64_t res;
     uint64_t standart_tick = tick();
     multiply_matrix_row(&smatrix_row, &smatrix, &sres);
-    standart_tick = tick() - standart_tick;
-    printf("Compact matrix imagine.  %" PRIu64 " :processor time\n", standart_tick);
+    res = tick() - standart_tick;
+    printf("Compact matrix imagine.  %" PRIu64 " :processor time\n", res);
 
     standart_tick = tick();
     multiply_matrix(&matrix_row, &matrix, &matrix_res);
-    standart_tick = tick() - standart_tick;
+    res = tick() - standart_tick;
 
-    printf("Standart matrix imagine. %" PRIu64 " processor time\n", standart_tick);
+    printf("Standart matrix imagine. %" PRIu64 " processor time\n", res);
 
     delete_smatrix_content(&smatrix_row);
     delete_smatrix_content(&smatrix);
@@ -149,9 +150,9 @@ int cnt_time(int size, int percent)
 
 int compare_time(int size)
 {
-    int percent = 75;
-    int twice_percent = 85;
-    int triple_percent = 95;
+    int percent = 95;
+    int twice_percent = 97;
+    int triple_percent = 99;
     
     printf("\nSize: %dx%d\n", size, size);
 

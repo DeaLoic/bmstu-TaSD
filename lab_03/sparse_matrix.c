@@ -1,6 +1,8 @@
 
 #include <stdio.h>
+#include <time.h>
 #include <stdlib.h>
+#include <inttypes.h>
 #include "array.h"
 #include "error_codes.h"
 #include "sparse_matrix.h"
@@ -32,6 +34,45 @@ int delete_smatrix_content(sparse_matrix *smatrix)
     return SUCCES;
 }
 
+int cnt_len(sparse_matrix *smatrix, int i)
+{
+    if (i == smatrix->n - 1)
+    {
+        i = smatrix->cnt_non_zero - smatrix->rows_start[i];
+    }
+    else
+    {
+        i = smatrix->rows_start[i + 1] - smatrix->rows_start[i];
+    }
+
+    return i;
+}
+
+/*
+int stransponate(sparse_matrix *smatrix, sparse_matrix *res)
+{
+    change_size_smatrix(res, smatrix->m, smatrix->n, smatrix->cnt_non_zero);
+
+    for (int i = 0; i < smatrix->n; i++)
+    {
+        for (int k = 0; k < )
+        len = cnt_len(smatrix, i);
+
+        if (len > 0)
+        {
+            for (int k = 0; k < len; k++)
+            {
+                res->
+            }
+        }
+    }
+
+    return SUCCES;
+}
+
+q
+*/
+
 int input_smatrix(sparse_matrix *smatrix)
 {
     int error_code = SUCCES;
@@ -43,12 +84,12 @@ int input_smatrix(sparse_matrix *smatrix)
     int stop = 0;
     char buff[128];
 
-    printf("Input non zero elements in format (row col value). Every next element row must be >= previouse row"
-    "\nFor interrupt input enter -1 in row position\n0 <= row < %d\n0 <= col < %d", smatrix->n, smatrix->m);
+    printf("Input non zero elements in format (row col value). Every next row must be >= previouse row"
+    "\nFor interrupt input -1 1 1\n0 <= row < %d\n0 <= col < %d\n", smatrix->n, smatrix->m);
     while (!stop && cnt_non_zero != (smatrix->n * smatrix->m))
     {
         fflush(stdin);
-        while (!(scanf("%d %d %d", &cur_row_index, &cur_col_index, &cur_element) == 3 && ((cur_row_index >= last_row_index &&\
+        while (!(scanf("%d %d %d", &cur_row_index, &cur_col_index, &cur_element) == 3 && ((cur_row_index >= last_row_index && cur_row_index < smatrix->n &&\
         	cur_col_index >= 0  && cur_col_index < smatrix->m && cur_element != 0) ||\
         	cur_row_index == -1)))
         {
@@ -215,14 +256,16 @@ int print_smatrix_source(sparse_matrix *smatrix)
     return SUCCES;
 }
 
+
 int multiply_matrix_row(sparse_matrix *matrix_row, sparse_matrix *smatrix, sparse_matrix *sres)
 {
     int cnt_nonzero = 0;
     int error_code = SUCCES;
+
     change_size_smatrix(sres, matrix_row->n, smatrix->m, 0);
-    sres->cnt_non_zero = 0;
     int res = 0;
     sres->rows_start[0] = 0;
+    
 
     int_arr_t buffer_array;
     create_array(&buffer_array, matrix_row->m, sizeof(int));
@@ -241,6 +284,7 @@ int multiply_matrix_row(sparse_matrix *matrix_row, sparse_matrix *smatrix, spars
             {
                 change_size_smatrix(sres, matrix_row->n, smatrix->m, cnt_nonzero + 20);
             }
+            //printf("Change to %d size: %" PRIu64 "\n", cnt_nonzero + 20, tick() - time_start);
             sres->column_for_values[cnt_nonzero] = j;
             sres->values[cnt_nonzero] = res;
             cnt_nonzero++;

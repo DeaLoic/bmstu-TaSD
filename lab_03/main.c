@@ -15,35 +15,47 @@ int main()
     set_null_matrix(&smatrix);
     int n;
     int m;
-    scanf("%d %d", &(n), &(m));
-    change_size_smatrix(&smatrix, n, m, 0);
-    error_code = input_smatrix(&smatrix);
+    printf("Input size of matrix: \n");
+
+    if (scanf("%d %d", &(n), &(m)) == 2  && n > 0 && m > 0)
+    {
+
+        change_size_smatrix(&smatrix, n, m, 0);
+        error_code = input_smatrix(&smatrix);
+    }
+    else
+    {
+    	printf("Incorrect size\n");
+    	error_code = INPUT_ERROR;
+    }
+
     if (!error_code)
     {
         sparse_matrix smatrix_row;
         set_null_matrix(&smatrix_row);
         change_size_smatrix(&smatrix_row, 1, smatrix.m, 0);
         printf("\n");
-        printf("Input no-zero elements in vector-row: ");
+        printf("Input vector-row: \n");
         error_code = input_smatrix(&smatrix_row);
         if (!error_code)
         {
-            print_smatrix_pretty(&smatrix_row);
-            printf("\n");
-            //print_smatrix_source(&smatrix_row);
-            printf("\n");
-            print_smatrix_pretty(&smatrix);
-            printf("\n");
+        	printf("\nSource vector-row:\n");
+            print_smatrix_source(&smatrix_row);
+            printf("\nSource matrix:\n");
             print_smatrix_source(&smatrix);
+
             sparse_matrix sres;
             set_null_matrix(&sres);
             change_size_smatrix(&sres, 1, smatrix.m, smatrix.m);
 
+            uint64_t end = 0;
             uint64_t start = tick();
-            multiply_matrix_row(&smatrix_row, &smatrix, &sres);
-            printf("result time compact imagination: %" PRIu64 " processors ticks\n", tick() - start);
 
-            print_smatrix_pretty(&sres);
+            multiply_matrix_row(&smatrix_row, &smatrix, &sres);
+            end = tick() - start;
+            printf("Result time compact imagination: %" PRIu64 " processors ticks\n", end);
+
+            print_smatrix_source(&sres);
             printf("\n");
 
             matrix_t matrix;
@@ -56,19 +68,16 @@ int main()
 
             sparse_to_classic_matrix(&smatrix, &matrix);
             sparse_to_classic_matrix(&smatrix_row, &matrix_row);
-            output_matrix(&matrix);
-            printf("\n");
-            output_matrix(&matrix_row);
             printf("\n");
 
             create_matrix(&matrix_res, smatrix_row.n, smatrix.m);
-            output_matrix(&matrix_res);
             printf("\n");
             start = tick();
             multiply_matrix(&matrix_row, &matrix, &matrix_res);
-            printf("result time normal imagination: %" PRIu64 " processors ticks\n", tick() - start);
+            end = tick() - start;
+            printf("result time normal imagination: %" PRIu64 " processors ticks\n", end);
             
-            output_matrix(&matrix_res);
+            //output_matrix(&matrix_res);
 
             compare_time(100);
             delete_smatrix_content(&sres);
@@ -78,6 +87,6 @@ int main()
 
     delete_smatrix_content(&smatrix);
 
-    getchar();getchar();
+    getchar();
     return error_code;
 }
