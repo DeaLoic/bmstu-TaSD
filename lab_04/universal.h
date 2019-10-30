@@ -30,4 +30,6 @@ int summator_double(double *increased, double *added);
 int fscanf_double(FILE* source, double *elem);
 int fprintf_double(FILE* source, double *elem);
 
+uint64_t tick(void);
+
 #endif

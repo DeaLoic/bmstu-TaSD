@@ -1,6 +1,10 @@
 #include "stack.h"
 #include "array.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include "test.h"
+
+#define TESTING_BASE 50
 
 int print_menu();
 int print_address_hex(node_t *node);
@@ -26,12 +30,15 @@ int main()
     create_array(&(free_zone.addresses), free_zone.max_size, sizeof(node_t*));
 
     int choose = 1;
-    print_menu();
     while (choose)
     {
+        print_menu();
+
         if (scanf("%d", &choose) == 1)
         {
+            system("clear");
             fflush(stdin);
+            
             switch (choose)
             {
             case 0:
@@ -135,6 +142,10 @@ int main()
                 print_stack(&stack);
                 break;
 
+            case 9:
+                testing(TESTING_BASE);
+                break;
+            
             default:
                 printf("Choose point from menu\n");
                 break;
@@ -155,9 +166,9 @@ int main()
 int print_menu()
 {
     printf("------------MENU------------\n\n");
-    printf("0 - exit\n1 - pop from array stack\n2 - push to array stack\n");
+    printf("0 - exit\n\n1 - pop from array stack\n2 - push to array stack\n");
     printf("3 - peek from array stack\n4 - print array stack\n\n5 - pop from list stack\n");
-    printf("6 - push to list stack\n7 - peek from list stack\n8 - print list stack\n\n");
+    printf("6 - push to list stack\n7 - peek from list stack\n8 - print list stack\n\n9 - testing\n\n");
 }
 
 int print_address_hex(node_t *node)

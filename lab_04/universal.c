@@ -172,3 +172,10 @@ int fprintf_double(FILE* source, double *elem)
 {
     return fprintf(source, "%lf", *elem);
 }
+
+uint64_t tick()
+{
+    uint64_t d;
+    __asm__ __volatile__("rdtsc" : "=A" (d));
+    return d;
+}
