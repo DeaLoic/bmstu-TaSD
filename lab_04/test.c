@@ -10,7 +10,7 @@ void test_list_stack(int size)
 
     uint64_t start_tick = tick();
     node_t *data_temp = NULL;
-    for (int iter = 0; iter < 0; iter++)
+    for (int iter = 0; iter < 3; iter++)
     {
         for (int i = 0; i < size; i++)
         {
@@ -35,7 +35,7 @@ void test_array_stack(int size)
 
     uint64_t start_tick = tick();
     int64_t data_temp = 0;
-    for (int iter = 0; iter < 0; iter++)
+    for (int iter = 0; iter < 3; iter++)
     {
         for (int i = 0; i < size; i++)
         {
