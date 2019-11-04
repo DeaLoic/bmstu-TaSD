@@ -34,13 +34,12 @@ int main()
     {
         print_menu();
 
-        if (scanf("%d", &choose) == 1)
+        scanf("%d", &choose);
+        system("clear");
+        fflush(stdin);
+        
+        switch (choose)
         {
-            system("clear");
-            fflush(stdin);
-            
-            switch (choose)
-            {
             case 0:
                 break;
             
@@ -149,11 +148,6 @@ int main()
             default:
                 printf("Choose point from menu\n");
                 break;
-            }
-        }
-        else
-        {
-            choose = 0;
         }
     }
 

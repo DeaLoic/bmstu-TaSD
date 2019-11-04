@@ -275,7 +275,7 @@ int print_array_stack(stack_array_t *stack)
         stack_array_t stack_buff;
         set_null_array_stack(&stack_buff);
 
-        int64_t data_buff = NULL;
+        int64_t data_buff = 0;
         error_code = SUCCES;
         int elem_cnt = stack->n;
         for (int i = 0; i < elem_cnt && !error_code; i++)
