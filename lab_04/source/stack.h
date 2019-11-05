@@ -45,7 +45,7 @@ int pop_stack(stack_t *stack);
 int pop_with_free_zone_control(stack_t *stack, free_zone_t *free_zone);
 
 int push_stack(stack_t *stack, node_t *new_elem);
-int push_with_free_zone_control(stack_t *stack, node_t *new_elem, free_zone_t *free_zone);
+int push_with_free_zone_control(stack_t *stack, node_t *new_elem, free_zone_t *free_zone, int is_print);
 
 int peek_stack(stack_t *stack, node_t **elem);
 
@@ -58,5 +58,7 @@ int print_array_stack(stack_array_t *stack);
 int pop_array_stack(stack_array_t *stack);
 int push_array_stack(stack_array_t *stack, int64_t *data);
 int peek_array_stack(stack_array_t *stack, int64_t *data);
+
+int compare_node_p(node_t **first, node_t **second);
 
 #endif

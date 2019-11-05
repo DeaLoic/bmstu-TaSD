@@ -106,7 +106,7 @@ int main()
             case 6:
                 if (stack.size < MAX_STACK)
                 {
-                    push_with_free_zone_control(&stack, NULL, &free_zone);
+                    push_with_free_zone_control(&stack, NULL, &free_zone, 1);
                     stack.head->data = stack.head;
                 }
                 else

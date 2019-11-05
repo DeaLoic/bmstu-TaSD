@@ -186,7 +186,7 @@ int compare_node_p(node_t **first, node_t **second)
     return exit_code;
 }
 
-int push_with_free_zone_control(stack_t *stack, node_t *elem, free_zone_t *free_zone)
+int push_with_free_zone_control(stack_t *stack, node_t *elem, free_zone_t *free_zone, int is_print)
 {
     int error_code = INCORRECT_INPUT;
     if (stack)
@@ -195,7 +195,10 @@ int push_with_free_zone_control(stack_t *stack, node_t *elem, free_zone_t *free_
         int pos = pos_in_array(free_zone->addresses, free_zone->cur_size, sizeof(node_t*), &(stack->head), compare_node_p);
         if (pos != -1)
         {
-            printf("Take %x from free zone\n", free_zone->addresses[pos]);
+            if (is_print)
+            {
+                printf("Take %x from free zone\n", free_zone->addresses[pos]);
+            }
             move_to_end(free_zone->addresses, free_zone->cur_size, sizeof(node_t*), pos);
             (free_zone->cur_size)--;
         }
