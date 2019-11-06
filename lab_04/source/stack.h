@@ -5,7 +5,7 @@
 #include <inttypes.h>
 #include "error_codes.h"
 
-#define MAX_STACK 30
+#define MAX_STACK 3
 #define MAX_MAX_STACK 300
 
 struct node_t
