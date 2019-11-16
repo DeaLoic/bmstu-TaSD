@@ -24,9 +24,8 @@ int create_queue_node(queue_node_t **node);
 int delete_queue_node(queue_node_t **node);
 int set_null_queue_node(queue_node_t *node);
 
-int set_null_queue_list(queue_list_t *queue);
-
 //CDIO
+int set_null_queue_list(queue_list_t *queue);
 int delete_queue_list(queue_list_t *queue);
 
 int add_elem_queue_list(queue_list_t *queue, void *data);
