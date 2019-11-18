@@ -93,11 +93,13 @@ int add_elem_queue_list(queue_list_t *queue, void *data)
             {
                 queue->tail_node = new_node;
                 queue->head_node = new_node;
+                queue->tail_node->prev_node = new_node;
                 queue->size = 1;
             }
             else
             {
                 queue->tail_node->prev_node = new_node;
+                queue->tail_node = new_node;
                 queue->size += 1;
             }
         }
@@ -129,17 +131,40 @@ int delete_elem_queue_list(queue_list_t *queue)
     return error_code;
 }
 
-int is_queue_list_empty(queue_list_t *queue)
+int print_queue_list(queue_list_t *queue)
 {
-    return queue && !queue->size && !queue->head_node && !queue->tail_node;
+    int error_code = INCORRECT_INPUT;
+    if (queue)
+    {
+        error_code = SUCCES;
+        if (is_queue_list_non_empty(queue))
+        {
+            void *temp_data = NULL;
+            int size = queue->size;
+            for (int i = 0; i < size; i++)
+            {
+                temp_data = queue->head_node->data;
+                printf("%x %x\n", queue->head_node, temp_data);
+                delete_elem_queue_list(queue);
+                add_elem_queue_list(queue, temp_data);
+            }
+        }
+    }
+
+    return error_code;
 }
 
-int is_queue_list_not_empty(queue_list_t *queue)
+int is_queue_list_empty(queue_list_t *queue)
+{
+    return queue && !(queue->size) && !(queue->head_node) && !(queue->tail_node);
+}
+
+int is_queue_list_non_empty(queue_list_t *queue)
 {
     return queue && queue->size > 0 && queue->head_node && queue->tail_node; 
 }
 
 int is_queue_list_correct(queue_list_t *queue)
 {
-    return is_queue_list_empty(queue) || is_queue_list_not_empty(queue);
+    return is_queue_list_empty(queue) || is_queue_list_non_empty(queue);
 }

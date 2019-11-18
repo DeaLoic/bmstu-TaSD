@@ -1,5 +1,6 @@
 #include "queue_array.h"
 #include "error_codes.h"
+#include "request.h"
 
 int create_queue_array(queue_array_t *queue, size_t queue_size)
 {
@@ -43,7 +44,7 @@ int print_queue_array(queue_array_t *queue)
     }
 }
 */
-int add_element_queue_array(queue_array_t *queue, double data)
+int add_element_queue_array(queue_array_t *queue, void *data)
 {
     int error_code = INCORRECT_INPUT;
     if (is_queue_array_correct(queue) && !is_queue_array_fill(queue))
