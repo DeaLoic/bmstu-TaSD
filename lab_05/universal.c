@@ -21,6 +21,12 @@ void universal_swap(void *first, void *second, size_t size)
     }
 }
 
+int printf_pointer(FILE* std, void *second)
+{
+    printf("%x", *(void**)second);
+    return 1;
+}
+
 // size with zero-byte
 int input_string(FILE *f, char *string, int size)
 {

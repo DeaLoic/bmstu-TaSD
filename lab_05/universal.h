@@ -24,6 +24,7 @@ int compare_int(int *first, int *second);
 int fscanf_int(FILE* source, int *elem);
 int fprintf_int(FILE* source, int *elem);
 
+int printf_pointer(FILE* std, void *second);
 // double
 int compare_double(double *first, double *second);
 int summator_double(double *increased, double *added);
