@@ -11,6 +11,9 @@ typedef struct info_t
     double middle_len_queue;
     int cur_queue_len;
 
+    double middle_proc_time;
+    double middle_income_time;
+
     int in_requests;
     int out_requests;
 

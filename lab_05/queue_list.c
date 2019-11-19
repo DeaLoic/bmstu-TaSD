@@ -156,7 +156,7 @@ int print_queue_list(queue_list_t *queue)
 
 int is_queue_list_empty(queue_list_t *queue)
 {
-    return queue && !(queue->size) && !(queue->head_node) && !(queue->tail_node);
+    return queue && !(queue->size);
 }
 
 int is_queue_list_non_empty(queue_list_t *queue)

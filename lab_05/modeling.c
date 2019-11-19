@@ -15,6 +15,7 @@ int next_cycle(queue_list_t *queue, free_zone_t *free_zone, info_t *info, reques
     //printf("\n %d\n", queue->size);
     if (queue && free_zone && info)
     {
+        error_code = SUCCES;
         if (is_queue_list_non_empty(queue))
         {
             //print_queue_list_req(queue);
@@ -25,6 +26,8 @@ int next_cycle(queue_list_t *queue, free_zone_t *free_zone, info_t *info, reques
 
             info->worked_count += 1;
             double oper_time = ((double)rand() / (double)RAND_MAX);
+            info->middle_proc_time += oper_time;
+            info->middle_proc_time /= 2;
 
             if ((info->full_time - temp_last_request->data) < 0)
             {
@@ -32,38 +35,34 @@ int next_cycle(queue_list_t *queue, free_zone_t *free_zone, info_t *info, reques
                 info->full_time += (temp_last_request->data - info->full_time);
             }
             info->full_time += oper_time;
-
-            if (is_request_full_handled(temp_last_request) && info->out_requests < 1000)
+            //printf("%x, %lf, %d    %lf     %lf\n", temp_last_request, temp_last_request->data, temp_last_request->count_of_cycle, info->full_time, next_request->data);
+            if (is_request_full_handled(temp_last_request))
             {
                 info->out_requests += 1;
                 free(temp_last_request);
-                if (is_queue_list_empty(queue))
+                if (is_queue_list_empty(queue) || (compare_double(&(next_request->data), &(info->full_time)) < 0))
                 {
                     add_with_free_zone_control_queue_list(next_request, queue, free_zone);
                     info->in_requests += 1;
                 }
                 else
                 {
-                    if (compare_double(&(next_request->data), &(info->full_time)) > 0)
-                    {
-                        info->cur_queue_len = queue->size;
-                        info->middle_len_queue = (info->middle_len_queue + queue->size) / 2.0;
-                        next_cycle(queue, free_zone, info, next_request);
-                    }
+                    info->cur_queue_len = queue->size;
+                    info->middle_len_queue = (info->middle_len_queue + queue->size) / 2.0;
+                    next_cycle(queue, free_zone, info, next_request);
                 }
             }
             else
             {
+                temp_last_request->data = info->full_time;
                 if (compare_double(&(next_request->data), &(info->full_time)) > 0)
                 {
-                    temp_last_request->data = info->full_time;
                     add_with_free_zone_control_queue_list(temp_last_request, queue, free_zone);
                     next_cycle(queue, free_zone, info, next_request);
                 }
                 else
                 {
                     add_with_free_zone_control_queue_list(next_request, queue, free_zone);
-                    temp_last_request->data = info->full_time;
                     add_with_free_zone_control_queue_list(temp_last_request, queue, free_zone);
                     info->cur_queue_len = queue->size;
 
@@ -93,18 +92,27 @@ int model(queue_list_t *queue, free_zone_t *free_zone, info_t *info)
         srand(time(NULL));
         error_code = SUCCES;
         double wait_time;
+        int i = 1;
         while (info->out_requests < 1000 && !error_code)
         {
+
             request_t *next_request = (request_t*)malloc(sizeof(request_t));
             if (next_request)
             {
                 wait_time = (((double)rand() / (double)RAND_MAX) * 6);
-                printf("%lf\n", wait_time);
+                info->middle_income_time += wait_time;
+                info->middle_income_time /= 2;
                 create_request(next_request, info->full_time + wait_time);
                 next_cycle(queue, free_zone, info, next_request);
                 //print_full_info(info);
             }
-
+            // TODO FIX
+            if ((info->out_requests / i) == i)
+            {
+                printf("\n%d requests was output\n", i * 100);
+                print_medium_info(info);
+                i++;
+            }
         }
     }
 
