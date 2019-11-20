@@ -25,9 +25,10 @@ int next_cycle(queue_list_t *queue, free_zone_t *free_zone, info_t *info, reques
             del_with_free_zone_control_queue_list(queue, free_zone);
 
             info->worked_count += 1;
-            double oper_time = ((double)rand() / (double)RAND_MAX);
+            double oper_time = ((double)rand() / (double)RAND_MAX) * MAX_PROC_TIME;
+            printf("%lf\n", oper_time);
             info->middle_proc_time += oper_time;
-            info->middle_proc_time /= 2;
+            //info->middle_proc_time /= 2;
 
             if ((info->full_time - temp_last_request->data) < 0)
             {
@@ -93,27 +94,30 @@ int model(queue_list_t *queue, free_zone_t *free_zone, info_t *info)
         error_code = SUCCES;
         double wait_time;
         int i = 1;
-        while (info->out_requests < 1000 && !error_code)
+        while (info->out_requests < TARGET_OUTPUT_REQUEST && !error_code)
         {
 
             request_t *next_request = (request_t*)malloc(sizeof(request_t));
             if (next_request)
             {
-                wait_time = (((double)rand() / (double)RAND_MAX) * 6);
+                wait_time = (((double)rand() / (double)RAND_MAX) * MAX_INCOME_TIME);
                 info->middle_income_time += wait_time;
-                info->middle_income_time /= 2;
                 create_request(next_request, info->full_time + wait_time);
                 next_cycle(queue, free_zone, info, next_request);
                 //print_full_info(info);
             }
             // TODO FIX
-            if ((info->out_requests / i) == i)
+            //printf("%d\n", info->out_requests);
+            if ((info->out_requests / 100) == i)
             {
-                printf("\n%d requests was output\n", i * 100);
+                printf("\n%d requests was output\n\n", i * 100);
                 print_medium_info(info);
                 i++;
+                info->middle_income_time /= 100;
             }
         }
+        info->middle_income_time /= info->worked_count;
+        print_full_info(info);
     }
 
     return error_code;

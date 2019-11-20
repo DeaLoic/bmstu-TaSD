@@ -1,5 +1,6 @@
 #include "request.h"
 #include "error_codes.h"
+#include "modeling.h"
 
 int create_request(request_t *request, double data)
 {
@@ -40,5 +41,5 @@ int copy_request(request_t *request_dest, request_t *request_source)
 
 int is_request_full_handled(request_t *request)
 {
-    return request->count_of_cycle >= 5;
+    return request->count_of_cycle >= COUNT_OF_CYCLE;
 }

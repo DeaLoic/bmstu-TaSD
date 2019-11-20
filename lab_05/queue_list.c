@@ -144,7 +144,7 @@ int print_queue_list(queue_list_t *queue)
             for (int i = 0; i < size; i++)
             {
                 temp_data = queue->head_node->data;
-                printf("%x %x\n", queue->head_node, temp_data);
+                printf("%x %lf\n", queue->head_node, *(double*)temp_data);
                 delete_elem_queue_list(queue);
                 add_elem_queue_list(queue, temp_data);
             }

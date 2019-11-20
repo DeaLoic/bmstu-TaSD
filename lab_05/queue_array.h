@@ -6,7 +6,7 @@
 
 typedef struct queue_array_t
 {
-    void *body[MAX_QUEUE];
+    double body[MAX_QUEUE];
     int max_size;
     int size;
     int tail_position;
@@ -18,7 +18,7 @@ int create_queue_array(queue_array_t *queue, size_t queue_size);
 int set_null_queue_array(queue_array_t *queue);
 int print_queue_array(queue_array_t *queue);
 
-int add_element_queue_array(queue_array_t *queue, void *data);
+int add_element_queue_array(queue_array_t *queue, double data);
 int delete_element_queue_array(queue_array_t *queue);
 
 int is_queue_array_empty(queue_array_t *queue);

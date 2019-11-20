@@ -30,21 +30,20 @@ int set_null_queue_array(queue_array_t *queue)
     return error_code;
 }
 
-/*
 int print_queue_array(queue_array_t *queue)
 {
     int error_code = INCORRECT_INPUT;
     if (is_queue_array_correct(queue))
     {
         error_code = SUCCES;
-        for (int i = 0; i < queue->cur_size; i++)
+        for (int i = 0; i < queue->size; i++)
         {
-            printf("%lf \n", queue->body[i + queue->cur_tail_position]);
+            printf("%lf \n", queue->body[(queue->head_position + i) % queue->size]);
         }
     }
 }
-*/
-int add_element_queue_array(queue_array_t *queue, void *data)
+
+int add_element_queue_array(queue_array_t *queue, double data)
 {
     int error_code = INCORRECT_INPUT;
     if (is_queue_array_correct(queue) && !is_queue_array_fill(queue))

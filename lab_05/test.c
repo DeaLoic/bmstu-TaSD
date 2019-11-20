@@ -14,32 +14,14 @@ int main()
 {
     queue_list_t queue;
     free_zone_t free_zone;
-    set_null_free_zone(&free_zone);
-    set_null_queue_list(&queue);
-    int c = 0;
-    while (c < 300)
+    info_t info;
+    double rand_sum;
+    srand(time(NULL));
+    for (int i = 0; i < 1000; i++)
     {
-        if (c < 100)
-        {
-            //request_t req;
-            //create_request(&req, c);
-            add_with_free_zone_control_queue_list(&c, &queue, &free_zone);
-        }
-        else if (c < 200)
-        {
-            //printf("%x %x\n", queue.head_node, queue.head_node->prev_node);
-            del_with_free_zone_control_queue_list(&queue, &free_zone);
-        }
-        else
-        {
-            add_with_free_zone_control_queue_list(&c, &queue, &free_zone);
-        }
-        //print_queue_list(&queue);
-        c++;
+        rand_sum += (double)rand() / (double)RAND_MAX;
     }
-    print_queue_list(&queue);
-    printf("%d\n", free_zone.cur_size);
-    print_array(free_zone.addresses, free_zone.cur_size, sizeof(void*), stdout, printf_pointer);
+    printf("%lf, %lf", rand_sum, rand_sum / 1000 * 4);
     getchar();
     return 0;
 }
