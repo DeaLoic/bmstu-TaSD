@@ -19,7 +19,8 @@ typedef struct info_t
     int in_requests;
     int out_requests;
 
-    int is_late_count;
+    int max_queue_len;
+    
 } info_t;
 
 int set_null_info(info_t *info);

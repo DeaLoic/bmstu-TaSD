@@ -18,8 +18,8 @@ int set_null_info(info_t *info)
         info->worked_count = 0;
         info->middle_income_time = 0;
         info->middle_proc_time = 0;
-        info->is_late_count = 0;
         info->real_time = 0;
+        info->max_queue_len = 0;
     }
 
     return error_code;
@@ -45,7 +45,8 @@ int print_full_info(info_t *info)
     if (info)
     {
         error_code = SUCCES;
-        printf("Real time: %lf sec\n\n"
+        printf(" ###### FULL INFO ######\n\n"
+               "Real time: %lf sec\n\n"
                "Full time: %lf\n"
                "Free time: %lf\n\n"
                "Requests was input: %d\n"

@@ -106,13 +106,17 @@ int modeling_list(queue_list_t *queue, free_zone_t *free_zone, info_t *info)
                 last_wait_time += wait_time;
                 create_request(next_request, last_wait_time);
                 next_cycle_list(queue, free_zone, info, next_request);
+                if (info->cur_queue_len > info->max_queue_len)
+                {
+                    info->max_queue_len = info->cur_queue_len;
+                }
             }
             info->real_time += (clock() - start_time);
             if ((info->out_requests / 100) == i)
             {
                 printf("\n%d requests was output\n", i * 100);
                 print_medium_info(info);
-                printf("\n");
+                printf("\n");   
                 i++;
             }
         }
@@ -120,7 +124,7 @@ int modeling_list(queue_list_t *queue, free_zone_t *free_zone, info_t *info)
         info->middle_income_time /= info->in_requests;
         info->middle_proc_time /= info->worked_count;
         print_full_info(info);
-        //printf("%d\n", info->is_late_count);
+        printf("\nUniqle memory blocks was used (ideal - %d (max queue size)): %d\n", info->max_queue_len, free_zone->cur_size);
     }
 
     return error_code;
@@ -190,7 +194,6 @@ int next_cycle_array(queue_array_t *queue, info_t *info, request_t *next_request
 
             if ((info->full_time - temp_last_request.data) < 0)
             {
-                info->is_late_count += 1;
                 info->free_time += temp_last_request.data - info->full_time;
                 info->full_time += (temp_last_request.data - info->full_time);
             }
