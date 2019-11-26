@@ -9,10 +9,10 @@
 исключения элементов из очереди при использовании двух указанных<br>
 структур данных. Оценка эффективности программы (при различной<br>
 реализации) по времени и по используемому объему памяти.</p>
-<p class="has-line-data" data-line-start="16" data-line-end="30"><strong>Условие задачи:</strong> Заявки поступают в “хвост” очереди по случайному закону с интервалом времени <strong>Т1</strong>, равномерно распределенным <strong>от 0 до 6 единиц времени (е.в.)</strong>.<br>
-В ОА они поступают из “головы” очереди по одной и обслуживаются также<br>
+<p class="has-line-data" data-line-start="16" data-line-end="30"><strong>Условие задачи:</strong> Заявки поступают в "хвост" очереди по случайному закону с интервалом времени <strong>Т1</strong>, равномерно распределенным <strong>от 0 до 6 единиц времени (е.в.)</strong>.<br>
+В ОА они поступают из "головы" очереди по одной и обслуживаются также<br>
 равновероятно за время <strong>Т2 от 0 до 1 е.в</strong>. Каждая заявка после ОА вновь<br>
-поступает в “хвост” очереди, совершая всего 5 циклов обслуживания, после<br>
+поступает в "хвост" очереди, совершая всего 5 циклов обслуживания, после<br>
 чего покидает систему. (Все времена – вещественного типа) В начале<br>
 процесса в системе заявок нет.<br>
 Смоделировать процесс обслуживания до ухода из системы первых 1000<br>
@@ -58,20 +58,20 @@
 <h3 class="code-line" data-line-start=63 data-line-end=64 ><a id="2____63"></a>2.Описание внутренних структур данных</h3>
 <p class="has-line-data" data-line-start="65" data-line-end="68"><strong>Описание полей</strong><br>
 Узел используется для очереди на списке<br>
-&lt;img src=“img/node.png”&gt;</p>
+<img src="img/node.png"></p>
 <ul>
 <li class="has-line-data" data-line-start="68" data-line-end="69">.data - указатель на данные</li>
 <li class="has-line-data" data-line-start="69" data-line-end="72">.next_node - указатель на следующий узел<br>
 Данная структура выбранна, так как является базовой для очереди на списке.</li>
 </ul>
 <p class="has-line-data" data-line-start="72" data-line-end="74">Очередь на списке<br>
-&lt;img src=“img/queue_list.png”&gt;</p>
+<img src="img/queue_list.png"></p>
 <ul>
 <li class="has-line-data" data-line-start="74" data-line-end="75">.head_node  - Указатель на голову очереди. (Под головой понимается элемент, к которому есть доступ)</li>
 <li class="has-line-data" data-line-start="75" data-line-end="76">.tail_node - Указатель на хвост стека. (Под хвостом понимается последний добавленный элемент)</li>
 <li class="has-line-data" data-line-start="76" data-line-end="78">.size - Кол-во узлов. (Кол-во элементов позволяет легче обрабатывать очередь. Хотя в общем случае можно ориентироваться на нулевой указатель)</li>
 </ul>
-<p class="has-line-data" data-line-start="78" data-line-end="79">&lt;img src=“img/free_zone.png”&gt;</p>
+<p class="has-line-data" data-line-start="78" data-line-end="79"><img src="img/free_zone.png"></p>
 <ul>
 <li class="has-line-data" data-line-start="79" data-line-end="80">.addresses - Массив свободных адресов.</li>
 <li class="has-line-data" data-line-start="80" data-line-end="81">.max_size - Кол-во элементов, помещающееся в выделенную область</li>
@@ -79,7 +79,7 @@
 Структура выбрана, так как позволяет хранить и обрабатывать адреса свободных ячеек памяти, что необходимо по заданию</li>
 </ul>
 <p class="has-line-data" data-line-start="84" data-line-end="86">Очередь на массиве (кольцевая)<br>
-&lt;img src=“img/queue_array.png”&gt;</p>
+<img src="img/queue_array.png"></p>
 <ul>
 <li class="has-line-data" data-line-start="86" data-line-end="87">.body - Массив данных типа request_t</li>
 <li class="has-line-data" data-line-start="87" data-line-end="88">.max_size - Ограничение на кол-во элементов</li>
@@ -87,12 +87,12 @@
 <li class="has-line-data" data-line-start="89" data-line-end="90">.tail_position - Текущая индекс хвоста очереди</li>
 <li class="has-line-data" data-line-start="90" data-line-end="92">.head_positin - Текущий индекс головы очереди</li>
 </ul>
-<p class="has-line-data" data-line-start="92" data-line-end="93">&lt;img src=“img/request.png”&gt;</p>
+<p class="has-line-data" data-line-start="92" data-line-end="93"><img src="img/request.png"></p>
 <ul>
 <li class="has-line-data" data-line-start="93" data-line-end="94">.data - Время входа в цикл</li>
 <li class="has-line-data" data-line-start="94" data-line-end="96">.count_of_cycle - Кол-во пройденных циклов обработки</li>
 </ul>
-<p class="has-line-data" data-line-start="96" data-line-end="97">&lt;img src=“img/info.png”&gt;</p>
+<p class="has-line-data" data-line-start="96" data-line-end="97"><img src="img/info.png"></p>
 <ul>
 <li class="has-line-data" data-line-start="97" data-line-end="98">.data - Время входа в цикл</li>
 <li class="has-line-data" data-line-start="98" data-line-end="99">.count_of_cycle - Кол-во пройденных циклов обработки</li>
@@ -135,18 +135,18 @@
 <h3 class="code-line" data-line-start=112 data-line-end=113 ><a id="5____112"></a>5. Вывод и сравнение</h3>
 <p class="has-line-data" data-line-start="113" data-line-end="120">Тесты скорости<br>
 Linux (Debian)<br>
-&lt;img src=“img/testing_time_linux.png”&gt;<br>
-&lt;img src=“img/testing_time_linux_array.png”&gt;<br>
+<img src="img/testing_time_linux.png"><br>
+<img src="img/testing_time_linux_array.png"><br>
 Windows 10<br>
-&lt;img src=“img/testing_time_windows10.png”&gt;<br>
-&lt;img src=“img/testing_time_windows10_array.png”&gt;</p>
+<img src="img/testing_time_windows10.png"><br>
+<img src="img/testing_time_windows10_array.png"></p>
 <p class="has-line-data" data-line-start="121" data-line-end="123">Скорость различается (см. вывод)<br>
 Результаты в условных временных еденицах примерно одинаковы</p>
 <p class="has-line-data" data-line-start="124" data-line-end="125">Дефрагментация:</p>
 <p class="has-line-data" data-line-start="126" data-line-end="130">Linux (Debian)<br>
-&lt;img src=“img/test_linux_defrag.png”&gt;<br>
+<img src="img/test_linux_defrag.png"><br>
 Windows 10<br>
-&lt;img src=“img/test_windows10_defrag.png”&gt;</p>
+<img src="img/test_windows10_defrag.png"></p>
 <p class="has-line-data" data-line-start="131" data-line-end="134"><strong>Вывод</strong> : Очередь, реализованная через список работает в 2 раза медленнее, чем очередь, реализованный через массив. Уровень дефрагментации различается на разных системах.<br>
 При небольшом кол-ве данных эффективнее использовать массив, так как скорость обработки значительно выше по сравнению со списком.<br>
 При большом или неизвестном кол-ве данных данные не помещаются в массив, и, жертвуя скоростью обработки и использованной памятью (+ хранение ссылок на узлы) приходиться реализовывать списком.</p>
