@@ -28,6 +28,11 @@ int main()
 
     queue_array_t queue_array;
     set_null_queue_array(&queue_array);
+
+    queue_array_t queue_array_check;
+    create_queue_array(&queue_array_check, MAX_QUEUE);
+
+    request_t temp_req;
     create_queue_array(&queue_array, MAX_HANDLE_QUEUE);
 
     int choose = 1;
@@ -36,11 +41,9 @@ int main()
         print_menu();
 
         printf("Your point: ");
-        fflush(stdin);
-        scanf("%d", &choose);
-        fflush(stdin);
+        if (scanf("%d", &choose))
+        {
             system("clear");
-            fflush(stdin);
             switch (choose)
             {
                 case 0:
@@ -54,7 +57,8 @@ int main()
                     printf("Input real number: ");
                     if (scanf("%lf", &new_elem) == 1)
                     {
-                        add_element_queue_array(&queue_array, new_elem);
+                        create_request(&temp_req, new_elem);
+                        add_element_queue_array(&queue_array, &temp_req);
                     }
                     else
                     {
@@ -150,22 +154,31 @@ int main()
                     set_null_info(&info);
                     set_null_queue_list(&que);
                     set_null_free_zone(&fre_z);
-                    model(&que, &fre_z, &info);
+                    modeling_list(&que, &fre_z, &info);
                 }
                 break;
-                default:
-                    break;
+                case 9:
+                {
+                    create_queue_array(&queue_array_check, MAX_QUEUE);
+                    set_null_info(&info);
+                    modeling_array(&queue_array_check, &info);
                 }
-                fflush(stdin);
+                default:
+                    printf("Pls, choose point from menu");
+                    gets();
+                    break;
+            }
+        }
+    
+        else
+        {
         
-        fflush(stdin);
-    }
+            gets();
+            system("clear");
 
-    model(&queue_list, &free_zone, &info);
-    print_full_info(&info);
-    //print_queue_list(&queue);
-    
-    
+        }
+    }
+        
     getchar();
     return error_code;
 }
@@ -173,5 +186,6 @@ int main()
 void print_menu()
 {
     printf("0 - Exit\n\n1 - Add element to array queue\n2 - Delete element from queue array\n3 - Print queue array\n\n"
-          "4 - Add element to queue list\n5 - Delete element from queue list\n6 - Print queue list\n7 - Print free zone\n\n8 - Modeling\n");
+           "4 - Add element to queue list\n5 - Delete element from queue list\n6 - Print queue list\n7 - Print free zone\n\n"
+           "8 - Modeling list\n9 - Modeling array\n");
 }

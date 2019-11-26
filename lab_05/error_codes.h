@@ -11,5 +11,6 @@
 #define LOGIC_ERROR 6      // Error in alghoritm
 #define INCORRECT_INPUT 7  // Error incorrect input data in function
 #define EOL_UNREACHED 2123
+#define STACK_OVERFLOW 8   
 
 #endif

@@ -8,6 +8,8 @@ typedef struct info_t
     double free_time;
     double full_time;
 
+    double real_time;
+
     double middle_len_queue;
     int cur_queue_len;
 
@@ -17,6 +19,7 @@ typedef struct info_t
     int in_requests;
     int out_requests;
 
+    int is_late_count;
 } info_t;
 
 int set_null_info(info_t *info);

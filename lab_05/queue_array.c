@@ -38,18 +38,18 @@ int print_queue_array(queue_array_t *queue)
         error_code = SUCCES;
         for (int i = 0; i < queue->size; i++)
         {
-            printf("%lf \n", queue->body[(queue->head_position + i) % queue->size]);
+            printf("%lf \n", queue->body[(queue->head_position + i) % queue->size].data);
         }
     }
 }
 
-int add_element_queue_array(queue_array_t *queue, double data)
+int add_element_queue_array(queue_array_t *queue, request_t *data)
 {
     int error_code = INCORRECT_INPUT;
     if (is_queue_array_correct(queue) && !is_queue_array_fill(queue))
     {
         error_code = SUCCES;
-        queue->body[queue->tail_position] = data;
+        copy_request(queue->body + queue->tail_position, data);
         queue->size += 1;
         queue->tail_position = (queue->tail_position + 1) % queue->max_size;
     }
