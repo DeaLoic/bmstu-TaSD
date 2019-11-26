@@ -15,6 +15,7 @@ void print_menu();
 
 int main()
 {
+    char buff_input[20];
     int error_code = SUCCES;
 
     queue_list_t queue_list;
@@ -165,7 +166,7 @@ int main()
                 }
                 default:
                     printf("Pls, choose point from menu");
-                    gets();
+                    gets(buff_input);
                     break;
             }
         }
@@ -173,7 +174,7 @@ int main()
         else
         {
         
-            gets();
+            gets(buff_input);
             system("clear");
 
         }

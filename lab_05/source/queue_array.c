@@ -1,6 +1,7 @@
 #include "queue_array.h"
 #include "error_codes.h"
 #include "request.h"
+#include <stdio.h>
 
 int create_queue_array(queue_array_t *queue, size_t queue_size)
 {
