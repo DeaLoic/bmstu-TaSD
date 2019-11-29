@@ -7,7 +7,7 @@
 #include "request.h"
 
 #define MAX_PROC_TIME 1
-#define MAX_INCOME_TIME 6
+#define MAX_INCOME_TIME 4
 #define TARGET_OUTPUT_REQUEST 1000
 #define COUNT_OF_CYCLE 5
 
