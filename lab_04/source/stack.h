@@ -5,7 +5,8 @@
 #include <inttypes.h>
 #include "error_codes.h"
 
-#define MAX_STACK 30
+#define MAX_STACK 3
+#define MAX_MAX_STACK 300
 
 struct node_t
 {
@@ -31,7 +32,7 @@ typedef struct
 typedef struct
 {
     int n;
-    int64_t data[MAX_STACK];
+    int64_t data[MAX_MAX_STACK];
 
 } stack_array_t;
 
@@ -44,7 +45,7 @@ int pop_stack(stack_t *stack);
 int pop_with_free_zone_control(stack_t *stack, free_zone_t *free_zone);
 
 int push_stack(stack_t *stack, node_t *new_elem);
-int push_with_free_zone_control(stack_t *stack, node_t *new_elem, free_zone_t *free_zone);
+int push_with_free_zone_control(stack_t *stack, node_t *new_elem, free_zone_t *free_zone, int is_print);
 
 int peek_stack(stack_t *stack, node_t **elem);
 
@@ -57,5 +58,7 @@ int print_array_stack(stack_array_t *stack);
 int pop_array_stack(stack_array_t *stack);
 int push_array_stack(stack_array_t *stack, int64_t *data);
 int peek_array_stack(stack_array_t *stack, int64_t *data);
+
+int compare_node_p(node_t **first, node_t **second);
 
 #endif

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "test.h"
 
-#define TESTING_BASE 50
+#define TESTING_BASE 60
 
 int print_menu();
 int print_address_hex(node_t *node);
@@ -34,13 +34,12 @@ int main()
     {
         print_menu();
 
-        if (scanf("%d", &choose) == 1)
+        scanf("%d", &choose);
+        system("clear");
+        fflush(stdin);
+        
+        switch (choose)
         {
-            system("clear");
-            fflush(stdin);
-            
-            switch (choose)
-            {
             case 0:
                 break;
             
@@ -107,7 +106,7 @@ int main()
             case 6:
                 if (stack.size < MAX_STACK)
                 {
-                    push_with_free_zone_control(&stack, NULL, &free_zone);
+                    push_with_free_zone_control(&stack, NULL, &free_zone, 1);
                     stack.head->data = stack.head;
                 }
                 else
@@ -149,11 +148,6 @@ int main()
             default:
                 printf("Choose point from menu\n");
                 break;
-            }
-        }
-        else
-        {
-            choose = 0;
         }
     }
 

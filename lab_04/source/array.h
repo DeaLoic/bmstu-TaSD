@@ -26,7 +26,7 @@ int insert_to_position(void *array, int size, size_t size_elem, void *value, int
 int max_in_array(void *array, int size, size_t elem_size, int (*compare)(void*, void*));
 
 //return first position of value in array if exist else -1
-int pos_in_array(void *array, int size, size_t size_elem, void *value, int (*compare)(void*, void*));
+int pos_in_array(void *array, int size, size_t size_elem, void *value_p, int (*compare)(void*, void*));
 
 // summator(increase, added)
 int sum_elements(void *array, int size, size_t elem_size, void *result, int (*summator)(void*, void*));
