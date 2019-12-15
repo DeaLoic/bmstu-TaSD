@@ -20,12 +20,12 @@ typedef struct bst_t
 } bst_t;
 
 int add_element(bst_t *tree, void *data_p, int compare(void*, void*));
-bst_node_t *find_element(bst_t *tree, void *data_p, int compare(void*, void*));
-int delete_element(bst_t *tree, void *data_p, int compare(void*, void*));
+bst_node_t *find_element(bst_node_t *root, void *data_p, int compare(void*, void*));
+bst_node_t *delete_element(bst_node_t *target_node);
 
-int print_tree_prefix(bst_t *tree);
-int print_tree_postfix(bst_t *tree);
-int print_tree_infix(bst_t *tree);
+void print_tree_prefix(bst_node_t *root, void print(void*));
+void print_tree_postfix(bst_node_t *root, void print(void*));
+void print_tree_infix(bst_node_t *root, void print(void*));
 
 int print_tree_graph(bst_t *tree);
 
