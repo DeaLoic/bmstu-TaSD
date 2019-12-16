@@ -34,10 +34,15 @@ int main()
                     source = fopen(TREE_FILE, "r");
                     set_null_bst(&tree);
                     fill_tree(&tree, source);
+                    set_null_bst(&avl);
+                    balance_bst_to_avl(tree.root, &avl);
+                    fseek(source, SEEK_SET, 0);
+                    set_null_bst(&tree);
+                    fill_tree(&tree, source);
                     fclose(source);
                     break;
                 case 2:
-                    balance_bst_to_avl(tree.root, &avl);
+                avl.root = balance(avl.root);
                     break;
                 case 3:
                     printf("Binary Search tree (AVL)\n");
@@ -48,19 +53,20 @@ int main()
                     printf("Balancing tree (AVL)\n");
                     print_tree_graph(avl.root, 0, 0);
                     printf("\n");
-                case 122:
+                    break;
+                case 5:
                     print_tree_prefix(tree.root, print_int);
                     printf("\n");
                     break;
-                case 5:
+                case 6:
                     print_tree_infix(tree.root, print_int);
                     printf("\n");
                     break;
-                case 6:
+                case 7:
                     print_tree_postfix(tree.root, print_int);
                     printf("\n");
                     break;
-                case 7:
+                case 8:
                 if (scanf("%d", &choose) == 1)
                 {
                     if (find_element(tree.root, &choose, int_compare))
@@ -72,9 +78,6 @@ int main()
                         printf("Element doesnt found\n");
                     }
                 }
-                    break;
-                case 8:
-                    /* code */
                     break;
                 case 9:
                     /* code */
@@ -118,14 +121,15 @@ void menu()
             "1  - make tree from file\n"
             "2  - balance tree to avl\n\n"
             "3  - print tree pseudographiacal\n"
-            "4  - print tree prefix\n"
-            "5  - print tree infix\n"
-            "6  - print tree postfix\n\n"
-            "7  - find integer in structs\n"
-            "8  - add integer to structs\n"
-            "9  - delete integer from structs\n\n"
-            "10  - make hash table from file\n"
-            "11  - print hash table\n"
-            "12  - restructurasing hash table\n\n"
-            "13 - modeling\n");
+            "4  - print AVL tree pseudographiacal\n"
+            "5  - print tree prefix\n"
+            "6  - print tree infix\n"
+            "7  - print tree postfix\n\n"
+            "8  - find integer in structs\n"
+            "9  - add integer to structs\n"
+            "10  - delete integer from structs\n\n"
+            "11  - make hash table from file\n"
+            "12  - print hash table\n"
+            "13  - restructurasing hash table\n\n"
+            "14 - modeling\n");
 }
