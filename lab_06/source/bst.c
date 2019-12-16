@@ -81,7 +81,7 @@ void set_null_bst_node(bst_node_t *node)
     if (node)
     {
         node->data_p = NULL;
-        node->height = 0;
+        node->height = 1;
 
         node->father = NULL;
         node->l_son = NULL;

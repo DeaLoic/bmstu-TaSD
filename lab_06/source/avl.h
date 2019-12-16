@@ -6,6 +6,7 @@
 int height(bst_node_t *p);
 int b_factor(bst_node_t *p);
 void fix_height(bst_node_t *p);
+void balance_full(bst_node_t *p);
 
 bst_node_t *rotate_right(bst_node_t *p); // правый поворот вокруг p
 bst_node_t *rotate_left(bst_node_t *q); // левый поворот вокруг q

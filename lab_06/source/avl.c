@@ -62,6 +62,12 @@ bst_node_t *balance(bst_node_t *p) // балансировка узла p
 	return p; // балансировка не нужна
 }
 
+void balance_full(bst_node_t *p)
+{
+	p->l_son = balance(p->l_son);
+	p->r_son = balance(p->r_son);
+	p = balance(p);
+}
 bst_node_t *insert(bst_node_t *p, void *data_p, int compare(void*, void*)) // вставка ключа k в дерево с корнем p
 {
     if ( !p ) return create_bst_node(data_p);

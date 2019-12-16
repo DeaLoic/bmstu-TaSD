@@ -44,7 +44,7 @@ int main()
                     fclose(source);
                     break;
                 case 2:
-                avl.root = balance(avl.root);
+                balance_full(avl.root);
                     break;
                 case 3:
                     printf("Binary Search tree (AVL)\n");
@@ -74,7 +74,7 @@ int main()
                 {
                     if (find_element(tree.root, &choose, int_compare))
                     {
-                        printf("Element found in tree\n");
+                        printf("Element found\n");
                     }
                     else
                     {
@@ -88,7 +88,7 @@ int main()
                 
                     break;
                 case 9:
-                    printf("Input integer to add, pls: ");
+                    printf("Input positive integer to add, pls: ");
                     temp_int_p = (int*)malloc(sizeof(int));
                     if (scanf("%d", temp_int_p) == 1)
                     {
@@ -181,9 +181,9 @@ void menu()
             "7  - print tree postfix\n\n"
             "8  - find integer in structs\n"
             "9  - add integer to structs\n"
-            "10  - delete integer from structs\n\n"
+            "10  - delete integer from structs (ERR?&)\n\n"
             "11  - make hash table from file\n"
             "12  - print hash table\n"
             "13  - restructurasing hash table\n\n"
-            "14 - modeling\n");
+            "14 - modeling (WIP)\n");
 }
