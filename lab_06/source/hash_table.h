@@ -19,5 +19,6 @@ int find_element_in_hash_table(hash_table_t *hash, int *element);
 void change_basis(hash_table_t *hash, int basic);
 
 int parse_file_hash_table(hash_table_t *hash, FILE *source);
+int print_hash_table(hash_table_t *hash);
 
 #endif

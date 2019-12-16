@@ -303,7 +303,7 @@ void print_tree_graph(bst_node_t *tree, int level, int is_left)
     if (tree)
     {
         print_tree_graph(tree->r_son, level + 1, 1);
-        for(int i = 0; i< level; i++)
+        for(int i = 0; i < level; i++)
         {
             printf("   ");
         }
