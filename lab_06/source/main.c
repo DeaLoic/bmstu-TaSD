@@ -20,18 +20,20 @@ int main()
     int choose = 1;
     while (choose != 0)
     {
-        //menu();
+        menu();
         scanf("%d", &choose);
         switch (choose)
         {
         case 1:
             source = fopen(TREE_FILE, "r");
-            fill_tree_avl(&tree, source);
+            set_null_bst(&tree);
+            fill_tree(&tree, source);
             fclose(source);
             break;
         case 2:
-            balance_bst_to_avl(tree.root, avl.root);
+            balance_bst_to_avl(tree.root, &avl);
             tree.root = avl.root;
+            set_null_bst(&avl);
             break;
         case 3:
             print_tree_graph(tree.root, 0, 0);
@@ -50,12 +52,17 @@ int main()
             printf("\n");
             break;
         case 7:
-            temp = tree.root;
-            while (temp)
+        if (scanf("%d", &choose) == 1)
+        {
+            if (find_element(tree.root, &choose, int_compare))
             {
-                printf("%p\n", temp);
-                temp = temp->r_son;
+                printf("Element found");
             }
+            else
+            {
+                printf("Element doesnt found");
+            }
+        }
             break;
         case 8:
             /* code */
@@ -74,14 +81,15 @@ int main()
 
 void menu()
 {
-    printf("0 - exit\n\n"
-            "1 - make tree from file\n"
-            "2 - balance tree to avl\n\n"
-            "3 - print tree pseudographiacal\n"
-            "4 - print tree prefix\n"
-            "5 - print tree infix\n"
-            "6 - print tree postfix\n\n"
-            "7 - make hash table from file\n"
-            "8 - restructurasing hash table\n\n"
-            "9 - modeling\n");
+    printf("0  - exit\n\n"
+            "1  - make tree from file\n"
+            "2  - balance tree to avl\n\n"
+            "3  - print tree pseudographiacal\n"
+            "4  - print tree prefix\n"
+            "5  - print tree infix\n"
+            "6  - print tree postfix\n\n"
+            "7  - find integer in tree\n"
+            "8  - make hash table from file\n"
+            "9  - restructurasing hash table\n\n"
+            "10 - modeling\n");
 }

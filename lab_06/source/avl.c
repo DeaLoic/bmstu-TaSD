@@ -64,9 +64,11 @@ bst_node_t *balance(bst_node_t *p) // балансировка узла p
 
 bst_node_t *insert(bst_node_t *p, void *data_p, int compare(void*, void*)) // вставка ключа k в дерево с корнем p
 {
-    bst_t tem;
-    tem.root = p;
-	add_element(&tem, data_p, compare);
+    if ( !p ) return create_bst_node(data_p);
+	if (compare(data_p, p->data_p) < 0)
+		p->l_son = insert(p->l_son, data_p, compare);
+	else
+		p->r_son = insert(p->r_son, data_p, compare);
 	return balance(p);
 }
 
@@ -116,7 +118,7 @@ void fill_tree_avl(bst_t *tree, FILE *source)
     int *cur_digit = (int*)malloc(sizeof(int));
     while (fscanf(source, "%d", cur_digit) == 1)
     {
-        insert(tree->root, cur_digit, int_compare);
+        tree->root = insert(tree->root, cur_digit, int_compare);
         cur_digit = (int*)malloc(sizeof(int));
     }
     free(cur_digit);
@@ -127,13 +129,13 @@ void empty_dest()
 
 };
 
-void balance_bst_to_avl(bst_node_t *root, bst_node_t *avl)
+void balance_bst_to_avl(bst_node_t *root, bst_t *avl)
 {
     if (root)
     {
         balance_bst_to_avl(root->l_son, avl);
         balance_bst_to_avl(root->r_son, avl);
-        insert(avl, root->data_p, int_compare);
+        avl->root = insert(avl->root, root->data_p, int_compare);
         if (root->father)
         {
             if (root->father->l_son == root)
