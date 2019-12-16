@@ -2,18 +2,20 @@
 #include <stdlib.h>
 #include "bst.h"
 #include "error_codes.h"
+#include "universal.h"
 
-bst_node_t *create_bst_node(void *data_p);
-void delete_bst_node(bst_node_t *node, void destructor(void*));
-
-void set_null_bst_node(bst_node_t *node);
-int update_height_up(bst_node_t *son);
-int add_element_at_parent(bst_node_t *parent, void *data_p, int compare(void*, void*));
+void set_null_bst(bst_t *tree)
+{
+    if (tree)
+    {
+        tree->root = NULL;
+    }
+}
 
 int add_element(bst_t *tree, void *data_p, int compare(void*, void*))
 {
     int error_code = INCORRECT_INPUT;
-    if (tree && data_p)
+    if (data_p)
     {
         error_code = SUCCES;
         if (tree->root)
@@ -23,7 +25,7 @@ int add_element(bst_t *tree, void *data_p, int compare(void*, void*))
         else
         {
             tree->root = create_bst_node(data_p);
-            if (!(tree->root))
+            if (!(tree))
             {
                 error_code = MEMORY_ERROR;
             }
@@ -43,6 +45,7 @@ bst_node_t *create_bst_node(void *data_p)
     }
     return new_node;
 }
+
 void delete_bst_node(bst_node_t *node, void destructor(void*))
 {
     if (node)
@@ -70,6 +73,7 @@ int add_element_at_parent(bst_node_t *parent, void *data_p, int compare(void*, v
     int error_code = INCORRECT_INPUT;
     if (parent && data_p)
     {
+        error_code = SUCCES;
         if (compare(data_p, parent->data_p) < 0)
         {
             if (parent->l_son)
@@ -82,7 +86,7 @@ int add_element_at_parent(bst_node_t *parent, void *data_p, int compare(void*, v
                 if (parent->l_son)
                 {
                     parent->l_son->father = parent;
-                    update_height_up(parent->l_son);
+                    //update_height_up(parent->l_son);
                 }
                 else
                 {
@@ -102,7 +106,7 @@ int add_element_at_parent(bst_node_t *parent, void *data_p, int compare(void*, v
                 if (parent->r_son)
                 {
                     parent->r_son->father = parent;
-                    update_height_up(parent->r_son);
+                    //update_height_up(parent->r_son);
                 }
                 else
                 {
@@ -111,6 +115,8 @@ int add_element_at_parent(bst_node_t *parent, void *data_p, int compare(void*, v
             }
         }
     }
+
+    return error_code;
 }
 
 int update_height_up(bst_node_t *son)
@@ -152,7 +158,7 @@ bst_node_t *find_element(bst_node_t *root, void *data_p, int compare(void*, void
     bst_node_t *result = NULL;
     if (root && data_p)
     {
-        bst_node_t *result = root;
+        result = root;
         if (compare(data_p, root->data_p) < 0)
         {
             if (root->l_son)
@@ -182,10 +188,10 @@ bst_node_t *find_element(bst_node_t *root, void *data_p, int compare(void*, void
 
 bst_node_t *delete_element(bst_node_t *target_node)
 {
-    bst_node_t *result = NULL;
+    bst_node_t *temp_node = NULL;
     if (target_node && (target_node->l_son || target_node->r_son || target_node->father))
     {
-        bst_node_t *temp_node = NULL;
+        temp_node = NULL;
         if (target_node->l_son)
         {
             temp_node = target_node->l_son;
@@ -223,7 +229,7 @@ bst_node_t *delete_element(bst_node_t *target_node)
         }
         
         temp_node->height = -1;
-        update_height_up(temp_node);
+        //update_height_up(temp_node);
 
         if (temp_node)
         {
@@ -234,8 +240,8 @@ bst_node_t *delete_element(bst_node_t *target_node)
             delete_bst_node(target_node, free);
         }
         
-        return temp_node;
     }
+    return temp_node;
 }
 
 void print_tree_prefix(bst_node_t *root, void print(void*))
@@ -243,6 +249,7 @@ void print_tree_prefix(bst_node_t *root, void print(void*))
     if (root)
     {
         print(root->data_p);
+        printf(" ");
         print_tree_prefix(root->l_son, print);
         print_tree_prefix(root->r_son, print);
     }
@@ -255,6 +262,7 @@ void print_tree_postfix(bst_node_t *root, void print(void*))
         print_tree_postfix(root->l_son, print);
         print_tree_postfix(root->r_son, print);
         print(root->data_p);
+        printf(" ");
     }
 }
 
@@ -264,10 +272,43 @@ void print_tree_infix(bst_node_t *root, void print(void*))
     {
         print_tree_infix(root->l_son, print);
         print(root->data_p);
+        printf(" ");
         print_tree_infix(root->r_son, print);
     }
 }
 
-int print_tree_graph(bst_t *tree);
+void print_tree_graph(bst_node_t *tree, int level, int is_left)
+{
+    if (tree)
+    {
+        print_tree_graph(tree->r_son, level + 1, 1);
+        for(int i = 0; i< level; i++)
+        {
+            printf("   ");
+        }
+        /* 
+        if (is_left)
+        {
+            printf("/");
+        }
+        else
+        {
+            printf("\\");
+        }
+        */
+        
+        printf("%3d\n", *((int*)tree->data_p));
+        print_tree_graph(tree->l_son, level + 1, 0);
+    }
+}
 
-int fill_tree(bst_t *tree, FILE *source);
+void fill_tree(bst_t *tree, FILE *source)
+{
+    int *cur_digit = (int*)malloc(sizeof(int));
+    while (fscanf(source, "%d", cur_digit) == 1)
+    {
+        add_element(tree, cur_digit, int_compare);
+        cur_digit = (int*)malloc(sizeof(int));
+    }
+    free(cur_digit);
+}

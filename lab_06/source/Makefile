@@ -1,4 +1,4 @@
-all: test.out
+all: app.exe
 
 test.out: test.o bin_tree.o bst.o
 	gcc -Wall test.o bin_tree.o bst.o -o test.out
@@ -11,3 +11,6 @@ bin_tree.o:
 
 bst.o:
 	gcc -Wall bst.c -c bst.o
+
+app.exe:
+	gcc -Wall bst.c main.c universal.c avl.c -o app.exe
