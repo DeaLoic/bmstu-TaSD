@@ -249,7 +249,7 @@ bst_node_t *delete_element(bst_node_t *target_node)
             delete_bst_node(target_node, free);
         }
         
-        temp_node->height = -1;
+        //temp_node->height = -1;
         //update_height_up(temp_node);
 
         if (temp_node)

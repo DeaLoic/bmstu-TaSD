@@ -3,6 +3,16 @@
 #include "error_codes.h"
 #include "array.h"
 
+int hash_func(hash_table_t *hash, int element)
+{
+    int res = -1;
+    if (hash && hash->basis > 0)
+    {
+        res = element % hash->basis;
+    }
+
+    return res;
+}
 void create_hash_table(hash_table_t *hash, int size, int base)
 {
     if (hash)
@@ -66,7 +76,7 @@ int find_element_in_hash_table(hash_table_t *hash, int *element)
         while (hash->body[insert_index] != NULL && *(hash->body[insert_index]) != *element && insert_index > 0)
         {
             insert_index++;
-            insert_index %= hash->basis;
+            insert_index %= hash->size;
             if (insert_index == *element % hash->basis)
             {
                 insert_index = -1;
@@ -75,6 +85,25 @@ int find_element_in_hash_table(hash_table_t *hash, int *element)
     }
 
     return insert_index;
+}
+
+int del_element_in_hash_table(hash_table_t *hash, int *element)
+{
+    int index = find_element_in_hash_table(hash, element);
+
+    if (index >= 0)
+    {
+        free(hash->body[index]);
+        hash->body[index] = NULL;
+        while (hash->body[(index + 1) % hash->size] != NULL)
+        {
+            element = hash->body[(index + 1) % hash->size];
+            hash->body[(index + 1) % hash->size] = NULL;
+            add_to_hash_table(hash, element);
+        }
+    }
+
+    return index;
 }
 
 void change_basis(hash_table_t *hash, int basis)

@@ -98,12 +98,11 @@ bst_node_t *remove_avl(bst_node_t *p, void *data_p, int compare(void*, void*)) /
     {
 		p->r_son = remove_avl(p->r_son, data_p, compare);	
     }
-    else //  k == p->key 
+    else 
 	{
 		bst_node_t *q = p->l_son;
 		bst_node_t *r = p->r_son;
 		delete_bst_node(p, free);
-        free(p);
 		if ( !r ) return q;
 		bst_node_t *min = find_min(r);
 		min->r_son = remove_min(r);

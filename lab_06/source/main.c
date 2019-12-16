@@ -18,6 +18,8 @@ int main()
     set_null_bst(&avl);
     bst_node_t *temp;
     hash_table_t hash;
+    int *temp_int_p = NULL;
+    int *temp_int_p2 = NULL;
     create_hash_table(&hash, 0, 13);
     FILE *source = NULL;
     int choose = 1;
@@ -67,6 +69,7 @@ int main()
                     printf("\n");
                     break;
                 case 8:
+                printf("Input integer to find, pls: ");
                 if (scanf("%d", &choose) == 1)
                 {
                     if (find_element(tree.root, &choose, int_compare))
@@ -78,20 +81,71 @@ int main()
                         printf("Element doesnt found\n");
                     }
                 }
+                else
+                {
+                    printf("Incorrect input\n");
+                }
+                
                     break;
                 case 9:
-                    /* code */
+                    printf("Input integer to add, pls: ");
+                    temp_int_p = (int*)malloc(sizeof(int));
+                    if (scanf("%d", temp_int_p) == 1)
+                    {
+                        insert(avl.root, temp_int_p, int_compare);
+                        temp_int_p2 = (int *)malloc(sizeof(int));
+
+                        *temp_int_p2 = *temp_int_p;
+                        add_to_hash_table(&hash, temp_int_p2);
+
+                        temp_int_p = (int *)malloc(sizeof(int));
+                        *temp_int_p = *temp_int_p2;
+                        if (add_element(&tree, temp_int_p, int_compare))
+                        {
+                            printf("Element added\n");
+                        }
+                    }
+                else
+                {
+                    free(temp_int_p);
+                    printf("Incorrect input\n");
+                }
+                    temp_int_p = NULL;
                     break;
                 case 10:
+                printf("Input integer to delete, pls: ");
+                    temp_int_p = (int*)malloc(sizeof(int));
+                    if (scanf("%d", temp_int_p) == 1)
+                    {
+                        avl.root = remove_avl(avl.root, temp_int_p, int_compare);
+                        del_element_in_hash_table(&hash, temp_int_p);
+                        if (delete_element(find_element(tree.root, temp_int_p, int_compare)))
+                        {
+                            printf("Element deleted\n");
+                        }
+                        else
+                        {
+                            printf("Element doesnt found\n");
+                        }
+                    }
+                else
+                {
+                    free(temp_int_p);
+                    printf("Incorrect input\n");
+                }
+                    temp_int_p = NULL;
+                    break;
+                case 11:
                     source = fopen(TREE_FILE, "r");
                     delete_hash_table(&hash);
+                    create_hash_table(&hash, 0, 13);
                     parse_file_hash_table(&hash, source);
                     fclose(source);
                     break;
-                case 11:
+                case 12:
                     print_hash_table(&hash);
                     break;
-                case 12:
+                case 13:
                     printf("Input new basis to function (basis > 0): ");
                     if (scanf("%d", &choose) == 1)
                     {
