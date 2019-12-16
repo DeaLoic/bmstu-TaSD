@@ -255,6 +255,14 @@ bst_node_t *delete_element(bst_node_t *target_node)
         if (temp_node)
         {
             temp_node->father = target_node->father;
+            if (target_node->father && target_node->father->l_son == target_node)
+            {
+                target_node->father = temp_node;
+            }
+            else if (target_node->father)
+            {
+                target_node->father->r_son = temp_node;
+            }
             temp_node->height = target_node->height;
             temp_node->l_son = target_node->l_son;
             temp_node->r_son = target_node->r_son;

@@ -100,6 +100,7 @@ int del_element_in_hash_table(hash_table_t *hash, int *element)
             element = hash->body[(index + 1) % hash->size];
             hash->body[(index + 1) % hash->size] = NULL;
             add_to_hash_table(hash, element);
+            index++;
         }
     }
 
