@@ -21,58 +21,64 @@ int main()
     while (choose != 0)
     {
         menu();
-        scanf("%d", &choose);
-        switch (choose)
+        printf("Your choice: ");
+        if (scanf("%d", &choose) == 1);
         {
-        case 1:
-            source = fopen(TREE_FILE, "r");
-            set_null_bst(&tree);
-            fill_tree(&tree, source);
-            fclose(source);
-            break;
-        case 2:
-            balance_bst_to_avl(tree.root, &avl);
-            tree.root = avl.root;
-            set_null_bst(&avl);
-            break;
-        case 3:
-            print_tree_graph(tree.root, 0, 0);
-            printf("\n");
-            break;
-        case 4:
-            print_tree_prefix(tree.root, print_int);
-            printf("\n");
-            break;
-        case 5:
-            print_tree_infix(tree.root, print_int);
-            printf("\n");
-            break;
-        case 6:
-            print_tree_postfix(tree.root, print_int);
-            printf("\n");
-            break;
-        case 7:
-        if (scanf("%d", &choose) == 1)
-        {
-            if (find_element(tree.root, &choose, int_compare))
+            system("clear");
+            switch (choose)
             {
-                printf("Element found");
+                case 1:
+                    source = fopen(TREE_FILE, "r");
+                    set_null_bst(&tree);
+                    fill_tree(&tree, source);
+                    fclose(source);
+                    break;
+                case 2:
+                    balance_bst_to_avl(tree.root, &avl);
+                    tree.root = avl.root;
+                    set_null_bst(&avl);
+                    break;
+                case 3:
+                    print_tree_graph(tree.root, 0, 0);
+                    printf("\n");
+                    break;
+                case 4:
+                    print_tree_prefix(tree.root, print_int);
+                    printf("\n");
+                    break;
+                case 5:
+                    print_tree_infix(tree.root, print_int);
+                    printf("\n");
+                    break;
+                case 6:
+                    print_tree_postfix(tree.root, print_int);
+                    printf("\n");
+                    break;
+                case 7:
+                if (scanf("%d", &choose) == 1)
+                {
+                    if (find_element(tree.root, &choose, int_compare))
+                    {
+                        printf("Element found");
+                    }
+                    else
+                    {
+                        printf("Element doesnt found");
+                    }
+                }
+                    break;
+                case 8:
+                    /* code */
+                    break;
+                case 9:
+                    /* code */
+                    break;
+                case 0:
+                    break;
+                default:
+                    printf("Pls, choose one of menu points");
+                    break;
             }
-            else
-            {
-                printf("Element doesnt found");
-            }
-        }
-            break;
-        case 8:
-            /* code */
-            break;
-        case 9:
-            /* code */
-            break;
-        
-        default:
-            break;
         }
 
     }
@@ -89,7 +95,9 @@ void menu()
             "5  - print tree infix\n"
             "6  - print tree postfix\n\n"
             "7  - find integer in tree\n"
-            "8  - make hash table from file\n"
-            "9  - restructurasing hash table\n\n"
-            "10 - modeling\n");
+            "8  - add integer to tree\n"
+            "9  - delete integer from tree\nn"
+            "10  - make hash table from file\n"
+            "11  - restructurasing hash table\n\n"
+            "12 - modeling\n");
 }

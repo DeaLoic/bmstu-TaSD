@@ -12,6 +12,27 @@ void set_null_bst(bst_t *tree)
     }
 }
 
+void delete_bst_by_root(bst_node_t* root)
+{
+    if (root)
+    {
+        delete_bst_by_root(root->l_son);
+        delete_bst_by_root(root->r_son);
+        if (root->father)
+        {
+            if (root->father->l_son == root)
+            {
+                root->father->l_son = NULL;
+            }
+            else
+            {
+                root->father->r_son = NULL;
+            }
+            
+        }
+        delete_bst_node(root, free);
+    }
+}
 int add_element(bst_t *tree, void *data_p, int compare(void*, void*))
 {
     int error_code = INCORRECT_INPUT;

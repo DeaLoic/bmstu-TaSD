@@ -79,7 +79,7 @@ int find_element_in_hash_table(hash_table_t *hash, int *element)
 void change_basis(hash_table_t *hash, int basis)
 {
     hash_table_t *new_hash;
-    create_hash_table(new_hash, hash->size > basis ? hash->size : basis, basis);
+    create_hash_table(new_hash, hash->fill > basis ? hash->fill * 2 + 1 : basis, basis);
     for (int i = 0; i < hash->size; i++)
     {
         if (hash->body[i])
