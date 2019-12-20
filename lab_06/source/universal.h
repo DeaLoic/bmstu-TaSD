@@ -8,6 +8,9 @@
 #define COMPARE_EPS 1E-7
 
 // universal
+void add_to_file(FILE *file, int element);
+int get_next_prime(int digit);
+
 int int_compare(void* first, void *second);
 void print_int(void *first);
 

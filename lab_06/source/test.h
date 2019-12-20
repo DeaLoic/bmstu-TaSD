@@ -8,4 +8,8 @@
 int test();
 int test_insert(int size, int cycle);
 
+int deleted_in_file(int number);
+void efficiency(char data_file[], int len_table);
+unsigned long int tick(void);
+
 #endif

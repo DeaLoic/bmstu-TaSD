@@ -33,15 +33,16 @@ void delete_bst_by_root(bst_node_t* root)
         delete_bst_node(root, free);
     }
 }
-int add_element(bst_t *tree, void *data_p, int compare(void*, void*))
+int add_element(bst_t *tree, void *data_p, int compare(void*, void*), int *comp_times)
 {
     int error_code = INCORRECT_INPUT;
     if (data_p)
     {
         error_code = SUCCES;
+        *comp_times = 1;
         if (tree->root)
         {
-            add_element_at_parent(tree->root, data_p, compare);
+            add_element_at_parent(tree->root, data_p, compare, comp_times);
         }
         else
         {
@@ -89,7 +90,7 @@ void set_null_bst_node(bst_node_t *node)
     }
 }
 
-int add_element_at_parent(bst_node_t *parent, void *data_p, int compare(void*, void*))
+int add_element_at_parent(bst_node_t *parent, void *data_p, int compare(void*, void*), int *cmp)
 {
     int error_code = INCORRECT_INPUT;
     if (parent && data_p)
@@ -97,9 +98,10 @@ int add_element_at_parent(bst_node_t *parent, void *data_p, int compare(void*, v
         error_code = SUCCES;
         if (compare(data_p, parent->data_p) < 0)
         {
+            *cmp += 1;
             if (parent->l_son)
             {
-                add_element_at_parent(parent->l_son, data_p, compare);
+                add_element_at_parent(parent->l_son, data_p, compare, cmp);
             }
             else
             {
@@ -115,11 +117,12 @@ int add_element_at_parent(bst_node_t *parent, void *data_p, int compare(void*, v
                 }
             }
         }
-        else
+        else if (compare(data_p, parent->data_p) > 0)
         {
+            *cmp += 2;
             if (parent->r_son)
             {
-                add_element_at_parent(parent->r_son, data_p, compare);
+                add_element_at_parent(parent->r_son, data_p, compare, cmp);
             }
             else
             {
@@ -174,17 +177,18 @@ int update_height_up(bst_node_t *son)
     return error_code;
 }
 
-bst_node_t *find_element(bst_node_t *root, void *data_p, int compare(void*, void*))
+bst_node_t *find_element(bst_node_t *root, void *data_p, int compare(void*, void*), int *cmp)
 {
     bst_node_t *result = NULL;
     if (root && data_p)
     {
         result = root;
+        *cmp += 1;
         if (compare(data_p, root->data_p) < 0)
         {
             if (root->l_son)
             {
-                result = find_element(root->l_son, data_p, compare);
+                result = find_element(root->l_son, data_p, compare, cmp);
             }
             else
             {
@@ -193,9 +197,10 @@ bst_node_t *find_element(bst_node_t *root, void *data_p, int compare(void*, void
         }
         else if (compare(data_p, root->data_p) > 0)
         {
+            *cmp += 1;
             if (root->r_son)
             {
-                result = find_element(root->r_son, data_p, compare);
+                result = find_element(root->r_son, data_p, compare, cmp);
             }
             else
             {
@@ -257,15 +262,32 @@ bst_node_t *delete_element(bst_node_t *target_node)
             temp_node->father = target_node->father;
             if (target_node->father && target_node->father->l_son == target_node)
             {
-                target_node->father = temp_node;
+                target_node->father->l_son = temp_node;
             }
             else if (target_node->father)
             {
                 target_node->father->r_son = temp_node;
             }
             temp_node->height = target_node->height;
-            temp_node->l_son = target_node->l_son;
-            temp_node->r_son = target_node->r_son;
+            if (temp_node != target_node->l_son)
+            {
+                temp_node->l_son = target_node->l_son;
+            }
+
+            if (temp_node != target_node->r_son)
+            {
+                temp_node->r_son = target_node->r_son;
+            }
+            
+            if (temp_node->r_son)
+            {
+                temp_node->r_son->father = temp_node;
+            }
+            if (temp_node->l_son)
+            {
+                temp_node->l_son->father = temp_node;
+            }
+            
             delete_bst_node(target_node, free);
         }
         
@@ -334,9 +356,10 @@ void print_tree_graph(bst_node_t *tree, int level, int is_left)
 void fill_tree(bst_t *tree, FILE *source)
 {
     int *cur_digit = (int*)malloc(sizeof(int));
+    int cmp = 0;
     while (fscanf(source, "%d", cur_digit) == 1)
     {
-        add_element(tree, cur_digit, int_compare);
+        add_element(tree, cur_digit, int_compare, &cmp);
         cur_digit = (int*)malloc(sizeof(int));
     }
     free(cur_digit);

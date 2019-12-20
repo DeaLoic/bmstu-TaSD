@@ -14,8 +14,8 @@ typedef struct hash_table_t
 void create_hash_table(hash_table_t *hash, int size, int base);
 void delete_hash_table(hash_table_t *hash);
 
-int add_to_hash_table(hash_table_t *hash, int *element);
-int find_element_in_hash_table(hash_table_t *hash, int *element);
+int add_to_hash_table(hash_table_t *hash, int *element, int *comp_times);
+int find_element_in_hash_table(hash_table_t *hash, int *element, int *cmp);
 void change_basis(hash_table_t *hash, int basic);
 
 int del_element_in_hash_table(hash_table_t *hash, int *element);

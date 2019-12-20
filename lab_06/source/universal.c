@@ -8,6 +8,29 @@
 #include "error_codes.h"
 #include "universal.h"
 
+
+void add_to_file(FILE *file, int element)
+{
+    fseek(file, SEEK_END, 0);
+    fprintf(file, "%d", element);
+}
+
+int get_next_prime(int number)
+{
+    while (1)
+    {
+        int count_del = 0;
+        number++;
+        for(int i = 2; i < number - 1; i++)
+            if (!(number%i))
+                count_del++;
+
+        if (!count_del)
+            return number;
+    }
+}
+
+
 int int_compare(void* first, void *second)
 {
     int result = 0;

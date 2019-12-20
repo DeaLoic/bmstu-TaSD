@@ -12,6 +12,7 @@ void menu();
 int main()
 {
     int error_code = SUCCES;
+    int cmp = 0;
     bst_t tree;
     bst_t avl;
     set_null_bst(&tree);
@@ -36,11 +37,14 @@ int main()
                     source = fopen(TREE_FILE, "r");
                     set_null_bst(&tree);
                     fill_tree(&tree, source);
+
                     set_null_bst(&avl);
                     balance_bst_to_avl(tree.root, &avl);
+
                     fseek(source, SEEK_SET, 0);
                     set_null_bst(&tree);
                     fill_tree(&tree, source);
+
                     fclose(source);
                     break;
                 case 2:
@@ -72,8 +76,19 @@ int main()
                 printf("Input integer to find, pls: ");
                 if (scanf("%d", &choose) == 1)
                 {
-                    if (find_element(tree.root, &choose, int_compare))
+                    cmp = 0;
+                    if (find_element(tree.root, &choose, int_compare, &cmp))
                     {
+                        printf("%d compare in tree\n", cmp);
+
+                        cmp = 0;
+                        find_element_in_hash_table(&hash, &choose, &cmp);
+                        printf("%d compare in hash table\n", cmp);
+
+                        cmp = 0;
+                        find_element(avl.root, &choose, int_compare, &cmp);
+                        printf("%d compare in avl\n", cmp);
+
                         printf("Element found\n");
                     }
                     else
@@ -92,16 +107,22 @@ int main()
                     temp_int_p = (int*)malloc(sizeof(int));
                     if (scanf("%d", temp_int_p) == 1)
                     {
-                        insert(avl.root, temp_int_p, int_compare);
+                        cmp = 0;
+                        insert(avl.root, temp_int_p, int_compare, &cmp);
+                        printf("%d compare in avl\n", cmp);
                         temp_int_p2 = (int *)malloc(sizeof(int));
 
                         *temp_int_p2 = *temp_int_p;
-                        add_to_hash_table(&hash, temp_int_p2);
+                        cmp = 0;
+                        add_to_hash_table(&hash, temp_int_p2, &cmp);
+                        printf("%d compare in hash table\n", cmp);
 
                         temp_int_p = (int *)malloc(sizeof(int));
                         *temp_int_p = *temp_int_p2;
-                        if (add_element(&tree, temp_int_p, int_compare))
+                        cmp = 0;
+                        if (!add_element(&tree, temp_int_p, int_compare, &cmp))
                         {
+                            printf("%d compare in tree\n", cmp);
                             printf("Element added\n");
                         }
                     }
@@ -119,13 +140,13 @@ int main()
                     {
                         avl.root = remove_avl(avl.root, temp_int_p, int_compare);
                         del_element_in_hash_table(&hash, temp_int_p);
-                        if (delete_element(find_element(tree.root, temp_int_p, int_compare)))
+                        if (!delete_element(find_element(tree.root, temp_int_p, int_compare, &cmp)))
                         {
-                            printf("Element deleted\n");
+                            printf("Element doesnt found\n");
                         }
                         else
                         {
-                            printf("Element doesnt found\n");
+                            printf("Element deleted\n");
                         }
                     }
                 else
@@ -140,21 +161,17 @@ int main()
                     delete_hash_table(&hash);
                     create_hash_table(&hash, 0, 13);
                     parse_file_hash_table(&hash, source);
+                    change_basis(&hash, get_next_prime(hash.fill / 5 * 4));
                     fclose(source);
                     break;
                 case 12:
                     print_hash_table(&hash);
                     break;
                 case 13:
-                    printf("Input new basis to function (basis > 0): ");
-                    if (scanf("%d", &choose) == 1)
-                    {
-                        change_basis(&hash, choose);
-                    }
-                    else
-                    {
-                        printf("Invalid basis\n");
-                    }
+                    change_basis(&hash, get_next_prime(hash.fill / 5 * 4));
+                    printf("New basis: %d\n", hash.basis);
+                    break;
+                case 14:
                     
                     break;
                 case 0:

@@ -36,9 +36,10 @@ void delete_hash_table(hash_table_t *hash)
     }
 }
 
-int add_to_hash_table(hash_table_t *hash, int *element)
+int add_to_hash_table(hash_table_t *hash, int *element, int *comp_times)
 {
     int insert_index = -1;
+    *comp_times = 1;
     if (hash && hash->basis > 0)
     {
         if (hash->fill == hash->size)
@@ -52,10 +53,22 @@ int add_to_hash_table(hash_table_t *hash, int *element)
         }
 
         insert_index = *element % hash->basis;
+        int is_in = 0;
         while (hash->body[insert_index] != NULL)
         {
+            if (*(hash->body[insert_index]) == *element)
+            {
+                is_in = 1;
+                break;
+            }
+            *comp_times += 2;
             insert_index++;
             insert_index %= hash->size;
+        }
+
+        if (is_in)
+        {
+            return -1;
         }
 
         (hash->body)[insert_index] = element;
@@ -67,14 +80,16 @@ int add_to_hash_table(hash_table_t *hash, int *element)
     return insert_index;
 }
 
-int find_element_in_hash_table(hash_table_t *hash, int *element)
+int find_element_in_hash_table(hash_table_t *hash, int *element, int *cmp)
 {
+    *cmp = 1;
     int insert_index = -1;
     if (hash)
     {
         insert_index = *element % hash->basis;
         while (hash->body[insert_index] != NULL && *(hash->body[insert_index]) != *element && insert_index > 0)
         {
+            *cmp += 2;
             insert_index++;
             insert_index %= hash->size;
             if (insert_index == *element % hash->basis)
@@ -89,7 +104,8 @@ int find_element_in_hash_table(hash_table_t *hash, int *element)
 
 int del_element_in_hash_table(hash_table_t *hash, int *element)
 {
-    int index = find_element_in_hash_table(hash, element);
+    int cmp = 0;
+    int index = find_element_in_hash_table(hash, element, &cmp);
 
     if (index >= 0)
     {
@@ -99,7 +115,7 @@ int del_element_in_hash_table(hash_table_t *hash, int *element)
         {
             element = hash->body[(index + 1) % hash->size];
             hash->body[(index + 1) % hash->size] = NULL;
-            add_to_hash_table(hash, element);
+            add_to_hash_table(hash, element, &cmp);
             index++;
         }
     }
@@ -110,12 +126,13 @@ int del_element_in_hash_table(hash_table_t *hash, int *element)
 void change_basis(hash_table_t *hash, int basis)
 {
     hash_table_t new_hash;
+    int cmp = 0;
     create_hash_table(&new_hash, hash->fill > basis ? hash->fill * 2 + 1 : basis, basis);
     for (int i = 0; i < hash->size; i++)
     {
         if (hash->body[i])
         {
-            add_to_hash_table(&new_hash, hash->body[i]);
+            add_to_hash_table(&new_hash, hash->body[i], &cmp);
         }
     }
 
@@ -129,11 +146,12 @@ void change_basis(hash_table_t *hash, int basis)
 int parse_file_hash_table(hash_table_t *hash, FILE *source)
 {
     int error_code = INCORRECT_INPUT;
+    int cmp = 0;
     int *cur_digit = (int*)malloc(sizeof(int));
     while (fscanf(source, "%d", cur_digit) == 1)
     {
         error_code = SUCCES;
-        add_to_hash_table(hash, cur_digit);
+        add_to_hash_table(hash, cur_digit, &cmp);
         cur_digit = (int*)malloc(sizeof(int));
     }
     free(cur_digit);

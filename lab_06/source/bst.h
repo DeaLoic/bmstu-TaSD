@@ -20,8 +20,8 @@ typedef struct bst_t
 } bst_t;
 
 void set_null_bst(bst_t *tree);
-int add_element(bst_t *tree, void *data_p, int compare(void*, void*));
-bst_node_t *find_element(bst_node_t *root, void *data_p, int compare(void*, void*));
+int add_element(bst_t *tree, void *data_p, int compare(void*, void*), int *comp_times);
+bst_node_t *find_element(bst_node_t *root, void *data_p, int compare(void*, void*), int *cmp);
 bst_node_t *delete_element(bst_node_t *target_node);
 
 void print_tree_prefix(bst_node_t *root, void print(void*));
@@ -38,5 +38,5 @@ void delete_bst_node(bst_node_t *node, void destructor(void*));
 
 void set_null_bst_node(bst_node_t *node);
 int update_height_up(bst_node_t *son);
-int add_element_at_parent(bst_node_t *parent, void *data_p, int compare(void*, void*));
+int add_element_at_parent(bst_node_t *parent, void *data_p, int compare(void*, void*), int *cmp);
 #endif
