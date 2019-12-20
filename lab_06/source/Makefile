@@ -16,5 +16,5 @@ app.exe:
 	gcc -Wall bst.c main.c universal.c avl.c -o app.exe
 
 app.out:
-	gcc -Wall -g bst.c main.c universal.c avl.c hash_table.c array.c -o app.out
+	gcc -Wall -g test.c  bst.c main.c universal.c avl.c hash_table.c array.c -o app.out
 
