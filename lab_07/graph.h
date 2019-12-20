@@ -13,7 +13,8 @@ typedef struct graph_t
 
 typedef struct graph_node_t
 {
-    int number;  
+    int number;
+    char label;
 } graph_node_t;
 
 typedef struct edge_t
