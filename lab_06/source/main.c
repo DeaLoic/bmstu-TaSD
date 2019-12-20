@@ -115,7 +115,7 @@ int main()
 
                         *temp_int_p2 = *temp_int_p;
                         cmp = 0;
-                        add_to_hash_table(&hash, temp_int_p2, &cmp);
+                        add_to_hash_table(&hash, temp_int_p2, &cmp, -1);
                         printf("%d compare in hash table\n", cmp);
 
                         temp_int_p = (int *)malloc(sizeof(int));
@@ -162,16 +162,15 @@ int main()
                 case 10:
                     source = fopen(TREE_FILE, "r");
                     delete_hash_table(&hash);
-                    create_hash_table(&hash, 0, 13);
+                    create_hash_table(&hash, 0, 1);
                     parse_file_hash_table(&hash, source);
-                    change_basis(&hash, get_next_prime(hash.fill / 5 * 4));
                     fclose(source);
                     break;
                 case 11:
                     print_hash_table(&hash);
                     break;
                 case 12:
-                    change_basis(&hash, get_next_prime(hash.fill / 5 * 4));
+                    change_basis(&hash, get_next_prime(hash.size - 1));
                     printf("New basis: %d\n", hash.basis);
                     break;
                 case 13:

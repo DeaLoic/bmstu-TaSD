@@ -2,6 +2,7 @@
 #include "hash_table.h"
 #include "error_codes.h"
 #include "array.h"
+#include "universal.h"
 
 int hash_func(hash_table_t *hash, int element)
 {
@@ -19,7 +20,7 @@ void create_hash_table(hash_table_t *hash, int size, int base)
     {
         hash->basis = base;
         hash->fill = 0;
-        hash->size = size > base ? size : base;
+        hash->size = size;
         hash->body = NULL;
         create_array(&(hash->body), hash->size, sizeof(int *));
     }
@@ -36,39 +37,40 @@ void delete_hash_table(hash_table_t *hash)
     }
 }
 
-int add_to_hash_table(hash_table_t *hash, int *element, int *comp_times)
+int add_to_hash_table(hash_table_t *hash, int *element, int *comp_times, int max_conflict)
 {
     int insert_index = -1;
-    if (hash && hash->basis > 0)
+    if (hash)
     {
         *comp_times = 1;
         if (hash->fill == hash->size)
         {
-            change_size_array(&(hash->body), hash->size * 2 + 1, sizeof(int*));
-            for (int i = hash->size; i < hash->size * 2 + 1; i++)
-            {
-                (hash->body)[i] = NULL;
-            }
-            hash->size = hash->size * 2 + 1;
+            change_basis(hash, get_next_prime(hash->basis * 2));
         }
 
-        insert_index = *element % hash->basis;
+        insert_index = hash_func(hash, *element);
+        int start_ins = insert_index;
         int is_in = 0;
         int k = 0;
-        while (hash->body[insert_index] != NULL && k < hash->size)
+        while (hash->body[insert_index] != NULL)
         {
-            k++;
             if (*(hash->body[insert_index]) == *element)
             {
                 is_in = 1;
                 break;
             }
+            if ((k && insert_index == start_ins) || ((max_conflict > 0) && (k + 1) == max_conflict))
+            {
+                change_basis(hash, get_next_prime(hash->basis * 2));
+                add_to_hash_table(hash, element, comp_times, max_conflict);
+            }
             *comp_times += 2;
-            insert_index++;
-            insert_index %= hash->size;
+
+            insert_index = ((insert_index + HASH_STEP) % hash->size);
+            k++;
         }
 
-        if (is_in || k == hash->size)
+        if (is_in)
         {
             return -1;
         }
@@ -89,52 +91,38 @@ int find_element_in_hash_table(hash_table_t *hash, int *element, int *cmp)
     if (hash)
     {
         insert_index = *element % hash->basis;
+        int start_index = insert_index;
+        int k = 0;
         while (hash->body[insert_index] != NULL && *(hash->body[insert_index]) != *element && insert_index > 0)
         {
             *cmp += 2;
-            insert_index++;
-            insert_index %= hash->size;
-            if (insert_index == *element % hash->basis)
+            k++;
+            insert_index = ((insert_index + HASH_STEP) % hash->size);
+            if (insert_index == start_index)
             {
                 insert_index = -1;
             }
+        }
+
+        if (hash->body[insert_index] == NULL)
+        {
+            insert_index = -1;
         }
     }
 
     return insert_index;
 }
 
-int del_element_in_hash_table(hash_table_t *hash, int *element)
-{
-    int cmp = 0;
-    int index = find_element_in_hash_table(hash, element, &cmp);
-
-    if (index >= 0)
-    {
-        free(hash->body[index]);
-        hash->body[index] = NULL;
-        while (hash->body[(index + 1) % hash->size] != NULL)
-        {
-            element = hash->body[(index + 1) % hash->size];
-            hash->body[(index + 1) % hash->size] = NULL;
-            add_to_hash_table(hash, element, &cmp);
-            index++;
-        }
-    }
-
-    return index;
-}
-
 void change_basis(hash_table_t *hash, int basis)
 {
     hash_table_t new_hash;
     int cmp = 0;
-    create_hash_table(&new_hash, hash->fill > basis ? hash->fill * 2 + 1 : basis, basis);
+    create_hash_table(&new_hash, basis, basis);
     for (int i = 0; i < hash->size; i++)
     {
         if (hash->body[i])
         {
-            add_to_hash_table(&new_hash, hash->body[i], &cmp);
+            add_to_hash_table(&new_hash, hash->body[i], &cmp, -1);
         }
     }
 
@@ -153,7 +141,7 @@ int parse_file_hash_table(hash_table_t *hash, FILE *source)
     while (fscanf(source, "%d", cur_digit) == 1)
     {
         error_code = SUCCES;
-        add_to_hash_table(hash, cur_digit, &cmp);
+        add_to_hash_table(hash, cur_digit, &cmp, -1);
         cur_digit = (int*)malloc(sizeof(int));
     }
     free(cur_digit);

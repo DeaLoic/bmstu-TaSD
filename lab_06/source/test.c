@@ -58,12 +58,7 @@ void efficiency(int len)
     {
         iter++;
         cmp = 0;
-        add_to_hash_table(&hash, temp_intp, &cmp);
-        if (cmp >= collis_pred)
-        {
-            //change_basis(&hash, get_next_prime(hash.fill / 5 * 4));
-            change_basis(&hash, get_next_prime(hash.fill));
-        }
+        add_to_hash_table(&hash, temp_intp, &cmp, collis_pred);
         cmp_full += cmp;
         start_malloc = clock();
         temp_intp = (int*)malloc(sizeof(int));
@@ -76,7 +71,7 @@ void efficiency(int len)
                         cmp_full / (double)iter, diff / (double)iter, diff);
     
     //print_hash_table(&hash);
-    delete_hash_table(&hash);
+    //delete_hash_table(&hash);
 
     fclose(f);
     f = fopen(FILE_TEMP, "r");
@@ -95,7 +90,7 @@ void efficiency(int len)
     end = clock();
     printf("\nBST:\nElements: %d\nMiddle compare: %lf\nMiddle time: %lf\nFull time: %ld\n", iter, \
                         (double)cmp_full / (double)iter, (double)(end - start) / (double)iter, end - start);
-                        del_bst(bs_tree.root);
+    //del_bst(bs_tree.root);
 
     fclose(f);
     f = fopen(FILE_TEMP, "r");
@@ -113,6 +108,69 @@ void efficiency(int len)
     //print_tree_graph(avl_tree.root, 0, 0);
     end = clock();
     printf("\nAVL:\nElements: %d\nMiddle compare: %lf\nMiddle time: %lf\nFull time: %ld\n", iter, \
+                        cmp_full / (double)iter, (double)(end - start) / iter, end - start);
+    //del_bst(avl_tree.root);
+    fclose(f);
+    f = fopen(FILE_TEMP, "r");
+
+
+
+//*** find find
+    start = clock();
+    cmp_full = 0;
+    iter = 0;
+    while (fscanf(f, "%d", temp_intp) == 1)
+    {
+        iter++;
+        cmp = 0;
+        find_element_in_hash_table(&hash, temp_intp, &cmp);
+        cmp_full += cmp;
+    }
+    end = clock();
+    diff = end - start;
+    printf("\n\n\nFind test\nHash table find:\nElements: %d\nMiddle compare: %lf\nMiddle time: %lf\nFull time: %lf\n", iter, \
+                        cmp_full / (double)iter, diff / (double)iter, diff);
+    
+    //print_hash_table(&hash);
+    delete_hash_table(&hash);
+
+    fclose(f);
+
+
+
+    f = fopen(FILE_TEMP, "r");
+    cmp_full = 0;
+
+    start = clock();
+    iter = 0;
+    while (fscanf(f, "%d", &temp_int) == 1)
+    {
+        iter++;
+        cmp = 0;
+        find_element(bs_tree.root, temp_int, &cmp);
+        cmp_full += cmp;
+    }
+    end = clock();
+    printf("\nBST find:\nElements: %d\nMiddle compare: %lf\nMiddle time: %lf\nFull time: %ld\n", iter, \
+                        (double)cmp_full / (double)iter, (double)(end - start) / (double)iter, end - start);
+    del_bst(bs_tree.root);
+
+    fclose(f);
+    f = fopen(FILE_TEMP, "r");
+    start = clock();
+    cmp_full = 0;
+    iter = 0;
+    while (fscanf(f, "%d", &temp_int) == 1)
+    {
+        iter++;
+        cmp = 0;
+        find_element(avl_tree.root, temp_int, &cmp);
+        cmp_full += cmp;
+    }
+
+    //print_tree_graph(avl_tree.root, 0, 0);
+    end = clock();
+    printf("\nAVL find:\nElements: %d\nMiddle compare: %lf\nMiddle time: %lf\nFull time: %ld\n", iter, \
                         cmp_full / (double)iter, (double)(end - start) / iter, end - start);
     del_bst(avl_tree.root);
     fclose(f);
