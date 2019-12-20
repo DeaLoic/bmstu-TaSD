@@ -68,14 +68,24 @@ void balance_full(bst_node_t *p)
 	p->r_son = balance(p->r_son);
 	p = balance(p);
 }
-bst_node_t *insert(bst_node_t *p, void *data_p, int compare(void*, void*), int *cmp) // вставка ключа k в дерево с корнем p
+bst_node_t *insert(bst_node_t *p, int data, int *cmp) // вставка ключа k в дерево с корнем p
 {
-    if ( !p ) return create_bst_node(data_p);
-	if (compare(data_p, p->data_p) < 0)
-		p->l_son = insert(p->l_son, data_p, compare, cmp);
-	else if (compare(data_p, p->data_p) > 0)
-		p->r_son = insert(p->r_son, data_p, compare, cmp);
-	*cmp += 1;
+    if (!p)
+	{
+		*cmp += 1;	
+		return create_bst_node(data);
+	}
+		
+	if (data < p->data)
+	{
+		*cmp += 1;
+		p->l_son = insert(p->l_son, data, cmp);
+	}
+	else if (data > p->data)
+	{
+		*cmp += 2;
+		p->r_son = insert(p->r_son, data, cmp);
+	}
 	return balance(p);
 }
 
@@ -94,22 +104,22 @@ bst_node_t *remove_min(bst_node_t *p) // удаление узла с миним
 	return balance(p);
 }
 
-bst_node_t *remove_avl(bst_node_t *p, void *data_p, int compare(void*, void*)) // удаление ключа k из дерева p
+bst_node_t *remove_avl(bst_node_t *p, int data) // удаление ключа k из дерева p
 {
 	if ( !p ) return 0;
-	if (compare(data_p, p->data_p) < 0)
+	if (data < p->data)
     {
-        p->l_son = remove_avl(p->l_son, data_p, compare);
+        p->l_son = remove_avl(p->l_son, data);
     }
-	else if (compare(data_p, p->data_p) > 0)
+	else if (data > p->data)
     {
-		p->r_son = remove_avl(p->r_son, data_p, compare);	
+		p->r_son = remove_avl(p->r_son, data);	
     }
     else 
 	{
 		bst_node_t *q = p->l_son;
 		bst_node_t *r = p->r_son;
-		delete_bst_node(p, free);
+		delete_bst_node(p);
 		if ( !r ) return q;
 		bst_node_t *min = find_min(r);
 		min->r_son = remove_min(r);
@@ -125,7 +135,7 @@ void fill_tree_avl(bst_t *tree, FILE *source)
 	int cmp = 0;
     while (fscanf(source, "%d", cur_digit) == 1)
     {
-        tree->root = insert(tree->root, cur_digit, int_compare, &cmp);
+        tree->root = insert(tree->root, *cur_digit, &cmp);
         cur_digit = (int*)malloc(sizeof(int));
     }
     free(cur_digit);
@@ -143,7 +153,7 @@ void balance_bst_to_avl(bst_node_t *root, bst_t *avl)
     {
         balance_bst_to_avl(root->l_son, avl);
         balance_bst_to_avl(root->r_son, avl);
-        avl->root = insert(avl->root, root->data_p, int_compare, &cmp);
+        avl->root = insert(avl->root, root->data, &cmp);
         if (root->father)
         {
             if (root->father->l_son == root)
@@ -156,6 +166,6 @@ void balance_bst_to_avl(bst_node_t *root, bst_t *avl)
             }
             
         }
-        delete_bst_node(root, empty_dest);
+        delete_bst_node(root);
     }
 }

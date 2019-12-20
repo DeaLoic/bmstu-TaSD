@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "error_codes.h"
 #include "universal.h"
+#include "test.h"
 
 #define TREE_FILE "tree.txt"
 
@@ -61,15 +62,15 @@ int main()
                     printf("\n");
                     break;
                 case 5:
-                    print_tree_prefix(tree.root, print_int);
+                    print_tree_prefix(tree.root);
                     printf("\n");
                     break;
                 case 6:
-                    print_tree_infix(tree.root, print_int);
+                    print_tree_infix(tree.root);
                     printf("\n");
                     break;
                 case 7:
-                    print_tree_postfix(tree.root, print_int);
+                    print_tree_postfix(tree.root);
                     printf("\n");
                     break;
                 case 8:
@@ -77,7 +78,7 @@ int main()
                 if (scanf("%d", &choose) == 1)
                 {
                     cmp = 0;
-                    if (find_element(tree.root, &choose, int_compare, &cmp))
+                    if (find_element(tree.root, choose, &cmp))
                     {
                         printf("%d compare in tree\n", cmp);
 
@@ -86,7 +87,7 @@ int main()
                         printf("%d compare in hash table\n", cmp);
 
                         cmp = 0;
-                        find_element(avl.root, &choose, int_compare, &cmp);
+                        find_element(avl.root, choose, &cmp);
                         printf("%d compare in avl\n", cmp);
 
                         printf("Element found\n");
@@ -108,7 +109,7 @@ int main()
                     if (scanf("%d", temp_int_p) == 1)
                     {
                         cmp = 0;
-                        insert(avl.root, temp_int_p, int_compare, &cmp);
+                        insert(avl.root, *temp_int_p, &cmp);
                         printf("%d compare in avl\n", cmp);
                         temp_int_p2 = (int *)malloc(sizeof(int));
 
@@ -120,7 +121,7 @@ int main()
                         temp_int_p = (int *)malloc(sizeof(int));
                         *temp_int_p = *temp_int_p2;
                         cmp = 0;
-                        if (!add_element(&tree, temp_int_p, int_compare, &cmp))
+                        if (!add_element(&tree, *temp_int_p, &cmp))
                         {
                             printf("%d compare in tree\n", cmp);
                             printf("Element added\n");
@@ -133,14 +134,15 @@ int main()
                 }
                     temp_int_p = NULL;
                     break;
+                    /*
                 case 10:
                 printf("Input integer to delete, pls: ");
                     temp_int_p = (int*)malloc(sizeof(int));
                     if (scanf("%d", temp_int_p) == 1)
                     {
-                        avl.root = remove_avl(avl.root, temp_int_p, int_compare);
+                        avl.root = remove_avl(avl.root, *temp_int_p);
                         del_element_in_hash_table(&hash, temp_int_p);
-                        if (!delete_element(find_element(tree.root, temp_int_p, int_compare, &cmp)))
+                        if (!delete_element(find_element(tree.root, *temp_int_p, &cmp)))
                         {
                             printf("Element doesnt found\n");
                         }
@@ -156,7 +158,8 @@ int main()
                 }
                     temp_int_p = NULL;
                     break;
-                case 11:
+                    */
+                case 10:
                     source = fopen(TREE_FILE, "r");
                     delete_hash_table(&hash);
                     create_hash_table(&hash, 0, 13);
@@ -164,15 +167,15 @@ int main()
                     change_basis(&hash, get_next_prime(hash.fill / 5 * 4));
                     fclose(source);
                     break;
-                case 12:
+                case 11:
                     print_hash_table(&hash);
                     break;
-                case 13:
+                case 12:
                     change_basis(&hash, get_next_prime(hash.fill / 5 * 4));
                     printf("New basis: %d\n", hash.basis);
                     break;
-                case 14:
-                    
+                case 13:
+                    efficiency(100);
                     break;
                 case 0:
                     break;
@@ -183,6 +186,9 @@ int main()
         }
 
     }
+    del_bst(avl.root);
+    del_bst(tree.root);
+    delete_hash_table(&hash);
     return error_code;
 }
 
@@ -198,9 +204,8 @@ void menu()
             "7  - print tree postfix\n\n"
             "8  - find integer in structs\n"
             "9  - add integer to structs\n"
-            "10  - delete integer from structs (ERR?&)\n\n"
-            "11  - make hash table from file\n"
-            "12  - print hash table\n"
-            "13  - restructurasing hash table\n\n"
-            "14 - modeling (WIP)\n");
+            "10  - make hash table from file\n"
+            "11  - print hash table\n"
+            "12  - restructurasing hash table\n\n"
+            "13 - modeling (WIP)\n");
 }

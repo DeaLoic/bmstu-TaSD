@@ -39,9 +39,9 @@ void delete_hash_table(hash_table_t *hash)
 int add_to_hash_table(hash_table_t *hash, int *element, int *comp_times)
 {
     int insert_index = -1;
-    *comp_times = 1;
     if (hash && hash->basis > 0)
     {
+        *comp_times = 1;
         if (hash->fill == hash->size)
         {
             change_size_array(&(hash->body), hash->size * 2 + 1, sizeof(int*));
@@ -54,8 +54,10 @@ int add_to_hash_table(hash_table_t *hash, int *element, int *comp_times)
 
         insert_index = *element % hash->basis;
         int is_in = 0;
-        while (hash->body[insert_index] != NULL)
+        int k = 0;
+        while (hash->body[insert_index] != NULL && k < hash->size)
         {
+            k++;
             if (*(hash->body[insert_index]) == *element)
             {
                 is_in = 1;
@@ -66,7 +68,7 @@ int add_to_hash_table(hash_table_t *hash, int *element, int *comp_times)
             insert_index %= hash->size;
         }
 
-        if (is_in)
+        if (is_in || k == hash->size)
         {
             return -1;
         }
