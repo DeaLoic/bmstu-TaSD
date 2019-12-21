@@ -201,11 +201,23 @@ int print_graph_file(FILE *out, graph_t *graph, linked_list_t *path)
     fprintf(out, "digraph { \n\trankdir=LR; \n");
 
     for (int i = 0; i < graph->edge_count; i++)
-
-        fprintf(out, "\t%d -> %d;\n", graph->edges[i]->first + 1, graph->edges[i]->second + 1);
-
+{
+        fprintf(out, "\t%d -> %d\n", graph->edges[i]->first + 1, graph->edges[i]->second + 1);
+        if (graph->edges[i]->road_type == railway)
+        {
+            printf("[shape=inv]");
+        }
+        printf(";\n");
+}
     for (int i = 0; i < path->size; i++)
-        fprintf(out, "\t%d -> %d[color=blue, penwidth=2.0];", ((edge_t *)get_element(path, i))->first + 1, ((edge_t *)get_element(path, i))->second + 1);
+    {
+        fprintf(out, "\t%d -> %d[color=blue, penwidth=2.0", ((edge_t *)get_element(path, i))->first + 1, ((edge_t *)get_element(path, i))->second + 1);
+        if (graph->edges[i]->road_type == railway)
+        {
+            printf(", shape=inv");
+        }
+        printf("];\n");
+    }
 
     fprintf(out, "}\n");
 }
