@@ -9,6 +9,8 @@
 
 // universal
 int int_compare(void* first, void *second);
+int reverse_int_compare(void* first, void *second);
+int int_sum(void *increased, void *added);
 void print_int(void *first);
 
 void universal_swap(void *first, void *second, size_t size);
