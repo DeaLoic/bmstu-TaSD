@@ -42,7 +42,7 @@ int delete_edge(graph_t *graph, edge_t *edge);
 
 int set_edge(edge_t *edge, int first, int second, int lenght, enum road_type_t road_type);
 
-int print_graph_file(FILE *out, graph_t *graph, linked_list_t *path)
+int print_graph_file(FILE *out, graph_t *graph, linked_list_t *path);
 
 int deikstra(graph_t *graph, int start_node, int end_node, linked_list_t *path);
 
