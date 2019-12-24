@@ -39,6 +39,7 @@ int set_null_graph(graph_t *graph)
 
     return SUCCES;
 }
+
 int delete_graph(graph_t *graph)
 {
     if (graph)
@@ -84,7 +85,7 @@ int add_edge(graph_t *graph, edge_t *edge)
     if (graph)
     {
         error_code = SUCCES;
-        if (!is_edge_exist(graph, edge))
+        if (!is_edge_exist(graph->edges, graph->edge_count, edge))
         {
             change_size_array(&(graph->edges), graph->edge_count + 1, sizeof(edge_t*));
             graph->edges[graph->edge_count] = edge;
@@ -161,6 +162,17 @@ int deikstra(graph_t *graph, int start_node, int end_node, linked_list_t *path)
                     add_element(all_path + (graph->edges)[i]->second - 1, (graph->edges)[i]);
                 }
             }
+            else if ((graph->edges)[i]->second == pos + 1 && is_setted[(graph->edges)[i]->first - 1] == 0)
+            {
+                if (ways_len[pos] != INT32_MAX && ways_len[(graph->edges)[i]->first - 1] > ways_len[pos] + (graph->edges)[i]->lenght)
+                {
+                    ways_len[(graph->edges)[i]->first - 1] = ways_len[pos] + (graph->edges)[i]->lenght;
+
+                    copy_linked_list(all_path + (graph->edges)[i]->first - 1,  all_path + pos);
+                    add_element(all_path + (graph->edges)[i]->first - 1, (graph->edges)[i]);
+                }
+            }
+            
         }
         sum_elements(&is_setted, graph->node_count, sizeof(int), &res, int_sum);
     }
@@ -191,30 +203,106 @@ int edge_compare(void *first, void *second)
     return 1;
 }
 
-int is_edge_exist(graph_t *graph, edge_t *edge)
+int is_edge_exist(edge_t **edges, int edge_count,  edge_t *edge)
 {
-    return find_in_array(graph->edges, graph->edge_count, sizeof(edge_t*), &edge, edge_compare) != -1;
+    return find_in_array(edges, edge_count, sizeof(edge_t*), &edge, edge_compare) != -1;
+}
+
+int is_edge_in_path(edge_t *edge, linked_list_t *path)
+{
+    int res = 0;
+    for (int i = 0; i < path->size; i++)
+    {
+
+        edge_t *ed = get_element(path, i);
+        if (!(edge_compare(edge, ed)))
+        {
+            res = 1;
+            break;
+        }
+    }
+
+    return res;
+}
+
+int is_node_trans(int node, linked_list_t *path)
+{
+    int res = 0;
+    if (path && path->size)
+    {
+        edge_t *prev = NULL;
+        int prev_node_1;
+        int prev_node_2;
+        enum road_type_t prev_type;
+        prev = get_element(path, 0);
+        prev_node_1 = prev->first;
+        prev_node_2 = prev->second;
+        prev_type = prev->road_type; 
+
+        for (int i = 1; i < path->size; i++)
+        {
+            prev = get_element(path, i);
+            if (prev_type != prev->road_type)
+            {
+                if (prev_node_1 == node)
+                {
+                    if (prev->first == prev_node_1 || prev->second == prev_node_1)
+                    {
+                        return 1;
+                    }
+                }
+                else if (prev_node_2 == node)
+                {
+                    if (prev->first == prev_node_2 || prev->second == prev_node_2)
+                    {
+                        return 1;
+                    }
+                }
+            }
+
+            prev_node_1 = prev->first;
+            prev_node_2 = prev->second;
+            prev_type = prev->road_type; 
+        }
+    }
+    return res;
 }
 
 int print_graph_file(FILE *out, graph_t *graph, linked_list_t *path)
 {
-    fprintf(out, "digraph { \n\trankdir=LR; \n");
+    fprintf(out, "graph { \n\trankdir=LR; \n");
 
+    for (int i = 1; i <= graph->node_count; i++)
+    {
+        if (!is_node_trans(i, path))
+        {
+            fprintf(out, "%d;\n", i);
+        }
+        else
+        {
+            fprintf(out, "%d [shape=box];\n", i);
+        }
+        
+    }
     for (int i = 0; i < graph->edge_count; i++)
     {
-        fprintf(out, "\t%d -> %d\n", graph->edges[i]->first + 1, graph->edges[i]->second + 1);
-        if (graph->edges[i]->road_type == railway)
+        if (!is_edge_in_path(graph->edges[i], path))
         {
-            fprintf(out, "[shape=inv]");
+            fprintf(out, "\t%d -- %d [label=%d\n", graph->edges[i]->first, graph->edges[i]->second, graph->edges[i]->lenght);
+            if (graph->edges[i]->road_type == railway)
+            {
+                fprintf(out, ", style=dotted");
+            }
+            fprintf(out, "];\n");
         }
-        fprintf(out, ";\n");
     }
     for (int i = 0; i < path->size; i++)
     {
-        fprintf(out, "\t%d -> %d[color=blue, penwidth=2.0", ((edge_t *)get_element(path, i))->first + 1, ((edge_t *)get_element(path, i))->second + 1);
-        if (graph->edges[i]->road_type == railway)
+        fprintf(out, "\t%d -- %d [label=%d, color=blue", ((edge_t *)get_element(path, i))->first, ((edge_t *)get_element(path, i))->second, \
+        ((edge_t *)get_element(path, i))->lenght);
+        if (((edge_t *)get_element(path, i))->road_type == railway)
         {
-            fprintf(out, ", shape=inv");
+            fprintf(out, ", style=dotted");
         }
         fprintf(out, "];\n");
     }

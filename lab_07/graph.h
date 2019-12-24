@@ -46,6 +46,6 @@ int print_graph_file(FILE *out, graph_t *graph, linked_list_t *path);
 
 int deikstra(graph_t *graph, int start_node, int end_node, linked_list_t *path);
 
-int is_edge_exist(graph_t *graph, edge_t *edge);
+int is_edge_exist(edge_t **edges, int edge_count,  edge_t *edge);
 
 #endif
