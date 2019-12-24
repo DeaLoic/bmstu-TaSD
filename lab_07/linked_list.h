@@ -28,6 +28,7 @@ void set_null_list(linked_list_t *list);
 int add_element(linked_list_t *list, void *data);
 int del_element(linked_list_t *list, int index_to_delete, void destructor(void*));
 
+int copy_linked_list(linked_list_t *dest, linked_list_t *source);
 // If error return NULL. But if data == NULL same behaivor
 void *get_element(linked_list_t *list, int index);
 

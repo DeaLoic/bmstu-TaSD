@@ -26,6 +26,24 @@ int int_compare(void* first, void *second)
     return result;
 }
 
+int reverse_int_compare(void* first, void *second)
+{
+    int result = 0;
+    int first_i = *((int*)first);
+    int second_i = *((int*)second);
+
+    if (first_i > second_i)
+    {
+        result = -1;
+    }
+    else if (first_i < second_i)
+    {
+        result = 1;
+    }
+
+    return result;
+}
+
 void print_int(void *first)
 {
     int first_i = *((int *)first);
@@ -170,6 +188,18 @@ int summator_double(double *increased, double *added)
     {
         error_code = SUCCES;
         *increased += *added;
+    }
+
+    return error_code;
+}
+
+int int_sum(void *increased, void *added)
+{
+    int error_code = INCORRECT_INPUT;
+    if (increased && added)
+    {
+        error_code = SUCCES;
+        *((int*)increased) += *((int*)added);
     }
 
     return error_code;

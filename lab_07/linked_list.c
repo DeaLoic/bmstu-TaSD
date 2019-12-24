@@ -47,6 +47,19 @@ void set_null_list(linked_list_t *list)
     }
 }
 
+int copy_linked_list(linked_list_t *dest, linked_list_t *source)
+{
+    set_null_list(dest);
+    void *res;
+    for (int i = 0; i < source->size; i++)
+    {
+        res = get_element(source, i);
+        add_element(dest, res);
+    }
+
+    return SUCCES;
+}
+
 int add_element(linked_list_t *list, void *data)
 {
     int error_code = INCORRECT_INPUT;
