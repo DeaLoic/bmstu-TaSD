@@ -1,5 +1,4 @@
-#### TaSD
+## BMSTU 2019. IU7-3 Типы и cтруктуры данных
 
-Types and Structs of Data. (Data types and data structures)
-
-BMSTU (2019-2020)
+Помогло? Поставь **звезду**. <br/>
+Нашел ошибку? Открой **ишью**.
